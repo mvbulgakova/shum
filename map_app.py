@@ -446,8 +446,6 @@ app.layout = html.Div(className="page-wrap", children=[
     dcc.Store(id="selected-city", data=None),
     dcc.Store(id="editing-idx", data=None),
 
-    html.Datalist(id="city-datalist"),
-
     html.Div(className="header", children=[
         html.H1("Форум ШУМ · 2026"),
         html.P("Работяги ШУМа · География команды"),
@@ -509,15 +507,15 @@ app.layout = html.Div(className="page-wrap", children=[
                           className="field", style={"width": "100%"}),
                 dcc.Input(id="edit-name", placeholder="Имя (необязательно)",
                           className="field", style={"width": "100%"}),
-                html.Input(id="edit-city-1", placeholder="Город 1",
-                           className="field", list="city-datalist",
-                           style={"width": "100%", "marginBottom": "8px"}),
-                html.Input(id="edit-city-2", placeholder="Город 2",
-                           className="field", list="city-datalist",
-                           style={"width": "100%", "marginBottom": "8px"}),
-                html.Input(id="edit-city-3", placeholder="Город 3",
-                           className="field", list="city-datalist",
-                           style={"width": "100%", "marginBottom": "8px"}),
+                dcc.Input(id="edit-city-1", placeholder="Город 1",
+                          className="field",
+                          style={"width": "100%", "marginBottom": "8px"}),
+                dcc.Input(id="edit-city-2", placeholder="Город 2",
+                          className="field",
+                          style={"width": "100%", "marginBottom": "8px"}),
+                dcc.Input(id="edit-city-3", placeholder="Город 3",
+                          className="field",
+                          style={"width": "100%", "marginBottom": "8px"}),
                 dcc.Dropdown(id="edit-service", placeholder="Служба",
                              style={"marginBottom": "8px", "fontSize": "13px"}),
                 html.Div([
@@ -536,15 +534,15 @@ app.layout = html.Div(className="page-wrap", children=[
                           className="field", style={"width": "100%"}),
                 dcc.Input(id="in-name", placeholder="Имя (необязательно)",
                           className="field", style={"width": "100%"}),
-                html.Input(id="in-city-1", placeholder="Город 1 (обязательно)",
-                           className="field", list="city-datalist",
-                           style={"width": "100%", "marginBottom": "8px"}),
-                html.Input(id="in-city-2", placeholder="Город 2",
-                           className="field", list="city-datalist",
-                           style={"width": "100%", "marginBottom": "8px"}),
-                html.Input(id="in-city-3", placeholder="Город 3",
-                           className="field", list="city-datalist",
-                           style={"width": "100%", "marginBottom": "8px"}),
+                dcc.Input(id="in-city-1", placeholder="Город 1 (обязательно)",
+                          className="field",
+                          style={"width": "100%", "marginBottom": "8px"}),
+                dcc.Input(id="in-city-2", placeholder="Город 2",
+                          className="field",
+                          style={"width": "100%", "marginBottom": "8px"}),
+                dcc.Input(id="in-city-3", placeholder="Город 3",
+                          className="field",
+                          style={"width": "100%", "marginBottom": "8px"}),
                 dcc.Dropdown(id="in-service", placeholder="Служба",
                              style={"marginBottom": "8px", "fontSize": "13px"}),
                 dcc.Upload(id="in-photo",
@@ -617,14 +615,6 @@ def update_filter_chips(data, current_value):
     existing = set(current_value)
     new_value = list(current_value) + [s for s in services if s not in existing]
     return opts, new_value
-
-
-@app.callback(
-    Output("city-datalist", "children"),
-    Input("data-store", "data"),
-)
-def update_city_datalist(_data):
-    return [html.Option(value=c) for c in sorted(CITY_COORDS.keys())]
 
 
 @app.callback(
