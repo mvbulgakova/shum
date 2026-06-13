@@ -17,14 +17,23 @@ CITY_COORDS = {
     "Пятигорск":    (44.0398, 43.0617),
 }
 
+SERVICES = [
+    "Тим-лидер",
+    "Служба образовательных программ",
+    "Служба по работе с участниками",
+    "Служба по организации атмосферных программ и церемоний",
+    "Служба комплексного сопровождения",
+    "Пресс-служба",
+]
+
 INITIAL_DATA = {
-    "services": ["Волонтёры образовательных программ"],
+    "services": SERVICES,
     "volunteers": [
-        {"handle": "@lizabeta_b",       "name": "Лиза",  "cities": ["Воронеж", "Губкин"],     "service": "Волонтёры образовательных программ", "photo": None},
-        {"handle": "@p.nekr",           "name": "П.",    "cities": ["Калининград"],            "service": "Волонтёры образовательных программ", "photo": None},
-        {"handle": "@peaid",            "name": "П.",    "cities": ["Тамбов", "Ижевск"],       "service": "Волонтёры образовательных программ", "photo": None},
-        {"handle": "@a_z1609",          "name": "А.",    "cities": ["Волгоград", "Пятигорск"], "service": "Волонтёры образовательных программ", "photo": None},
-        {"handle": "@daria_volkova328", "name": "Дарья", "cities": ["Москва"],                 "service": "Волонтёры образовательных программ", "photo": None},
+        {"handle": "@lizabeta_b",       "name": "Лиза",  "cities": ["Воронеж", "Губкин"],     "service": "Служба образовательных программ", "photo": None},
+        {"handle": "@p.nekr",           "name": "П.",    "cities": ["Калининград"],            "service": "Служба по работе с участниками",  "photo": None},
+        {"handle": "@peaid",            "name": "П.",    "cities": ["Тамбов", "Ижевск"],       "service": "Служба образовательных программ", "photo": None},
+        {"handle": "@a_z1609",          "name": "А.",    "cities": ["Волгоград", "Пятигорск"], "service": "Служба по работе с участниками",  "photo": None},
+        {"handle": "@daria_volkova328", "name": "Дарья", "cities": ["Москва"],                 "service": "Служба образовательных программ", "photo": None},
     ],
 }
 
@@ -233,12 +242,16 @@ app.layout = html.Div(className="page-wrap", children=[
                           className="field", style={"width": "100%"}),
                 dcc.Input(id="in-name", placeholder="Имя (необязательно)",
                           className="field", style={"width": "100%"}),
-                dcc.Input(id="in-city-1", placeholder="Город 1 (обязательно)",
-                          className="field", style={"width": "100%"}),
-                dcc.Input(id="in-city-2", placeholder="Город 2",
-                          className="field", style={"width": "100%"}),
-                dcc.Input(id="in-city-3", placeholder="Город 3",
-                          className="field", style={"width": "100%"}),
+                html.Datalist(id="city-datalist"),
+                html.Input(id="in-city-1", placeholder="Город 1 (обязательно)",
+                           className="field", list="city-datalist",
+                           style={"width": "100%", "marginBottom": "8px"}),
+                html.Input(id="in-city-2", placeholder="Город 2",
+                           className="field", list="city-datalist",
+                           style={"width": "100%", "marginBottom": "8px"}),
+                html.Input(id="in-city-3", placeholder="Город 3",
+                           className="field", list="city-datalist",
+                           style={"width": "100%", "marginBottom": "8px"}),
                 dcc.Dropdown(id="in-service", placeholder="Служба",
                              style={"marginBottom": "8px", "fontSize": "13px"}),
                 dcc.Upload(
@@ -274,6 +287,14 @@ app.layout = html.Div(className="page-wrap", children=[
 )
 def update_service_options(data):
     return [{"label": s, "value": s} for s in data["services"]]
+
+
+@app.callback(
+    Output("city-datalist", "children"),
+    Input("data-store", "data"),
+)
+def update_city_datalist(_data):
+    return [html.Option(value=c) for c in sorted(CITY_COORDS.keys())]
 
 
 @app.callback(
