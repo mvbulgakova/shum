@@ -1,6 +1,7 @@
+import json
 import requests as http_requests
 import dash
-from dash import dcc, html, Input, Output, State
+from dash import dcc, html, Input, Output, State, ALL
 import plotly.graph_objects as go
 
 # ── начальные данные ──────────────────────────────────────────────────────────
@@ -113,21 +114,25 @@ def build_figure(data):
 def build_volunteer_list(data):
     color_map = get_color_map(data["services"])
     items = []
-    for v in data["volunteers"]:
+    for i, v in enumerate(data["volunteers"]):
         color = color_map.get(v["service"], "#888")
         items.append(html.Div([
-            html.Span(v["handle"],
-                      style={"fontWeight": "bold", "color": color, "fontSize": "14px"}),
-            html.Span(" · " + ", ".join(v["cities"]),
-                      style={"color": "#555", "fontSize": "13px"}),
-            html.Br(),
-            html.Span(v["service"], style={
-                "fontSize": "11px", "color": "white", "background": color,
-                "padding": "1px 8px", "borderRadius": "10px",
-                "display": "inline-block", "marginTop": "3px",
-            }),
+            html.Div([
+                html.Span(v["handle"],
+                          style={"fontWeight": "bold", "color": color, "fontSize": "14px"}),
+                html.Span(" · " + ", ".join(v["cities"]),
+                          style={"color": "#555", "fontSize": "13px"}),
+                html.Br(),
+                html.Span(v["service"], style={
+                    "fontSize": "11px", "color": "white", "background": color,
+                    "padding": "1px 8px", "borderRadius": "10px",
+                    "display": "inline-block", "marginTop": "3px",
+                }),
+            ], style={"flex": "1"}),
+            html.Button("×", id={"type": "btn-delete", "index": i},
+                        n_clicks=0, className="btn-delete"),
         ], className="vol-item",
-           style={"borderLeft": f"4px solid {color}"}))
+           style={"borderLeft": f"4px solid {color}", "display": "flex", "alignItems": "center"}))
     return items
 
 
@@ -167,7 +172,11 @@ app.layout = html.Div(className="page-wrap", children=[
                           className="field", style={"width": "100%"}),
                 dcc.Input(id="in-name",    placeholder="Имя (необязательно)",
                           className="field", style={"width": "100%"}),
-                dcc.Input(id="in-cities",  placeholder="Город1, Город2",
+                dcc.Input(id="in-city-1", placeholder="Город 1 (обязательно)",
+                          className="field", style={"width": "100%"}),
+                dcc.Input(id="in-city-2", placeholder="Город 2",
+                          className="field", style={"width": "100%"}),
+                dcc.Input(id="in-city-3", placeholder="Город 3",
                           className="field", style={"width": "100%"}),
                 dcc.Dropdown(id="in-service", placeholder="Служба",
                              style={"marginBottom": "8px", "fontSize": "13px"}),
@@ -222,27 +231,46 @@ def add_service(n, name, data):
 
 @app.callback(
     Output("data-store", "data", allow_duplicate=True),
+    Input({"type": "btn-delete", "index": ALL}, "n_clicks"),
+    State("data-store", "data"),
+    prevent_initial_call=True,
+)
+def delete_volunteer(n_clicks_list, data):
+    if not any(n_clicks_list):
+        return data
+    triggered_id = dash.callback_context.triggered[0]["prop_id"].split(".")[0]
+    idx = json.loads(triggered_id)["index"]
+    data = dict(data)
+    data["volunteers"] = [v for i, v in enumerate(data["volunteers"]) if i != idx]
+    return data
+
+
+@app.callback(
+    Output("data-store", "data", allow_duplicate=True),
     Output("msg-volunteer", "children"),
     Output("in-handle", "value"),
     Output("in-name", "value"),
-    Output("in-cities", "value"),
+    Output("in-city-1", "value"),
+    Output("in-city-2", "value"),
+    Output("in-city-3", "value"),
     Output("in-service", "value"),
     Input("btn-add-volunteer", "n_clicks"),
     State("in-handle", "value"),
     State("in-name", "value"),
-    State("in-cities", "value"),
+    State("in-city-1", "value"),
+    State("in-city-2", "value"),
+    State("in-city-3", "value"),
     State("in-service", "value"),
     State("data-store", "data"),
     prevent_initial_call=True,
 )
-def add_volunteer(n, handle, name, cities_str, service, data):
-    if not handle or not cities_str or not service:
-        return data, "Заполните handle, города и службу", handle, name, cities_str, service
+def add_volunteer(n, handle, name, city1, city2, city3, service, data):
+    if not handle or not city1 or not service:
+        return data, "Заполните handle, город 1 и службу", handle, name, city1, city2, city3, service
 
     handle = handle.strip()
-    cities = [c.strip() for c in cities_str.split(",") if c.strip()]
+    cities = [c.strip() for c in [city1, city2 or "", city3 or ""] if c.strip()]
 
-    # геокодируем города, которых ещё нет в словаре
     failed = []
     for city in cities:
         if city not in CITY_COORDS:
@@ -252,7 +280,7 @@ def add_volunteer(n, handle, name, cities_str, service, data):
 
     if failed:
         msg = f"Не удалось найти на карте: {', '.join(failed)}"
-        return data, msg, handle, name, cities_str, service
+        return data, msg, handle, name, city1, city2, city3, service
 
     entry = {
         "handle": handle,
@@ -262,7 +290,7 @@ def add_volunteer(n, handle, name, cities_str, service, data):
     }
     data = dict(data)
     data["volunteers"] = data["volunteers"] + [entry]
-    return data, "", "", "", "", None
+    return data, "", "", "", "", "", "", None
 
 
 @app.callback(
