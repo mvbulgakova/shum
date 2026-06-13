@@ -146,7 +146,7 @@ app.layout = html.Div(className="page-wrap", children=[
 
     html.Div(className="header", children=[
         html.H1("Форум ШУМ · 2026"),
-        html.P("Волонтёры образовательных программ · География команды"),
+        html.P("Работяги ШУМа · География команды"),
     ]),
 
     html.Div(className="main-layout", children=[
