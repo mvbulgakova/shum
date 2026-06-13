@@ -193,6 +193,83 @@ input.field:focus { border-color: #667eea; }
     overflow-x: auto;
 }
 
+/* ── штаб / оргструктура ── */
+.staff-section {
+    margin-top: 28px;
+    padding: 0 4px;
+}
+
+.staff-title {
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 16px;
+}
+
+.dept-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.dept-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.dept-header {
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.dept-body {
+    padding: 8px 12px 10px;
+}
+
+.staff-row {
+    padding: 6px 0;
+    border-bottom: 1px solid #f0f0f5;
+    font-size: 13px;
+}
+.staff-row:last-child { border-bottom: none; }
+
+.staff-name { color: #333; font-weight: 500; }
+.staff-head { font-weight: 700; font-size: 14px; }
+.staff-role { color: #777; font-size: 12px; }
+
+.staff-contact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+.staff-phone {
+    font-size: 11px;
+    color: #667eea;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.staff-phone:hover { text-decoration: underline; }
+
+.staff-meta {
+    font-size: 11px;
+    color: #888;
+}
+
+.staff-tags {
+    font-size: 11px;
+    color: #aaa;
+    margin-top: 2px;
+}
+
 /* ── мобильная адаптация ── */
 @media (max-width: 700px) {
     .page-wrap { padding: 10px; }
@@ -200,4 +277,9 @@ input.field:focus { border-color: #667eea; }
     .main-layout { flex-direction: column; }
     .side-col { width: 100%; }
     .map-col { padding: 6px; }
+    .dept-grid { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 701px) and (max-width: 1100px) {
+    .dept-grid { grid-template-columns: repeat(2, 1fr); }
 }
