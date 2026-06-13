@@ -73,11 +73,15 @@ def get_color_map(services):
     return {s: PALETTE[i % len(PALETTE)] for i, s in enumerate(services)}
 
 
-def build_figure(data):
+def build_figure(data, visible_services=None):
+    if visible_services is None:
+        visible_services = data["services"]
     color_map = get_color_map(data["services"])
     traces = {}
     for v in data["volunteers"]:
         svc = v["service"]
+        if svc not in visible_services:
+            continue
         if svc not in traces:
             traces[svc] = {"lats": [], "lons": [], "texts": []}
         for city in v["cities"]:
@@ -100,6 +104,7 @@ def build_figure(data):
         ))
 
     fig.update_layout(
+        uirevision="stable",
         geo=dict(
             scope="asia", resolution=50,
             showland=True,  landcolor="#F0EEE9",
@@ -119,28 +124,55 @@ def build_figure(data):
     return fig
 
 
-def build_volunteer_list(data):
+def build_volunteer_list(data, query=None, visible_services=None):
     color_map = get_color_map(data["services"])
-    items = []
+    all_services = data["services"]
+    if visible_services is None:
+        visible_services = all_services
+
+    filtered = []
     for i, v in enumerate(data["volunteers"]):
-        color = color_map.get(v["service"], "#888")
+        if v["service"] not in visible_services:
+            continue
+        if query:
+            q = query.strip().lower()
+            if q and q not in v["handle"].lower() and q not in v.get("name", "").lower():
+                continue
+        filtered.append((i, v))
+
+    if not filtered:
+        return [html.P("Нет участников", style={"color": "rgba(255,255,255,0.6)", "fontSize": "13px", "margin": "0"})]
+
+    items = []
+    for svc in all_services:
+        if svc not in visible_services:
+            continue
+        group = [(i, v) for i, v in filtered if v["service"] == svc]
+        if not group:
+            continue
+        color = color_map.get(svc, "#888")
         items.append(html.Div([
-            html.Div([
-                html.Span(v["handle"],
-                          style={"fontWeight": "bold", "color": color, "fontSize": "14px"}),
-                html.Span(" · " + ", ".join(v["cities"]),
-                          style={"color": "#555", "fontSize": "13px"}),
-                html.Br(),
-                html.Span(v["service"], style={
-                    "fontSize": "11px", "color": "white", "background": color,
-                    "padding": "1px 8px", "borderRadius": "10px",
-                    "display": "inline-block", "marginTop": "3px",
-                }),
-            ], style={"flex": "1"}),
-            html.Button("×", id={"type": "btn-delete", "index": i},
-                        n_clicks=0, className="btn-delete"),
-        ], className="vol-item",
-           style={"borderLeft": f"4px solid {color}", "display": "flex", "alignItems": "center"}))
+            html.Span(svc, style={
+                "fontSize": "11px", "color": "white", "background": color,
+                "padding": "2px 8px", "borderRadius": "10px",
+            }),
+            html.Span(f"  {len(group)}", style={"fontSize": "12px", "color": "rgba(255,255,255,0.7)"}),
+        ], style={"marginTop": "10px", "marginBottom": "4px"}))
+
+        for i, v in group:
+            items.append(html.Div([
+                html.Div([
+                    html.Span(v["handle"], style={"fontWeight": "bold", "color": color, "fontSize": "13px"}),
+                    html.Span(" · " + ", ".join(v["cities"]), style={"color": "#666", "fontSize": "12px"}),
+                ], style={"flex": "1", "minWidth": "0", "overflow": "hidden", "textOverflow": "ellipsis"}),
+                html.Button("📍", id={"type": "vol-focus", "index": i},
+                            n_clicks=0, title="Показать на карте", className="btn-icon"),
+                html.Button("✏️", id={"type": "btn-edit", "index": i},
+                            n_clicks=0, title="Редактировать", className="btn-icon"),
+                html.Button("×", id={"type": "btn-delete", "index": i},
+                            n_clicks=0, className="btn-delete"),
+            ], className="vol-item",
+               style={"borderLeft": f"4px solid {color}", "display": "flex", "alignItems": "center"}))
     return items
 
 
@@ -154,42 +186,65 @@ def build_city_panel(city, data):
     for i, v in vols:
         color = color_map.get(v["service"], "#888")
         photo = v.get("photo")
-        photo_el = (
-            html.Img(src=photo, className="vol-photo")
-            if photo
-            else html.Div("📷", className="vol-photo-placeholder")
-        )
-        del_btn = ([
-            html.Button("Удалить", id={"type": "btn-del-photo", "index": i},
-                        n_clicks=0, className="btn-photo-sm btn-photo-del"),
-        ] if photo else [])
-
+        photo_el = (html.Img(src=photo, className="vol-photo") if photo
+                    else html.Div("📷", className="vol-photo-placeholder"))
+        del_btn = ([html.Button("Удалить", id={"type": "btn-del-photo", "index": i},
+                                n_clicks=0, className="btn-photo-sm btn-photo-del")] if photo else [])
         items.append(html.Div([
             html.Div(photo_el, style={"marginRight": "10px", "flexShrink": "0"}),
             html.Div([
                 html.Div([
-                    html.Span(v["handle"],
-                              style={"fontWeight": "bold", "color": color, "fontSize": "13px"}),
-                    (html.Span(" " + v["name"],
-                               style={"color": "#777", "fontSize": "12px"}) if v.get("name") else ""),
+                    html.Span(v["handle"], style={"fontWeight": "bold", "color": color, "fontSize": "13px"}),
+                    (html.Span(" " + v["name"], style={"color": "#777", "fontSize": "12px"}) if v.get("name") else ""),
                 ]),
-                html.Div(", ".join(v["cities"]),
-                         style={"color": "#999", "fontSize": "11px", "marginBottom": "4px"}),
+                html.Div(", ".join(v["cities"]), style={"color": "#999", "fontSize": "11px", "marginBottom": "4px"}),
                 html.Div([
-                    dcc.Upload(
-                        id={"type": "upload-photo", "index": i},
-                        children=html.Button(
-                            "Изменить" if photo else "+ фото",
-                            className="btn-photo-sm",
-                        ),
-                        accept="image/*",
-                        style={"display": "inline-block", "marginRight": "4px"},
-                    ),
+                    dcc.Upload(id={"type": "upload-photo", "index": i},
+                               children=html.Button("Изменить" if photo else "+ фото", className="btn-photo-sm"),
+                               accept="image/*",
+                               style={"display": "inline-block", "marginRight": "4px"}),
                 ] + del_btn, style={"display": "flex", "alignItems": "center", "gap": "4px"}),
             ], style={"flex": "1"}),
-        ], style={"display": "flex", "alignItems": "center",
-                  "padding": "8px 0", "borderBottom": "1px solid #f0f0f0"}))
+        ], style={"display": "flex", "alignItems": "center", "padding": "8px 0", "borderBottom": "1px solid #f0f0f0"}))
     return items
+
+
+def validate_and_geocode(cities):
+    """Returns list of failed cities."""
+    failed = []
+    for city in cities:
+        if city not in CITY_COORDS:
+            if geocode(city) is None:
+                failed.append(city)
+    return failed
+
+
+def parse_import(text):
+    """Parse pasted text into volunteer dicts. Returns (volunteers, errors)."""
+    volunteers, errors = [], []
+    for i, line in enumerate(text.strip().splitlines(), 1):
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        sep = "|" if "|" in line else ","
+        parts = [p.strip() for p in line.split(sep)]
+        if len(parts) == 3:
+            handle, cities_str, service = parts
+            name = ""
+        elif len(parts) >= 4:
+            handle, name, cities_str, service = parts[0], parts[1], parts[2], parts[3]
+        else:
+            errors.append(f"Строка {i}: нужно handle | город | служба")
+            continue
+        if not handle.startswith("@"):
+            handle = "@" + handle
+        cities = [c.strip() for c in cities_str.split(",") if c.strip()]
+        if not cities:
+            errors.append(f"Строка {i}: не указаны города")
+            continue
+        volunteers.append({"handle": handle, "name": name, "cities": cities,
+                           "service": service, "photo": None})
+    return volunteers, errors
 
 
 # ── приложение ────────────────────────────────────────────────────────────────
@@ -201,6 +256,9 @@ server = app.server
 app.layout = html.Div(className="page-wrap", children=[
     dcc.Store(id="data-store", data=INITIAL_DATA),
     dcc.Store(id="selected-city", data=None),
+    dcc.Store(id="editing-idx", data=None),
+
+    html.Datalist(id="city-datalist"),
 
     html.Div(className="header", children=[
         html.H1("Форум ШУМ · 2026"),
@@ -217,9 +275,8 @@ app.layout = html.Div(className="page-wrap", children=[
         # боковая панель
         html.Div(className="side-col", children=[
 
-            # ── карточка города — появляется при клике на метку ──
-            html.Div(id="city-detail", className="card city-detail",
-                     style={"display": "none"}, children=[
+            # ── карточка города ──
+            html.Div(id="city-detail", className="card city-detail", style={"display": "none"}, children=[
                 html.Div([
                     html.Span(id="city-detail-title",
                               style={"fontWeight": "700", "fontSize": "15px", "color": "#4a4a6a"}),
@@ -229,20 +286,68 @@ app.layout = html.Div(className="page-wrap", children=[
                 html.Div(id="city-detail-content"),
             ]),
 
-            # список участников
+            # ── поиск ──
+            dcc.Input(id="search-query", placeholder="🔍 Поиск по имени / @handle",
+                      className="field search-field",
+                      debounce=True,
+                      style={"width": "100%", "marginBottom": "6px"}),
+
+            # ── фильтр по службам ──
+            html.Div(className="card filter-card", children=[
+                html.P("Фильтр", style={"margin": "0 0 6px", "fontSize": "12px",
+                                         "color": "#4a4a6a", "fontWeight": "600"}),
+                dcc.Checklist(
+                    id="filter-chips",
+                    options=[{"label": s, "value": s} for s in SERVICES],
+                    value=list(SERVICES),
+                    className="filter-chips",
+                    labelStyle={"display": "inline-flex", "alignItems": "center",
+                                "marginRight": "6px", "marginBottom": "4px",
+                                "cursor": "pointer", "fontSize": "11px"},
+                    inputStyle={"marginRight": "3px"},
+                ),
+            ]),
+
+            # ── список участников ──
             html.Div(style={"marginBottom": "14px"}, children=[
                 html.P("Участники", className="vol-section-title"),
                 html.Div(id="volunteer-list"),
             ]),
 
-            # форма добавления участника
-            html.Div(className="card", children=[
+            # ── редактирование ──
+            html.Div(id="edit-panel", className="card", style={"display": "none"}, children=[
+                html.H3("Редактировать"),
+                dcc.Input(id="edit-handle", placeholder="@telegram",
+                          className="field", style={"width": "100%"}),
+                dcc.Input(id="edit-name", placeholder="Имя (необязательно)",
+                          className="field", style={"width": "100%"}),
+                html.Input(id="edit-city-1", placeholder="Город 1",
+                           className="field", list="city-datalist",
+                           style={"width": "100%", "marginBottom": "8px"}),
+                html.Input(id="edit-city-2", placeholder="Город 2",
+                           className="field", list="city-datalist",
+                           style={"width": "100%", "marginBottom": "8px"}),
+                html.Input(id="edit-city-3", placeholder="Город 3",
+                           className="field", list="city-datalist",
+                           style={"width": "100%", "marginBottom": "8px"}),
+                dcc.Dropdown(id="edit-service", placeholder="Служба",
+                             style={"marginBottom": "8px", "fontSize": "13px"}),
+                html.Div([
+                    html.Button("Сохранить", id="btn-save-edit", n_clicks=0,
+                                className="btn btn-primary", style={"width": "48%", "marginRight": "4%"}),
+                    html.Button("Отмена", id="btn-cancel-edit", n_clicks=0,
+                                className="btn btn-green", style={"width": "48%"}),
+                ], style={"display": "flex"}),
+                html.Div(id="msg-edit", className="msg"),
+            ]),
+
+            # ── добавление ──
+            html.Div(id="add-panel", className="card", children=[
                 html.H3("Добавить участника"),
                 dcc.Input(id="in-handle", placeholder="@telegram",
                           className="field", style={"width": "100%"}),
                 dcc.Input(id="in-name", placeholder="Имя (необязательно)",
                           className="field", style={"width": "100%"}),
-                html.Datalist(id="city-datalist"),
                 html.Input(id="in-city-1", placeholder="Город 1 (обязательно)",
                            className="field", list="city-datalist",
                            style={"width": "100%", "marginBottom": "8px"}),
@@ -254,18 +359,15 @@ app.layout = html.Div(className="page-wrap", children=[
                            style={"width": "100%", "marginBottom": "8px"}),
                 dcc.Dropdown(id="in-service", placeholder="Служба",
                              style={"marginBottom": "8px", "fontSize": "13px"}),
-                dcc.Upload(
-                    id="in-photo",
-                    children=html.Div(id="in-photo-label", children="📷 Прикрепить фото"),
-                    accept="image/*",
-                    className="upload-photo-input",
-                ),
+                dcc.Upload(id="in-photo",
+                           children=html.Div(id="in-photo-label", children="📷 Прикрепить фото"),
+                           accept="image/*", className="upload-photo-input"),
                 html.Button("Добавить", id="btn-add-volunteer",
                             n_clicks=0, className="btn btn-primary"),
                 html.Div(id="msg-volunteer", className="msg"),
             ]),
 
-            # форма добавления службы
+            # ── добавить службу ──
             html.Div(className="card", children=[
                 html.H3("Добавить службу"),
                 dcc.Input(id="in-service-name", placeholder="Название службы",
@@ -273,6 +375,26 @@ app.layout = html.Div(className="page-wrap", children=[
                 html.Button("Добавить службу", id="btn-add-service",
                             n_clicks=0, className="btn btn-green"),
                 html.Div(id="msg-service", className="msg"),
+            ]),
+
+            # ── импорт ──
+            html.Details(className="card import-details", children=[
+                html.Summary("📥 Импорт участников"),
+                html.Div([
+                    html.P("Формат — по одному на строку:", className="import-hint"),
+                    html.Code("@handle | Имя | Город1, Город2 | Служба",
+                              className="import-hint-code"),
+                    html.P("Имя необязательно, тогда 3 поля через |", className="import-hint"),
+                    dcc.Textarea(id="import-text", placeholder="Вставьте данные...",
+                                 style={"width": "100%", "height": "90px", "fontSize": "12px",
+                                        "border": "1px solid #ddd", "borderRadius": "8px",
+                                        "padding": "6px", "resize": "vertical",
+                                        "marginTop": "4px"}),
+                    html.Button("Импортировать", id="btn-import",
+                                n_clicks=0, className="btn btn-primary",
+                                style={"marginTop": "6px"}),
+                    html.Div(id="msg-import", className="msg"),
+                ], style={"marginTop": "8px"}),
             ]),
         ]),
     ]),
@@ -283,10 +405,28 @@ app.layout = html.Div(className="page-wrap", children=[
 
 @app.callback(
     Output("in-service", "options"),
+    Output("edit-service", "options"),
     Input("data-store", "data"),
 )
 def update_service_options(data):
-    return [{"label": s, "value": s} for s in data["services"]]
+    opts = [{"label": s, "value": s} for s in data["services"]]
+    return opts, opts
+
+
+@app.callback(
+    Output("filter-chips", "options"),
+    Output("filter-chips", "value"),
+    Input("data-store", "data"),
+    State("filter-chips", "value"),
+)
+def update_filter_chips(data, current_value):
+    services = data["services"]
+    opts = [{"label": s, "value": s} for s in services]
+    if current_value is None:
+        return opts, services
+    existing = set(current_value)
+    new_value = list(current_value) + [s for s in services if s not in existing]
+    return opts, new_value
 
 
 @app.callback(
@@ -296,6 +436,27 @@ def update_service_options(data):
 def update_city_datalist(_data):
     return [html.Option(value=c) for c in sorted(CITY_COORDS.keys())]
 
+
+@app.callback(
+    Output("map-graph", "figure"),
+    Input("data-store", "data"),
+    Input("filter-chips", "value"),
+)
+def refresh_map(data, visible_services):
+    return build_figure(data, visible_services)
+
+
+@app.callback(
+    Output("volunteer-list", "children"),
+    Input("data-store", "data"),
+    Input("search-query", "value"),
+    Input("filter-chips", "value"),
+)
+def refresh_list(data, query, visible_services):
+    return build_volunteer_list(data, query, visible_services)
+
+
+# ── добавить службу ───────────────────────────────────────────────────────────
 
 @app.callback(
     Output("data-store", "data", allow_duplicate=True),
@@ -317,6 +478,8 @@ def add_service(n, name, data):
     return data, "", ""
 
 
+# ── удалить участника ─────────────────────────────────────────────────────────
+
 @app.callback(
     Output("data-store", "data", allow_duplicate=True),
     Input({"type": "btn-delete", "index": ALL}, "n_clicks"),
@@ -333,6 +496,8 @@ def delete_volunteer(n_clicks_list, data):
     return data
 
 
+# ── добавить участника ────────────────────────────────────────────────────────
+
 @app.callback(
     Output("in-photo-label", "children"),
     Input("in-photo", "contents"),
@@ -340,9 +505,7 @@ def delete_volunteer(n_clicks_list, data):
     prevent_initial_call=True,
 )
 def update_photo_label(contents, filename):
-    if contents:
-        return f"✓ {filename}"
-    return "📷 Прикрепить фото"
+    return f"✓ {filename}" if contents else "📷 Прикрепить фото"
 
 
 @app.callback(
@@ -370,53 +533,116 @@ def add_volunteer(n, handle, name, city1, city2, city3, service, photo, data):
     if not handle or not city1 or not service:
         return (data, "Заполните handle, город 1 и службу",
                 handle, name, city1, city2, city3, service, photo)
-
     handle = handle.strip()
     cities = [c.strip() for c in [city1, city2 or "", city3 or ""] if c.strip()]
-
-    failed = []
-    for city in cities:
-        if city not in CITY_COORDS:
-            if geocode(city) is None:
-                failed.append(city)
-
+    failed = validate_and_geocode(cities)
     if failed:
         return (data, f"Не удалось найти на карте: {', '.join(failed)}",
                 handle, name, city1, city2, city3, service, photo)
-
-    entry = {
-        "handle": handle,
-        "name": (name or "").strip(),
-        "cities": cities,
-        "service": service,
-        "photo": photo,
-    }
+    entry = {"handle": handle, "name": (name or "").strip(),
+             "cities": cities, "service": service, "photo": photo}
     data = dict(data)
     data["volunteers"] = data["volunteers"] + [entry]
     return data, "", "", "", "", "", "", None, None
 
 
+# ── редактирование ────────────────────────────────────────────────────────────
+
 @app.callback(
-    Output("map-graph", "figure"),
-    Output("volunteer-list", "children"),
-    Input("data-store", "data"),
+    Output("editing-idx", "data"),
+    Output("data-store", "data", allow_duplicate=True),
+    Output("msg-edit", "children"),
+    Input({"type": "btn-edit", "index": ALL}, "n_clicks"),
+    Input("btn-cancel-edit", "n_clicks"),
+    Input("btn-save-edit", "n_clicks"),
+    State("edit-handle", "value"),
+    State("edit-name", "value"),
+    State("edit-city-1", "value"),
+    State("edit-city-2", "value"),
+    State("edit-city-3", "value"),
+    State("edit-service", "value"),
+    State("editing-idx", "data"),
+    State("data-store", "data"),
+    prevent_initial_call=True,
 )
-def refresh(data):
-    return build_figure(data), build_volunteer_list(data)
+def handle_edit(edit_clicks, _cancel, _save,
+                handle, name, city1, city2, city3, service, idx, data):
+    triggered = dash.callback_context.triggered[0]["prop_id"]
+
+    if "btn-cancel-edit" in triggered:
+        return None, data, ""
+
+    if "btn-save-edit" in triggered:
+        if idx is None or not handle or not city1 or not service:
+            return idx, data, "Заполните обязательные поля"
+        handle = handle.strip()
+        cities = [c.strip() for c in [city1, city2 or "", city3 or ""] if c.strip()]
+        failed = validate_and_geocode(cities)
+        if failed:
+            return idx, data, f"Не удалось найти: {', '.join(failed)}"
+        data = dict(data)
+        vols = list(data["volunteers"])
+        vols[idx] = {**vols[idx], "handle": handle, "name": (name or "").strip(),
+                     "cities": cities, "service": service}
+        data["volunteers"] = vols
+        return None, data, ""
+
+    if "btn-edit" in triggered:
+        if not any(edit_clicks):
+            return dash.no_update, dash.no_update, dash.no_update
+        edit_idx = json.loads(triggered.split(".")[0])["index"]
+        return edit_idx, data, ""
+
+    return dash.no_update, dash.no_update, dash.no_update
 
 
-# ── city detail panel ─────────────────────────────────────────────────────────
+@app.callback(
+    Output("edit-panel", "style"),
+    Output("add-panel", "style"),
+    Output("edit-handle", "value"),
+    Output("edit-name", "value"),
+    Output("edit-city-1", "value"),
+    Output("edit-city-2", "value"),
+    Output("edit-city-3", "value"),
+    Output("edit-service", "value"),
+    Input("editing-idx", "data"),
+    State("data-store", "data"),
+)
+def show_edit_panel(idx, data):
+    if idx is None:
+        return {"display": "none"}, {"display": "block"}, "", "", "", "", "", None
+    v = data["volunteers"][idx]
+    cities = v.get("cities", [])
+    return (
+        {"display": "block"}, {"display": "none"},
+        v["handle"], v.get("name", ""),
+        cities[0] if len(cities) > 0 else "",
+        cities[1] if len(cities) > 1 else "",
+        cities[2] if len(cities) > 2 else "",
+        v["service"],
+    )
+
+
+# ── карточка города ───────────────────────────────────────────────────────────
 
 @app.callback(
     Output("selected-city", "data"),
     Input("map-graph", "clickData"),
     Input("btn-close-detail", "n_clicks"),
+    Input({"type": "vol-focus", "index": ALL}, "n_clicks"),
+    State("data-store", "data"),
     prevent_initial_call=True,
 )
-def update_selected_city(click_data, _close):
+def update_selected_city(click_data, _close, focus_clicks, data):
     triggered = dash.callback_context.triggered[0]["prop_id"]
     if "btn-close-detail" in triggered:
         return None
+    if "vol-focus" in triggered:
+        if not any(focus_clicks):
+            return dash.no_update
+        idx = json.loads(triggered.split(".")[0])["index"]
+        cities = data["volunteers"][idx].get("cities", []) if idx < len(data["volunteers"]) else []
+        return cities[0] if cities else None
     if click_data:
         text = click_data["points"][0].get("text", "")
         parts = text.split("<br>")
@@ -477,6 +703,53 @@ def delete_photo(n_clicks_list, data):
     vols[idx] = {**vols[idx], "photo": None}
     data["volunteers"] = vols
     return data
+
+
+# ── импорт ────────────────────────────────────────────────────────────────────
+
+@app.callback(
+    Output("data-store", "data", allow_duplicate=True),
+    Output("msg-import", "children"),
+    Output("import-text", "value"),
+    Input("btn-import", "n_clicks"),
+    State("import-text", "value"),
+    State("data-store", "data"),
+    prevent_initial_call=True,
+)
+def import_volunteers(n, text, data):
+    if not text or not text.strip():
+        return data, "Вставьте данные", text
+
+    volunteers, errors = parse_import(text)
+    if not volunteers:
+        return data, "Не удалось распознать ни одной записи. " + "; ".join(errors), text
+
+    # geocode all cities, collect failures
+    all_failed = []
+    valid = []
+    for v in volunteers:
+        failed = validate_and_geocode(v["cities"])
+        if failed:
+            all_failed.append(f"{v['handle']}: {', '.join(failed)}")
+        else:
+            valid.append(v)
+
+    # auto-add new services
+    data = dict(data)
+    existing_services = set(data["services"])
+    new_services = [v["service"] for v in valid if v["service"] not in existing_services]
+    if new_services:
+        data["services"] = data["services"] + list(dict.fromkeys(new_services))
+
+    data["volunteers"] = data["volunteers"] + valid
+
+    parts = [f"Добавлено: {len(valid)}"]
+    if errors:
+        parts.append(f"Ошибки формата: {len(errors)}")
+    if all_failed:
+        parts.append(f"Не найдены города: {'; '.join(all_failed)}")
+    msg = " · ".join(parts)
+    return data, msg, ""
 
 
 if __name__ == "__main__":
