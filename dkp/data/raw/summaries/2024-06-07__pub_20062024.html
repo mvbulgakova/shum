@@ -1,0 +1,786 @@
+<!-- source_url: https://www.cbr.ru/dkp/mp_dec/decision_key_rate/summary_key_rate_20062024/ -->
+<!-- fetched: 2026-08-02T04:18:35Z -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="zoom:lang" content="ru" />
+    <meta name="zoom:last-modified" content="Thu, 20 Jun 2024 11:00:00 GMT" />
+<title>Резюме обсуждения ключевой ставки | Банк России</title>
+
+
+
+    <meta property="og:image" content="/common/images/share-1.jpg" />
+
+    
+
+
+            <link rel="stylesheet" type="text/css" href="/common/libs/jquery-ui/jquery-ui.min.css?v=v478607061" media="all">
+
+            <!--[if IE 9]><link rel="stylesheet" type="text/css" href="/common/style/main-ie9.css?v=v1910799576" media="all"><![endif]-->
+
+            <!--[if gt IE 9]><!--><link rel="stylesheet" type="text/css" href="/common/style/main.min.css?v=v1572385387" media="all"><!--<![endif]-->
+
+
+        <script type="text/javascript" src="/common/libs/jquery-3.7.1.min.js?v=v735956814"></script>
+
+
+
+        <script type="text/javascript" src="/common/libs/jquery-ui/jquery-ui.min.js?v=v478607061"></script>
+
+        <script type="text/javascript" src="/common/libs/jquery.inputmask.min.js?v=v478607061"></script>
+
+
+        <script type="text/javascript" src="/common/scripts/vendor.js?v=v4270970564"></script>
+
+        <script type="text/javascript" src="/common/libs/jquery.floatThead.min.js?v=v478607061"></script>
+
+
+
+
+
+
+
+
+        <script type="text/javascript" src="/common/libs/popper.js?v=v478607061"></script>
+
+        <script type="text/javascript" src="/common/libs/tippy.js?v=v478607061"></script>
+
+        <script type="text/javascript" src="/common/scripts/main.min.js?v=v824551275"></script>
+
+
+        <script type="text/javascript" src="/common/libs/localization-ru.js?v=v712023859"></script>
+        <script type="text/javascript" src="/js/jquery.ui.autocomplete-ru.js?v=v1043438991"></script>
+
+        <script type="text/javascript" src="/js/jquery.cookie.min.js?v=v4260771145"></script>
+
+        <script type="text/javascript" src="/js/site.js?v=v2848633841"></script>
+
+
+
+
+
+    <script type="text/javascript">
+    $(function () {
+        var $menu = $('[data-menu]'),
+            $menuItemBtn = $menu.find('[data-menu-item-btn]'),
+            $menuShow = $('[data-menu-show]'),
+            $menuClose = $('[data-menu-close]');
+        var config = $menu.data('config');
+
+        $menuShow.on('click.cms_loadwholesite', function (event) {
+            loadWholeSite(true);
+        });
+        $menuShow.on('mouseenter.cms_loadwholesite', function (event) {
+            loadWholeSite(false);
+        });
+
+        var xhr = null, g_openMenu = false;
+        function loadWholeSite(openmenu) {
+            g_openMenu = g_openMenu || openmenu;
+            $menuShow.off('click.cms_loadwholesite mouseenter.cms_loadwholesite');
+            if (xhr === null) {
+                $('.menu_wrap .networks-circle').html($('.networks-circle.footer_networks').html());
+                $('.menu_wrap .header_search').html($('.header .offsetMenu .header_search').html());
+
+                xhr = $.ajax(config.url, {
+                    dataType: "html",
+                    method: "get",
+                    success: function (html) {
+                        $('[data-cms-wholesite-placeholder]').replaceWith(html);
+
+                        $menu.find('.menu_tab[data-tabs-tab]').each(function () {
+                            var tab = $(this).data('tabs-tab');
+                            $(this).toggle($menu.find('[data-tabs-content="' + tab + '"]').length != 0);
+                        });
+
+                        $menu.trigger('new-html');
+
+                        for (var i in config.catalogPath) {
+                            $menu.find('li[data-catalog-id="' + config.catalogPath[i] + '"]')
+                                .addClass("_active");
+                            $menu.find('li[data-catalog-id="' + config.catalogPath[i] + '"]')
+                                .closest('[data-tabs-content]')
+                                .trigger('open-anchor');
+                        }
+
+                        
+                        xhr = true;
+                    },
+                    error: function () {
+                        xhr = null;
+                    }
+                });
+            }
+        }
+    });
+    </script>
+
+
+<script>
+    if (window.localStorage) {
+        if (localStorage.getItem('vision-impaired'))
+            document.getElementsByTagName('html')[0].className += ' vision-impaired';
+    }
+</script>
+<script>
+    document.documentElement.style.setProperty('--scrollbar-width', '17px');
+    setTimeout(function () {
+        
+        var div = document.createElement('div');
+
+        div.style.overflowY = 'scroll';
+        div.style.width = '50px';
+        div.style.height = '50px';
+
+        
+        div.style.visibility = 'hidden';
+
+        document.body.appendChild(div);
+        var scrollWidth = Math.max(div.offsetWidth - div.clientWidth, 0.15); 
+        document.body.removeChild(div);
+        
+        document.documentElement.style.setProperty('--scrollbar-width', scrollWidth + 'px');
+    }, 0);
+</script>
+
+
+
+
+    
+</head>
+<body class="page-v3 page-v3-inside " id="">
+
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();
+    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+    ym(5774506, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+    });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/5774506" style="position:absolute; left:-9999px;" alt="" /></div></noscript>    
+<!-- /Yandex.Metrika counter -->
+        
+    <div class="header-print">
+    <div class="offsetMenu">
+        <div class="header-print_inner">
+            <img class="header-print_logo" alt="cbr" src="/common/images/logo.svg">
+            <ul class="header-print_contacts">
+<li>107016, Москва, ул. Неглинная, д.&nbsp;12, к. В, Банк России</li>
+<li><nobr class="phone">8 800 300-30-00</nobr></li>
+<li>www.cbr.ru</li>
+</ul>
+
+        </div>
+    </div>
+</div>
+
+        <div class="banner-header">
+            <header class="header" id="header" style="background-image: url(/StaticHtml/File/158144/kr_new2.jpg);">
+                <div class="header-image"><img class="banner-header_image" src="/StaticHtml/File/158144/kr_new2.jpg"></div>
+                <div class="top-line" data-top-line="">
+                    <div class="header_burger-big"></div>
+                    <div class="offsetMenu">
+                        <div class="col-md-23 header_margin-left">
+                            <div class="top-line_inner header_inner">
+                                
+
+<div class="row">
+    <div class="col-xl-4 col-md-6">
+        <div class="header_left pr-0">
+                <div class="header_menu" data-menu-show=""></div>
+            <a class="header_logo" href="/"></a>
+                <a class="header_search_btn d-flex d-md-none" href="#" data-search-form-show="" aria-label="Поиск по сайту"><div class="header_search_icon"></div></a>
+            <a class="d-flex d-md-none" href="#" data-tooltip="" data-tooltip-content="Версия для слабовидящих" data-tooltip-class="mobile-hide"><div class="header_visual-impaired_item"></div></a>
+        </div>
+    </div>
+    <div class="col-xl-17 col-md-13 offset-md-1 header_block">
+        <div class="d-none d-md-block">
+            <div class="header_right">
+                <div class="networks header_link header_networks"><a class="header_appeal-link" href="/contactBR/" data-tooltip="" data-tooltip-content="Обратиться в Банк России" data-tooltip-class="mobile-hide"></a></div>
+                <div class="networks header_networks header_visual-impaired header_visual-impaired_inner"><a href="#" data-tooltip="" data-tooltip-content="Версия для слабовидящих" data-tooltip-class="mobile-hide" aria-label="Версия для слабовидящих"><div class="header_visual-impaired_item"></div></a></div>
+                <div class="header_lang header_lang_inner header_networks">
+    <a href="/Localization/SwitchLanguage?url=%2Fdkp%2Fmp_dec%2Fdecision_key_rate%2Fsummary_key_rate_20062024%2F&amp;from=ru-RU&amp;to=en-CB"><!--noindex-->EN<!--/noindex--></a>
+</div>
+                    <div class="header_networks header_search header_search_inner">
+                        <a class="header_search_btn" href="#" data-search-form-show="" aria-label="Поиск по сайту"><div class="header_search_icon"></div><span aria-hidden="true">Поиск по сайту</span></a>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="offsetMenu">
+                    <div class="col-md-23 offset-md-1 header_margin-left">
+                        <div class="header_inner">
+                            
+<div class="row">
+    <div class="col-xl-4 col-md-6">
+        <div class="header_left pr-0">
+            <div class="header_menu" data-menu-show=""></div>
+            <a class="header_logo" href="/"></a>
+            <a class="header_search_btn d-flex d-md-none" href="#" data-search-form-show="" aria-label="Поиск по сайту">
+                <div class="header_search_icon"></div>
+            </a>
+            <a class="d-flex d-md-none" href="#" data-tooltip data-tooltip-content="Версия для слабовидящих" data-tooltip-class="mobile-hide">
+                <div class="header_visual-impaired_item"></div>
+            </a>
+        </div>
+    </div>
+    <div class="col-xl-17 col-md-13 offset-md-1 header_block justify-content-end">
+        <div class="d-none d-md-block">
+            <div class="header_right">
+                <div class="networks header_link header_networks"><a class="header_appeal-link" href="/contactBR/" data-tooltip="" data-tooltip-content="Обратиться в Банк России" data-tooltip-class="mobile-hide"></a></div>
+                <div class="networks header_networks header_visual-impaired header_visual-impaired_inner">
+                    <a href="#" data-tooltip data-tooltip-content="Версия для слабовидящих" data-tooltip-class="mobile-hide" aria-label="Версия для слабовидящих">
+                        <div class="header_visual-impaired_item"></div>
+                    </a>
+                </div>
+                <div class="header_lang header_lang_inner header_networks">
+    <a href="/Localization/SwitchLanguage?url=%2Fdkp%2Fmp_dec%2Fdecision_key_rate%2Fsummary_key_rate_20062024%2F&amp;from=ru-RU&amp;to=en-CB"><!--noindex-->EN<!--/noindex--></a>
+</div>
+                <div class="header_networks header_search header_search_inner">
+                    <a class="header_search_btn" href="#" data-search-form-show="" aria-label="Поиск по сайту">
+                        <div class="header_search_icon"></div><span aria-hidden="true">Поиск по сайту</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="banner-header_main">
+                <div class="offsetMenu banner-header_breadcumbs">
+                    <div class="col-md-23 offset-md-1">
+                        <div class="breadcrumbs">
+    <div class="breadcrumbs_item"><a class="breadcrumbs_home" href="/"></a></div>
+        <div class="breadcrumbs_item">
+            <a href="/dkp/"><!--noindex-->Денежно-кредитная политика<!--/noindex--></a>
+        </div>
+        <div class="breadcrumbs_item">
+            <a href="/dkp/mp_dec/"><!--noindex-->Решения по&#160;денежно-кредитной политике<!--/noindex--></a>
+        </div>
+        <div class="breadcrumbs_item">
+            <a href="/dkp/mp_dec/decision_key_rate/"><!--noindex-->Материалы по&#160;итогам заседаний Совета директоров Банка России по&#160;ключевой ставке<!--/noindex--></a>
+        </div>
+    </div>
+
+                    </div>
+                </div>
+                <div class="offsetMenu">
+                    <div class="col-md-23 offset-md-1">
+                        <!--index-->
+                        <h1><span class="referenceable">Резюме обсуждения ключевой ставки</span>
+</h1>
+
+                        <!--/index-->
+                    </div>
+                </div>
+            </div>
+            <div class="banner-header_bottom">
+<div class="offsetMenu"><div class="col-md-23 offset-md-1"><div class="banner-header_vestnik"><div class="banner-header_vestnik_subtitle"></div><div class="banner-header_vestnik_title">на «неделе тишины» и в ходе<br />
+заседания Совета директоров<br />
+Банка России 7 июня 2024 года</div><div class="banner-header_vestnik_btn"><a class="b-btn _blue" href="/Content/Document/File/161651/summary_key_rate_20062024.pdf">Скачать в формате PDF</a></div></div><div class="news-header_author"><!--	Фото:  copyright --></div><div class="news-info-line row news-info-line__dark"><div class="col-md-6 col-12 news-info-line_date">20 июня 2024 года</div><div class="col-md-11 col-13 news-info-line_type"></div><div class="col-md-6 d-none d-md-block news-info-line_share"><span class="news-info-line_share-btn" tabindex="0" data-share-btn="data-share-btn">Поделиться</span><div class="news-info-line_share-select _hide"><a class="news-info-line_share-vkontakte" target="_blank" href="https://vkontakte.ru/share.php?url=https%3a%2f%2fwww.cbr.ru%2fdkp%2fmp_dec%2fdecision_key_rate%2fsummary_key_rate_20062024%2f">ВКонтакте</a><a class="news-info-line_share-whatsapp" target="_blank" href="https://web.whatsapp.com/send?text=https%3a%2f%2fwww.cbr.ru%2fdkp%2fmp_dec%2fdecision_key_rate%2fsummary_key_rate_20062024%2f&amp;utm_source=share2" data-action="share/whatsapp/share">WhatsApp</a><a class="news-info-line_share-telegram" target="_blank" href="https://telegam.me/share/url?url=https%3a%2f%2fwww.cbr.ru%2fdkp%2fmp_dec%2fdecision_key_rate%2fsummary_key_rate_20062024%2f">Telegram</a></div></div></div></div></div>            </div>
+        </div>
+    <form action="/search/" method="get" class="search-form" data-search-form=""
+      data-api-url="/Content/SearchSuggest/Suggest"
+      data-api-top-url="">
+    <div class="offsetMenu">
+        <div class="col-md-23 offset-md-1">
+            <div class="search-form_inner">
+                <div class="search-form_title">Что вы хотите найти?<img class="search-form_title-close" src="/common/images/icons/menu-close-dark-grey.svg"></div>
+                <div class="search-form_content">
+                    <div class="search-form_block">
+                        <div class="search-form_icon"></div>
+                        <div class="search-form_field">
+                            <input name="text" type="text" autocomplete="off" placeholder="Начните писать" data-search-form-input="" />
+                        </div>
+                    </div>
+                    <div class="search-form_clear" data-search-form-clear-btn=""><img src="/common/images/icons/menu-close-gray.svg"></div>
+                    <div class="search-form_btn">
+                        <button class="b-btn _blue" data-search-form-btn="">Искать</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<div class="menu_wrap" data-menu="" data-config="{&quot;catalogPath&quot;:[27054,16446,15917],&quot;url&quot;:&quot;/Catalog/SiteMap/GetWholeSiteHtml?blockId=59191&quot;}">
+    <div class="offsetMenu">
+        <div class="header_menu _close menu_close d-none d-md-block" data-menu-close=""></div>
+        <div class="header_inner top-line_inner d-block d-md-none">
+            <div class="row">
+                <div class="col-xl-5 col-md-9">
+                    <div class="header_left pr-0">
+                        <div class="header_menu _close" role="button" tabindex="0" aria-label="Закрыть меню" data-menu-close=""></div>
+                        <a class="header_logo" href="/"></a>
+                        <a class="header_search_btn" href="#" data-search-form-show="data-search-form-show" aria-label="Поиск по сайту"><div class="header_search_icon"></div></a>
+                        <a href="#" data-tooltip="data-tooltip" data-tooltip-content="Версия для слабовидящих" data-tooltip-class="mobile-hide"><div class="header_visual-impaired_item"></div></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="menu row" data-tabs="data-tabs">
+            <div class="menu_quick col-md-7">
+                <div role="tablist" class="menu_quick_tabs">
+    <a role="tab" id="menu_tab_Activity" aria-controls="menu_content_Activity" aria-selected="true" class="menu_tab _active" href="#" data-tabs-tab="Activity">Деятельность</a>
+    <a role="tab" id="menu_tab_FinancialMarkets" aria-controls="menu_content_FinancialMarkets" aria-selected="false" class="menu_tab" href="#" data-tabs-tab="FinancialMarkets">Финансовые рынки</a>
+    <a role="tab" id="menu_tab_Documents" aria-controls="menu_content_Documents" aria-selected="false" class="menu_tab" href="#" data-tabs-tab="Documents">Документы и данные</a>
+    <a role="tab" id="menu_tab_AboutBank" aria-controls="menu_content_AboutBank" aria-selected="false" class="menu_tab" href="#" data-tabs-tab="AboutBank">О Банке России</a>
+    <a role="tab" id="menu_tab_Services" aria-controls="menu_content_Services" aria-selected="false" class="menu_tab" href="#" data-tabs-tab="Services">Сервисы</a>
+</div>
+<div class="menu_quick_links">
+    <div class="inner_links"><a href="/support_measures/" title="Меры зашиты финансового рынка" style="color:red">Меры защиты финансового рынка</a>
+  </div>
+<div class="phones"><a class="menu_phone_val" href="tel:+74993003000">
+<div class="plus">+</div>7 499 300-30-00</a><a class="menu_phone_val" href="tel:88003003000">8 800 300-30-00</a><a class="menu_phone_val" href="tel:300">300</a><span>Бесплатно для звонков с мобильных телефонов</span></div>
+<div class="inner_links">
+  <a href="/news/" title="Новости">Новости</a>
+  <a href="/rbr/" title="Решения Банка России">Решения Банка России</a>
+  <a href="/contacts/" title="Контактная информация">Контактная информация</a>
+  <a href="/sitemap" title="Карта сайта">Карта сайта</a>
+  <a href="/about/" title="О сайте">О сайте</a>
+  </div>
+<div class="networks-circle">
+  <a class="networks-circle_item _vk" href="https://vk.com/cbr_official" title="ВКонтакте"></a>
+  <a class="networks-circle_item _yt" href="https://www.youtube.com/user/BankofRussia" title="Youtube"></a>
+  <a class="networks-circle_item _tg" href="https://telegram.me/centralbank_russia" title="Telegram"></a>
+  <a class="networks-circle_item _ydzen" href="https://zen.yandex.ru/id/622372d6a565892091994ea9" title="Яндекс Дзен"></a>
+  <a class="networks-circle_item _ok" href="https://ok.ru/group/68858679787580" title="Одноклассники"></a>
+  <a class="networks-circle_item _rt" href="https://rutube.ru/channel/23873201/" title="RUTUBE"></a>
+  <a class="networks-circle_item _max" href="https://max.ru/cbr_official" title="Макс"></a>
+</div>
+</div>
+            </div>
+            <div class="d-md-none link-above">
+                <div class="header_right">
+                    <div class="header_link"><a href="/contactBR/">Обратиться в&nbsp;Банк России</a></div>
+                    <div class="header_lang">
+            <div class="header_lang_item _active"><span><!--noindex-->RU<!--/noindex--></span></div>
+            <div class="header_lang_item"><a href="/Localization/SwitchLanguage?url=%2Fdkp%2Fmp_dec%2Fdecision_key_rate%2Fsummary_key_rate_20062024%2F&amp;from=ru-RU&amp;to=en-CB"><!--noindex-->EN<!--/noindex--></a></div>
+</div>
+                </div>
+<div class="header_right"><div class="header_link"><a href="/about_br/">О Банке России</a></div></div>
+<div class="header_right"><div class="header_link"><a href="/beware/">Осторожно: мошенники!</a></div></div>            </div>
+            <div class="menu_content_container col-md with-centered-loader" data-cms-wholesite-placeholder="">
+            </div>
+        </div>
+    </div>
+</div>
+
+    <main id="content">
+        <div class="offsetMenu">
+            <div class="container-fluid">
+                <div class="col-md-23 offset-md-1">
+                    <!--index-->
+                    <style type='text/css'>
+/*<![CDATA[*/
+.marker {
+background-color: #e6e6e6;
+}
+
+ul.custom_items>li::before {
+    content: '•';
+    font-size: 2.2em;
+    margin-top: -0.5em;
+    color: #08c;
+	margin-left: -1em;
+}
+
+.incut_border__mod {
+border-top: 4px solid #08c;
+}
+
+.constructor_img {
+height: 100px;
+width: auto;
+
+}
+.item_img {
+    height: 50px;
+    margin-right: 30px;
+    position: relative;
+    top: -0.1em;
+}
+@media (max-width:1200px) {
+.menu-sticky {
+margin-left:-35px;
+}
+}
+@media (max-width:1030px) {
+.constructor_img {
+height: 50px !important;
+width: auto;
+margin-bottom:10px;
+}
+}
+/*]]*/
+</style><script type='text/javascript'>
+//<![CDATA[
+
+
+let ol=document.querySelectorAll('.numbering');
+let cr=0;
+if (ol.length>0) {
+for (i=1; i<ol.length;i++) {
+  
+   cr+=(ol[i-1].children.length);
+    ol[i].style.counterReset=`a ${cr}`;
+}
+}
+
+//]]
+</script>                                            <div class="landing-text">
+                            <span id="start"></span><p><em>Участники обсуждения: члены Совета директоров Банка России, руководство Департамента денежно-кредитной политики, Департамента исследований и&nbsp;прогнозирования, ряда других департаментов и&nbsp;главных управлений Банка России.</em></p>
+<p>Департамент денежно-кредитной политики и&nbsp;Департамент исследований и&nbsp;прогнозирования представили результаты анализа текущей экономической ситуации в&nbsp;стране и&nbsp;в&nbsp;мире, а&nbsp;также свои оценки того, как&nbsp;складывающиеся экономические тенденции соотносятся с&nbsp;базовым макроэкономическим прогнозом на&nbsp;2024 &mdash; 2026&nbsp;годы и&nbsp;его&nbsp;вариациями. Главные управления Банка России представили информацию о&nbsp;ситуации в&nbsp;регионах, в&nbsp;том&nbsp;числе на&nbsp;основе опросов бизнеса. Дополнительно участники обсуждения рассмотрели информацию Департамента организации международных расчетов.</p>
+<p>Материал отражает <strong>ключевые моменты обсуждения</strong>.</p>
+                        </div>
+                        <!--noindex-->
+    <div class="menu-sticky hide_number" aria-hidden="true">
+        <div class="menu-sticky__links">
+                <ol class="">
+            <li>
+                <a class="menu-sticky__link" href="/dkp/mp_dec/decision_key_rate/summary_key_rate_20062024/#start">Начало</a>
+            </li>
+            <li>
+                <a class="menu-sticky__link" href="#a_161625"> Ситуация в экономике и инфляция</a>
+            </li>
+            <li>
+                <a class="menu-sticky__link" href="#a_161630">Денежно-кредитные условия</a>
+            </li>
+            <li>
+                <a class="menu-sticky__link" href="#a_161636"> Внешние условия</a>
+            </li>
+            <li>
+                <a class="menu-sticky__link" href="#a_161641">Инфляционные риски</a>
+            </li>
+            <li>
+                <a class="menu-sticky__link" href="#a_161643">Выводы для денежно-кредитной политики и решение по ключевой ставке</a>
+            </li>
+            <li>
+                <a class="menu-sticky__link" href="#a_161646">Дополнительные материалы</a>
+            </li>
+    </ol>
+
+        </div>
+        <div class="menu-sticky__content">
+            <div class="menu-sticky__icon"></div>
+            <div class="menu-sticky__text">Содержание раздела</div>
+            <div class="menu-sticky__close"></div>
+        </div>
+    </div>
+    <!--/noindex-->
+
+
+<div class="landing-text"><div class="block-title"><h2><span class="referenceable" id="a_161625"><img class="item_img" src="/StaticHtml/File/159223/1.svg"/> Ситуация в экономике и инфляция</span></h2></div><div class="incut ">
+<div class="incut_element incut_border incut_border__mod">
+<div class="title_20">Основные факты</div>
+</div>
+</div><p class="clear-both"><span class="a0">Экономика в&nbsp;I&nbsp;квартале 2024&nbsp;года выросла на&nbsp;5,4% г/г, что&nbsp;выше прогноза Банка России. По&nbsp;оперативным данным, в&nbsp;апреле рост экономики немного замедлился, но&nbsp;оставался высоким. Потребление домохозяйств в&nbsp;I&nbsp;квартале 2024&nbsp;года, по&nbsp;оценкам, выросло сильнее, чем&nbsp;ожидал Банк России. По&nbsp;оперативным данным, потребительская активность в&nbsp;II&nbsp;квартале остается высокой, хотя есть некоторые признаки ее&nbsp;замедления. Данные опросов предприятий и&nbsp;динамика инвестиций в&nbsp;основной капитал свидетельствуют о&nbsp;сохранении высокого инвестиционного спроса. Индикатор бизнес-климата Банка России в&nbsp;мае&nbsp;вырос и&nbsp;находился вблизи максимумов за&nbsp;12&nbsp;лет. Сальдированный финансовый результат крупных и&nbsp;средних компаний (за&nbsp;исключением кредитных организаций) за&nbsp;последние 12&nbsp;месяцев в&nbsp;марте составил 33,9&nbsp;трлн&nbsp;рублей и&nbsp;находился вблизи исторических максимумов. Напряженность на&nbsp;рынке труда продолжила нарастать. Уровень безработицы в&nbsp;апреле снизился до&nbsp;2,6%, обновив исторический минимум. Рост номинальных зарплат существенно ускорился в&nbsp;марте (до&nbsp;21,6% г/г). Текущие темпы роста цен&nbsp;в&nbsp;апреле составили 5,8% с&nbsp;сезонной корректировкой в&nbsp;годовом выражении (с.к.г.) после 5,7% в&nbsp;среднем за&nbsp;I&nbsp;квартал 2024&nbsp;года. Большинство показателей устойчивой инфляции в&nbsp;апреле выросли. В&nbsp;частности, базовая инфляция выросла до&nbsp;8,3% с.к.г. после 7,1% с.к.г.&nbsp;в&nbsp;среднем за&nbsp;I&nbsp;квартал 2024&nbsp;года.</span></p><div class="incut ">
+<div class="incut_element incut_border incut_border__mod">
+<div class="title_20">Дискуссия</div>
+</div>
+</div><p class="clear-both">Участники обсуждения пришли к&nbsp;выводу, что&nbsp;<strong><span class="a">в&nbsp;апреле снижение инфляционного давления, наблюдавшееся с&nbsp;декабря 2023&nbsp;года, приостановилось</span></strong>. Недельные данные указывают на&nbsp;сохранение текущих темпов роста цен&nbsp;на&nbsp;повышенном уровне. Однако в&nbsp;еженедельный мониторинг цен&nbsp;входит ограниченный набор товаров и&nbsp;услуг, поэтому однозначный вывод о&nbsp;динамике инфляции в&nbsp;мае&nbsp;сделать пока нельзя. Кроме того, повышенная динамика цен&nbsp;в&nbsp;апреле&nbsp;&mdash; мае&nbsp;отчасти объясняется разовыми факторами: индексацией тарифов на&nbsp;услуги связи и&nbsp;повышением цен&nbsp;на&nbsp;отечественные автомобили.<o:p></o:p></p>
+<p class="a0"><strong><span class="a">Наибольшую дискуссию вызвала&nbsp;дальнейшая динамика инфляции.</span></strong> Часть участников обсуждения указывала на&nbsp;то, что, несмотря на&nbsp;неполные данные по&nbsp;инфляции, многие индикаторы, очищенные от&nbsp;волатильных компонентов, говорят о&nbsp;сохранении в&nbsp;мае&nbsp;высокого уровня темпов роста&nbsp;цен. И&nbsp;поскольку рост кредитования и&nbsp;потребления не&nbsp;замедляется, инфляция может закрепиться на&nbsp;текущем повышенном уровне или&nbsp;даже перейти к&nbsp;росту. Другие участники считали, что&nbsp;на&nbsp;динамику цен&nbsp;в&nbsp;последние месяцы влияло множество разовых факторов, из‑за&nbsp;чего месячные темпы роста цен&nbsp;были очень волатильны. Это&nbsp;не&nbsp;позволяет сделать однозначный вывод о&nbsp;том, как&nbsp;инфляция будет вести себя в&nbsp;дальнейшем: ускорится, замедлится или&nbsp;останется на&nbsp;текущих уровнях. Отдельные участники придерживались мнения, что&nbsp;все&nbsp;еще&nbsp;можно ожидать снижения инфляции по&nbsp;мере большего проявления эффектов проводимой денежно-кредитной политики на&nbsp;динамику кредитования и&nbsp;потребительскую активность.<o:p></o:p></p>
+<p class="a0">Были обсуждены<span class="a"> <strong>дополнительные факторы, которые могут повлиять на&nbsp;инфляцию в&nbsp;дальнейшем.</strong></span><strong> <span class="a">Значительного роста цен&nbsp;на&nbsp;продовольствие из-за ситуации с&nbsp;урожаем не&nbsp;ожидается.</span> <span class="a">Влияние произошедшего в&nbsp;мае&nbsp;укрепления рубля на&nbsp;динамику&nbsp;цен, по&nbsp;их&nbsp;мнению, будет сдержанным.</span></strong> Несмотря на&nbsp;неблагоприятные погодные условия весной, прогнозы урожая остаются вблизи средних значений за&nbsp;последние 5&nbsp;лет. Урожай зерновых частично может быть восполнен за&nbsp;счет пересева. Потери в&nbsp;предложении фруктов и&nbsp;ягод возможно заместить расширением импорта. Что&nbsp;касается влияния укрепления рубля, то&nbsp;в&nbsp;значительной степени оно&nbsp;может быть компенсировано воздействием санкционных ограничений на&nbsp;цены импортных товаров и&nbsp;услуг.<o:p></o:p></p>
+<p class="a0">Департаменты представили свои <strong><span class="a">оценки влияния бюджетных новаций, анонсированных Правительством Российской Федерации, на&nbsp;динамику&nbsp;цен.</span> <span class="a">Итогом обсуждения стал вывод о&nbsp;том, что&nbsp;совокупное влияние налоговой реформы на&nbsp;инфляцию будет скорее нейтральным</span></strong>, поскольку дополнительные ненефтегазовые доходы, полученные в&nbsp;результате изменений в&nbsp;налогообложении, полностью покроют предполагаемые дополнительные расходы бюджета. В&nbsp;то&nbsp;же&nbsp;время <strong><span class="a">могут возникнуть эффекты второго порядка, связанные со&nbsp;структурой этих расходов и&nbsp;доходов</span></strong>. В&nbsp;частности, налоговая реформа может оказать влияние на&nbsp;поведение и&nbsp;спрос населения и&nbsp;бизнеса. В&nbsp;зависимости от&nbsp;того, какое влияние будет преобладать, возможен как&nbsp;про-, так&nbsp;и&nbsp;дезинфляционный эффект.<o:p></o:p></p>
+<p class="a0"><span class="a"><strong>Инфляционные ожидания остаются повышенными, что&nbsp;усиливает инерцию устойчивой инфляции.</strong> </span>Большинство индикаторов инфляционных ожиданий в&nbsp;мае&nbsp;выросли: инфляционные ожидания населения, ожидания профессиональных аналитиков по&nbsp;инфляции на&nbsp;2024 и&nbsp;2025&nbsp;годы, вмененная инфляция, рассчитанная из&nbsp;ОФЗ-ИН. Ценовые ожидания предприятий не&nbsp;изменились, оставаясь повышенными.<o:p></o:p></p>
+<p class="a0">Участники согласились, что&nbsp;<strong><span class="a">рост потребительского спроса по‑прежнему превышает возможности расширения предложения, и&nbsp;это&nbsp;является основным фактором повышенного роста&nbsp;цен</span></strong>. В&nbsp;I&nbsp;квартале наблюдался уверенный рост потребительской активности. При&nbsp;этом динамика оперативных индикаторов за&nbsp;II&nbsp;квартал 2024&nbsp;года неоднородна. Они&nbsp;не&nbsp;позволяют сделать однозначный вывод о&nbsp;том, прослеживается&nbsp;ли&nbsp;тенденция замедления потребительского спроса или&nbsp;она&nbsp;отсутствует. С&nbsp;одной стороны, платные услуги населению, включая общественное питание, в&nbsp;начале&nbsp;II&nbsp;квартала продолжали активно расти, что&nbsp;говорит о&nbsp;сохранении высокого потребительского спроса. С&nbsp;другой стороны, данные Росстата по&nbsp;обороту розничной торговли за&nbsp;апрель указывают на&nbsp;снижение потребительского спроса за&nbsp;счет непродовольственных товаров. Представители ряда главных управлений Банка России (ГУ) сообщили о&nbsp;некотором снижении посещаемости торговых центров и&nbsp;активности покупателей на&nbsp;маркетплейсах, что&nbsp;также может быть признаком охлаждения потребительской активности. Участники отмечали, что&nbsp;данные по&nbsp;потреблению в&nbsp;последние месяцы могут быть зашумлены действием разовых факторов. В&nbsp;частности, было высказано предположение, что&nbsp;высокий рост потребительского спроса в&nbsp;I&nbsp;квартале 2024&nbsp;года и&nbsp;возможная его&nbsp;коррекция в&nbsp;начале&nbsp;II&nbsp;квартала 2024&nbsp;года могут отчасти быть связаны с&nbsp;динамикой продаж автомобилей. Ужесточение ввоза транспортных средств через страны ЕАЭС с&nbsp;1&nbsp;апреля могло привести к&nbsp;перераспределению продаж автомобилей с&nbsp;II&nbsp;квартала на&nbsp;I&nbsp;квартал. Если учесть этот фактор, то&nbsp;динамика потребительского спроса была скорее стабильно высокой, без&nbsp;признаков охлаждения. Дополнительные данные по&nbsp;потребительской активности за&nbsp;май&nbsp;позволят лучше оценить эффекты разовых и&nbsp;более устойчивых факторов спроса.<o:p></o:p></p>
+<p class="a0"><strong><span class="a">Основным ограничением для&nbsp;расширения предложения, по&nbsp;мнению участников, по‑прежнему является дефицит трудовых ресурсов.</span></strong> Напряженность на&nbsp;рынке труда усиливается. В&nbsp;условиях конкуренции за&nbsp;работников компании повышают заработные платы, имея такую возможность благодаря высокому финансовому результату. В&nbsp;итоге зарплаты продолжают расти высокими темпами, опережая рост производительности труда. При&nbsp;этом наблюдается значительная неравномерность динамики зарплат по&nbsp;отраслям и&nbsp;регионам. В&nbsp;феврале&nbsp;&mdash; марте дополнительно ускорить рост заработных плат могла выплата повышенных премий по&nbsp;итогам успешного для&nbsp;многих компаний финансового&nbsp;года. Оценить масштаб влияния этого фактора можно будет после выхода данных за&nbsp;апрель. Представители ГУ&nbsp;обратили внимание на&nbsp;то, что&nbsp;некоторое сдерживающее влияние на&nbsp;рост зарплат оказывает привлечение мигрантов из‑за&nbsp;рубежа, а&nbsp;также межотраслевая и&nbsp;межрегиональная миграция.<o:p></o:p></p>
+<p class="a0"><strong><span class="a">Инвестиционная активность остается высокой.</span></strong> Как&nbsp;и&nbsp;прежде, поддержку инвестициям оказывают высокий финансовый результат компаний, государственный спрос, льготные программы кредитования, снижение конкуренции со&nbsp;стороны импорта по&nbsp;ряду товаров при&nbsp;повышенном внутреннем спросе. Участники обсуждения по‑прежнему ожидают более умеренной динамики инвестиций, в&nbsp;том&nbsp;числе по&nbsp;мере завершения инвестиционной фазы уже&nbsp;реализуемых проектов.<o:p></o:p></p>
+<p class="a0"><strong><span class="a">Для&nbsp;вывода о&nbsp;том, что&nbsp;рост экономики в&nbsp;I&nbsp;квартале 2024&nbsp;года значимо отклонился от&nbsp;базового сценария, данных недостаточно</span></strong>,<span class="a"> </span>согласились участники. <strong><span class="a">Динамика ВВП&nbsp;в&nbsp;I&nbsp;квартале 2024&nbsp;года зашумлена календарным эффектом високосного&nbsp;года.</span> <span class="a">Оценки вклада этого фактора в&nbsp;рост&nbsp;ВВП&nbsp;стали предметом дискуссии.</span></strong> Диапазон обсуждавшихся оценок эффекта високосного&nbsp;года предполагает, что&nbsp;секвенциальный темп роста экономики мог&nbsp;как&nbsp;быть близок к&nbsp;базовому сценарию, то&nbsp;есть замедлялся по&nbsp;сравнению с&nbsp;IV&nbsp;кварталом 2023&nbsp;года, так&nbsp;и&nbsp;быть выше него. По&nbsp;данным оперативной статистики, деловая активность в&nbsp;апреле несколько замедлилась. Признаки этого в&nbsp;отдельных регионах отмечали представители&nbsp;ГУ: снижение индекса бизнес-климата, ожиданий компаниями будущего спроса. В&nbsp;результате в&nbsp;дальнейшем можно ожидать некоторого замедления экономической активности.<o:p></o:p></p>
+<p class="a0">Участники пришли к&nbsp;единому мнению, <strong>что&nbsp;<span class="a">напряженность на&nbsp;рынке труда и&nbsp;повышенные темпы роста цен&nbsp;свидетельствуют о&nbsp;значительном положительном разрыве выпуска</span></strong>. В&nbsp;то&nbsp;же&nbsp;время пока <strong><span class="a">нельзя сделать однозначный вывод о&nbsp;динамике разрыва</span></strong>. Часть участников обсуждения считала, что&nbsp;перегрев экономики в&nbsp;I&nbsp;квартале мог&nbsp;усилиться. Они&nbsp;указывали на&nbsp;нарастание дефицита рабочей силы, сопровождающееся ускоренным ростом зарплат, а&nbsp;также признаки разворота в&nbsp;динамике инфляции в&nbsp;апреле&nbsp;&mdash; мае. По&nbsp;их&nbsp;мнению, влияние високосного&nbsp;года на&nbsp;экономический рост в&nbsp;I&nbsp;квартале было небольшим. Другие участники, напротив, считали, что&nbsp;данных для&nbsp;вывода об&nbsp;усилении перегрева недостаточно. По&nbsp;их&nbsp;мнению, вклад високосного&nbsp;года в&nbsp;экономический рост мог&nbsp;быть существенным. Кроме того, высокие темпы роста экономики отчасти могут быть связаны с&nbsp;продолжающимся наращиванием уровня ее&nbsp;потенциала. Это&nbsp;происходит в&nbsp;результате как&nbsp;увеличения производственных мощностей, так&nbsp;и&nbsp;роста производительности труда, о&nbsp;чем, в&nbsp;частности, свидетельствовали многие опрошенные Банком России компании. Среди основных факторов роста производительности труда они&nbsp;называли ввод нового оборудования и&nbsp;оптимизацию процессов. Отдельные компании также связывали рост производительности труда с&nbsp;обучением персонала, использованием нового программного обеспечения и&nbsp;новых материалов.<o:p></o:p></p></div><div class="landing-text"><div class="block-title"><h2><span class="referenceable" id="a_161630"><img class="item_img" src="/StaticHtml/File/159223/2.svg"/>Денежно-кредитные условия</span></h2></div><div class="incut ">
+<div class="incut_element incut_border incut_border__mod">
+<div class="title_20">Основные факты</div>
+</div>
+</div><p class="clear-both"><span>С&nbsp;апрельского заседания ставки денежного рынка и&nbsp;доходности&nbsp;ОФЗ существенно выросли. Инверсия кривой&nbsp;ОФЗ уменьшилась. Реальные доходности ОФЗ-ИН значительно увеличились при&nbsp;сравнительно меньшем повышении вмененной инфляции. Процентные ставки по&nbsp;депозитам и&nbsp;кредитам также выросли. Сохранялся значительный рост депозитов населения. Кредитная активность оставалась высокой, но&nbsp;месячные темпы роста ниже пиковых значений осени прошлого&nbsp;года. Корпоративные и&nbsp;необеспеченные потребительские кредиты после некоторого замедления в&nbsp;начале&nbsp;года в&nbsp;апреле снова росли повышенными темпами (м/м, с&nbsp;сезонной корректировкой, с.к.). Темпы роста ипотечного кредитования в&nbsp;апреле не&nbsp;изменились, оставаясь значительно ниже показателей 2023&nbsp;года (м/м, с.к.).</span></p><div class="incut ">
+<div class="incut_element incut_border incut_border__mod">
+<div class="title_20">Дискуссия</div>
+</div>
+</div><p class="clear-both">Участники обсуждения согласились, что&nbsp;<strong>денежно-кредитные условия ужесточились с&nbsp;апрельского заседания преимущественно в&nbsp;части ценовых условий</strong>.</p>
+<ul class="custom_items">
+<li>Ставки денежного рынка и&nbsp;доходности&nbsp;ОФЗ существенно выросли. Участники рынка корректировали свои ожидания по&nbsp;будущей траектории ключевой ставки. На&nbsp;это&nbsp;в&nbsp;том&nbsp;числе повлияла коммуникация Банка России о&nbsp;большей продолжительности периода жестких денежно-кредитных условий, а&nbsp;также выходящие данные о&nbsp;росте&nbsp;ВВП и&nbsp;инфляции. Доходности долгосрочных&nbsp;ОФЗ росли из‑за увеличения премии за&nbsp;срочность. В&nbsp;ходе обсуждения было высказано мнение о&nbsp;том, что&nbsp;рост стоимости заимствований для&nbsp;всех субъектов экономики, включая государство, связан с&nbsp;усилившейся конкуренцией за&nbsp;сбережения. Это&nbsp;объясняется&nbsp;тем, что&nbsp;из‑за структурной перестройки в&nbsp;экономике увеличивается спрос на&nbsp;инвестиции, источником финансирования которых являются сбережения.</li>
+<li>Участники обсуждения отметили, что&nbsp;в&nbsp;мае, по&nbsp;оперативным данным, ставки по&nbsp;вкладам в&nbsp;банках заметно выросли. Это&nbsp;могло быть связано как&nbsp;с&nbsp;пересмотром вверх ожиданий по&nbsp;ключевой ставке с&nbsp;учетом коммуникации Банка России, так&nbsp;и&nbsp;с&nbsp;увеличением конкуренции после отмены комиссии за&nbsp;перевод средств вкладчиков между своими счетами в&nbsp;пределах 30&nbsp;млн&nbsp;рублей в&nbsp;месяц. Ставки по&nbsp;кредитам также росли, продолжая подстраиваться под&nbsp;принятые решения по&nbsp;денежно-кредитной политике. Участники обсуждения заключили, что&nbsp;с&nbsp;учетом произошедшего роста доходностей&nbsp;ОФЗ рост ставок по&nbsp;кредитам и&nbsp;депозитам продолжится.</li>
+</ul>
+<p class="clear-both">Общим выводом стало&nbsp;то, <strong>что&nbsp;ожидаемого дальнейшего замедления кредитования не&nbsp;происходит</strong>. Возросшие доходы населения и&nbsp;бизнеса позволяют им&nbsp;привлекать больше заемных средств, а&nbsp;большой запас капитала у&nbsp;банков&nbsp;&mdash; продолжать наращивать кредитование, несмотря на&nbsp;ужесточение макропруденциальных&nbsp;мер.</p>
+<ul class="custom_items">
+<li>Розничное кредитование продолжает быстро расти. Рост необеспеченного потребительского кредита в&nbsp;апреле ускорился, преимущественно в&nbsp;сегменте кредитных карт. Высокие темпы расширения автокредитования по‑прежнему поддерживаются государственными программами. В&nbsp;ипотечном кредитовании повышенный рост показывают кредиты по&nbsp;льготным госпрограммам, в&nbsp;том&nbsp;время как&nbsp;динамика рыночной ипотеки весьма сдержанная.<o:p></o:p></li>
+<li>Корпоративное кредитование растет повышенными темпами. Но&nbsp;они&nbsp;ниже пиковых значений осени 2023&nbsp;года (м/м, с.к.). Рыночная часть кредитного портфеля ожидаемо замедляется в&nbsp;ответ на&nbsp;рост ставок. Однако различные меры поддержки экономики, наряду с&nbsp;высокими финансовыми результатами компаний, способствовали тому, что&nbsp;сейчас корпоративное кредитование менее чувствительно к&nbsp;жестким денежно-кредитным условиям.</li>
+<li>Участники подчеркнули, что&nbsp;чем&nbsp;выше будет оставаться доля нечувствительного к&nbsp;рыночным ставкам кредита, тем&nbsp;выше будут процентные ставки для&nbsp;других сегментов экономики, не&nbsp;имеющих доступ к&nbsp;льготному кредитованию.</li>
+</ul>
+<p class="clear-both">В&nbsp;ходе обсуждения участники отметили сохраняющуюся высокую активность на&nbsp;фондовом рынке. При&nbsp;этом на&nbsp;фоне повышения ставок на&nbsp;денежном и&nbsp;долговом рынках наблюдались коррекция цен&nbsp;и&nbsp;переток средств инвесторов с&nbsp;рынка акций в&nbsp;фонды денежного рынка.</p>
+<p class="clear-both">Участники обсуждения считают, что&nbsp;<strong><span class="a">в&nbsp;условиях ускоренного роста доходов для&nbsp;устойчивого процесса дезинфляции требуется более высокая норма сбережения</span></strong>.<span class="a"> </span>С&nbsp;одной стороны, сберегательная активность населения в&nbsp;I&nbsp;квартале была максимальной для&nbsp;этого периода&nbsp;года за&nbsp;последние 10&nbsp;лет. В&nbsp;апреле срочные вклады продолжали расти высокими темпами. С&nbsp;другой стороны, рост доходов и&nbsp;кредитования способствовал ускоренному расширению потребления. Часть участников предположили, что&nbsp;уже&nbsp;при&nbsp;достигнутой жесткости денежно-кредитных условий норма сбережений продолжит повышаться. Это&nbsp;произойдет благодаря росту привлекательности ставок по&nbsp;депозитам и&nbsp;постепенному замедлению розничного кредитования в&nbsp;силу ограничения льготных программ и&nbsp;действия макропруденциальных&nbsp;мер. Другие посчитали, что&nbsp;для&nbsp;повышения нормы сбережения необходимы дополнительные шаги денежно-кредитной политики.<o:p></o:p></p>
+<p class="clear-both"><strong><span class="a">Оценка достаточности жесткости денежно-кредитных условий стала значимым дискуссионным моментом.</span></strong> Одни участники высказали суждение о&nbsp;том, что&nbsp;отсутствие заметного замедления кредитования может говорить о&nbsp;недостаточной жесткости денежно-кредитных условий. В&nbsp;этом случае требуется дополнительная реакция денежно-кредитной политики. Другая точка зрения заключалась в&nbsp;том, что&nbsp;нужно больше времени, чтобы ужесточение ценовых условий в&nbsp;полной мере отразилось в&nbsp;динамике кредитования. Многие экономические агенты в&nbsp;ожидании скорого снижения ключевой ставки могли привлекать кредиты по&nbsp;плавающим ставкам либо с&nbsp;расчетом рефинансировать кредит на&nbsp;более выгодных условиях. С&nbsp;учетом коммуникации Банка России эти&nbsp;ожидания должны скорректироваться, что&nbsp;отразится на&nbsp;темпах кредитования. Кроме того, значительное влияние на&nbsp;рост кредита оказывают льготные программы. После прекращения действия безадресной льготной ипотеки с&nbsp;июля воздействие проводимой денежно-кредитной политики на&nbsp;кредитную активность должно стать более выраженным. Необходимо получить дополнительные данные, чтобы сделать вывод о&nbsp;достаточности степени жесткости денежно-кредитных условий.</p></div><div class="landing-text"><div class="block-title"><h2><span class="referenceable" id="a_161636"><img class="item_img" src="/StaticHtml/File/159223/3.svg"/> Внешние условия</span></h2></div><div class="incut ">
+<div class="incut_element incut_border incut_border__mod">
+<div class="title_20">Основные факты</div>
+</div>
+</div><p class="clear-both"><span class="a0"><span>Мировая экономика продолжала устойчиво расти. Экономики еврозоны и&nbsp;Китая в&nbsp;I&nbsp;квартале 2024&nbsp;года росли быстрее, чем&nbsp;ожидалось в&nbsp;апреле. Экономика США&nbsp;&mdash; несколько ниже прогноза. Инфляция в&nbsp;ключевых развитых странах с&nbsp;начала&nbsp;года стабилизировалась на&nbsp;повышенных уровнях. В&nbsp;Китае инфляция, напротив, оставалась низкой из‑за&nbsp;сдержанного потребительского спроса. Рыночные ожидания по&nbsp;ставкам&nbsp;ФРС и&nbsp;ЕЦБ&nbsp;предполагают более медленную нормализацию денежно-кредитной политики в&nbsp;этих регионах, чем&nbsp;раньше. С&nbsp;апрельского заседания по&nbsp;ключевой ставке цены на&nbsp;большинство товаров российского экспорта снизились, но&nbsp;оставались выше уровней начала&nbsp;года. Профицит счета текущих операций с&nbsp;начала&nbsp;года был&nbsp;выше прошлогодних значений. Стоимостный объем экспорта в&nbsp;целом был&nbsp;близок к&nbsp;значениям прошлого&nbsp;года. </span>Стоимостный объем импорта несколько снизился.</span></p><div class="incut ">
+<div class="incut_element incut_border incut_border__mod">
+<div class="title_20">Дискуссия</div>
+</div>
+</div><p class="clear-both">Участники обсуждения согласились, что&nbsp;<strong>внешние условия за&nbsp;прошедший с&nbsp;апрельского решения период в&nbsp;целом соответствовали базовому сценарию Банка России</strong>.</p>
+<p><strong>Мировая экономика по‑прежнему устойчива к&nbsp;повышению процентных ставок и&nbsp;растет высокими темпами. Ее&nbsp;устойчивый рост оказывает поддержку ценам на&nbsp;нефть и&nbsp;прочим товарам российского экспорта.</strong> Однако при&nbsp;текущих нефтяных котировках быстрыми темпами растет нефтедобыча вне&nbsp;ОПЕК+, что&nbsp;выступает сдерживающим фактором для&nbsp;цен. Тем&nbsp;не&nbsp;менее в&nbsp;целом нефтяные котировки остаются высокими и&nbsp;стабильными, в&nbsp;рамках предпосылок базового сценария. Продление соглашений ОПЕК+<sup>1</sup>&nbsp;окажет дополнительную поддержку ценам на&nbsp;нефть.</p>
+<p><strong>Ситуация на&nbsp;мировом зерновом рынке пока не&nbsp;несет значимых инфляционных рисков, в&nbsp;том&nbsp;числе из-за гибких экспортных пошлин.</strong></p>
+<p><strong>Процесс дезинфляции в&nbsp;мире идет медленно.</strong> Поэтому значимое смягчение денежно-кредитной политики в&nbsp;ключевых развитых странах, вероятно, произойдет позже, чем&nbsp;ожидалось в&nbsp;апреле. Это&nbsp;означает, что&nbsp;дифференциал внутренних и&nbsp;внешних процентных ставок также будет меньше прогнозируемого ранее и<span>&nbsp;<strong>может быть фактором снижения жесткости денежно-кредитных условий в&nbsp;нашей стране</strong></span>. При&nbsp;этом данный канал трансмиссии по‑прежнему остается более слабым, чем&nbsp;до&nbsp;2022&nbsp;года.</p>
+<p><strong>Профицит текущего счета оставался выше аналогичного периода прошлого&nbsp;года.</strong> Этому способствовала как&nbsp;стабильная динамика экспорта, так&nbsp;и&nbsp;более сдержанная динамика импорта. Сезонного увеличения импорта в&nbsp;марте&nbsp;&mdash; апреле не&nbsp;произошло. На&nbsp;динамике импорта могли сказаться проблемы с&nbsp;платежами. На&nbsp;импорт влияет и&nbsp;жесткая денежно-кредитная политика, сдерживающая спрос на&nbsp;него и&nbsp;повышающая привлекательность рублевых активов.</p>
+<p><strong>Сдержанная из‑за&nbsp;санкционных ограничений динамика импорта при&nbsp;устойчивом экспорте создает предпосылки к&nbsp;укреплению рубля</strong>, что&nbsp;имеет дезинфляционный эффект. В&nbsp;то&nbsp;же&nbsp;время она&nbsp;ведет к&nbsp;сокращению предложения товаров и&nbsp;услуг и&nbsp;росту транзакционных издержек импортеров, что&nbsp;может иметь проинфляционный эффект при&nbsp;сохранении высокого внутреннего спроса. Отдельные участники считали, что&nbsp;проинфляционный эффект будет преобладать. По&nbsp;мнению большинства, <strong>итоговый эффект на&nbsp;инфляцию остается фактором неопределенности</strong>.</p>
+<p class="note"><sup>1</sup>&nbsp;ОПЕК+ приняла решение продлить добровольные ограничения добычи на&nbsp;2,2&nbsp;млн&nbsp;баррелей в&nbsp;день до&nbsp;конца&nbsp;сентября 2024&nbsp;года с&nbsp;последующим постепенным наращиванием добычи к&nbsp;концу 2025&nbsp;года, а&nbsp;также продлить основные ограничения до&nbsp;конца 2025&nbsp;года.</p></div><div class="landing-text"><div class="block-title"><h2><span class="referenceable" id="a_161641"><img class="item_img" src="/StaticHtml/File/159223/4.svg "/>Инфляционные риски</span></h2></div><p class="clear-both">Участники обсуждения пришли к&nbsp;заключению, что&nbsp;<strong>баланс рисков еще&nbsp;больше сместился в&nbsp;сторону проинфляционных</strong>.</p>
+<p>Среди основных <strong>проинфляционных рисков</strong> были выделены следующие:</p>
+<ul class="custom_items">
+<li>
+<p class="a"><span class="a0">Усиление жесткости рынка труда</span>. Дальнейшее расширение дефицита кадров может привести к&nbsp;еще&nbsp;большему отставанию производительности труда от&nbsp;роста реальных заработных плат. В&nbsp;результате в&nbsp;условиях высокой загрузки производственных мощностей и&nbsp;нехватки трудовых ресурсов дисбаланс между динамикой спроса и&nbsp;предложения может увеличиться. Это&nbsp;приведет к&nbsp;сохранению высокого инфляционного давления или&nbsp;его&nbsp;росту.</p>
+</li>
+<li>
+<p class="a"><o:p></o:p><span class="a0">Сохранение значительных объемов кредитования в&nbsp;рамках государственных льготных программ.</span> Например, в&nbsp;случае расширения кредитования в&nbsp;рамках других программ после прекращения действия безадресной льготной ипотеки с&nbsp;июля. Сохранение значительных объемов &laquo;автономного&raquo; кредита (не&nbsp;зависящего от&nbsp;изменения ключевой ставки) ослабляет влияние ключевой ставки на&nbsp;динамику кредитования в&nbsp;целом и&nbsp;несет риски закрепления инфляции на&nbsp;повышенном уровне, а&nbsp;также увеличивает нагрузку на&nbsp;бюджет. В&nbsp;результате может потребоваться большая реакция денежно-кредитной политики для&nbsp;возвращения инфляции к&nbsp;цели.</p>
+</li>
+<li>
+<p class="a"><o:p></o:p><span class="a0">Ухудшение условий внешней торговли под&nbsp;влиянием геополитической ситуации и&nbsp;ухудшения конъюнктуры на&nbsp;мировых товарных рынках</span>. В&nbsp;частности, снижение экспорта при&nbsp;одновременном сохранении высокого спроса на&nbsp;импорт может создать риски для&nbsp;динамики курса рубля и&nbsp;инфляции.</p>
+</li>
+<li>
+<p class="a"><o:p></o:p><span class="a0">Высокие и&nbsp;незаякоренные инфляционные ожидания, чувствительные к&nbsp;временным эпизодам роста цен&nbsp;на&nbsp;отдельные товары или&nbsp;услуги</span>. Это&nbsp;может усиливать вторичные эффекты в&nbsp;динамике инфляции.</p>
+</li>
+<li>
+<p class="a"><span class="a0"><o:p></o:p></span><span class="a0">Расширение бюджетного дефицита, а&nbsp;также возникновение вторичных эффектов, связанных со&nbsp;структурой дополнительных доходов и&nbsp;расходов бюджета. </span>Увеличение налога на&nbsp;добычу полезных ископаемых и&nbsp;налога на&nbsp;прибыль (для&nbsp;ряда экспортных отраслей) увеличивает процикличность бюджетной политики. В&nbsp;случае ухудшения конъюнктуры мировых товарно-сырьевых рынков могут возникнуть риски расширения бюджетного дефицита, что&nbsp;будет иметь проинфляционный эффект. Инфляционные риски также связаны с&nbsp;переносом компаниями в&nbsp;цены издержек от&nbsp;увеличения налога на&nbsp;прибыль. Участники обсуждения обратили внимание, что&nbsp;новая структура расходов может иметь более проинфляционное влияние, несмотря на&nbsp;сбалансированность бюджетных расходов и&nbsp;доходов. В&nbsp;частности, дальнейшее активное использование инструментов субсидирования процентных ставок за&nbsp;счет бюджета создает кредитное плечо, позволяя существенно увеличивать внутренний спрос по&nbsp;сравнению с&nbsp;более &laquo;классическими&raquo; направлениями госрасходов. Кроме того, в&nbsp;новой структуре расходов увеличивается доля бюджетополучателей, менее чувствительных к&nbsp;динамике процентных ставок и&nbsp;с&nbsp;более выраженной потребительской моделью поведения. Помимо структуры бюджетных расходов, сами по&nbsp;себе ожидания их&nbsp;сохранения на&nbsp;высоком уровне поддерживают спрос, что&nbsp;также может создавать проинфляционные риски.</p>
+</li>
+</ul>
+<p class="a0"><span class="a"><strong>Дезинфляционные риски</strong> </span>выражены слабо и&nbsp;в&nbsp;основном связаны с&nbsp;более быстрым замедлением внутреннего спроса под&nbsp;влиянием уже&nbsp;реализованного ужесточения денежно-кредитной политики. Кроме того, если рост экономики в&nbsp;большей мере сложился за&nbsp;счет расширения потенциала, а&nbsp;не&nbsp;циклического компонента (разрыва), то&nbsp;в&nbsp;экономике может формироваться меньшее инфляционное давление. Ряд&nbsp;участников также отмечали, что&nbsp;увеличение ставки налога на&nbsp;прибыль может оказать дополнительное охлаждающее влияние на&nbsp;инвестиционный спрос. Это&nbsp;способно вызвать краткосрочный дезинфляционный эффект. Дезинфляционное влияние может оказать дальнейшее укрепление рубля из‑за&nbsp;сдержанной динамики импорта, в&nbsp;случае если эта&nbsp;динамика в&nbsp;большей степени обусловлена действием жесткой денежно-кредитной политики.<o:p></o:p></p></div><div class="landing-text"><div class="block-title"><h2><span class="referenceable" id="a_161643"><img class="item_img" src="/StaticHtml/File/159223/5.svg"/>Выводы для денежно-кредитной политики и решение по ключевой ставке</span></h2></div><p class="clear-both">С&nbsp;учетом данных, полученных с&nbsp;апрельского решения по&nbsp;ключевой ставке, и&nbsp;оценки развития ситуации относительно апрельского прогноза Банка России <strong>участники обсуждения рассматривали два&nbsp;варианта решения</strong>:</p>
+<ul class="custom_items">
+<li>Повышение ключевой ставки на&nbsp;100 &mdash; 200&nbsp;базисных пунктов, до&nbsp;17,00 &mdash; 18,00% годовых.</li>
+<li>Сохранение ключевой ставки на&nbsp;уровне 16,00% годовых.</li>
+</ul>
+<p>По&nbsp;мнению участников, выступавших за&nbsp;<strong>повышение ключевой ставки до&nbsp;17,00 &mdash; 18,00% годовых</strong>:</p>
+<ul class="custom_items">
+<li><span>Экономика, скорее всего, отклонилась от&nbsp;апрельского базового сценария в&nbsp;сторону более проинфляционного.</span> В&nbsp;пользу этого вывода свидетельствуют имеющиеся данные по&nbsp;ВВП, инфляции, рынку труда и&nbsp;кредитованию. Текущие денежно-кредитные условия не&nbsp;обеспечивают достаточного увеличения склонности населения и&nbsp;бизнеса к&nbsp;сбережению, замедления роста кредитования, охлаждения внутреннего спроса, которые необходимы для&nbsp;возвращения инфляции к&nbsp;цели в&nbsp;следующем&nbsp;году. Более высокая ключевая ставка создаст дополнительные условия для&nbsp;возобновления процесса дезинфляции в&nbsp;экономике.</li>
+<li><span>Рост инфляционных ожиданий усилил инерцию в&nbsp;динамике инфляции и&nbsp;создает риски для&nbsp;достижения цели по&nbsp;инфляции в&nbsp;2025&nbsp;году.</span> Повышение ключевой ставки позволит укрепить уверенность экономических агентов в&nbsp;приверженности Банка России достижению цели по&nbsp;инфляции, предотвратит дальнейший рост инфляционных ожиданий и&nbsp;возникновение вторичных эффектов.</li>
+</ul>
+<p>По&nbsp;мнению участников, выступавших за&nbsp;<strong>сохранение ключевой ставки на&nbsp;уровне 16,00% годовых</strong>:</p>
+<ul class="custom_items">
+<li><span>Эффекты от&nbsp;ужесточения денежно-кредитной политики с&nbsp;учетом лагов и&nbsp;действие автономных от&nbsp;нее&nbsp;факторов еще&nbsp;не&nbsp;в&nbsp;полной мере отразились на&nbsp;динамике спроса и&nbsp;инфляции.</span> С&nbsp;апрельского решения по&nbsp;ключевой ставке и&nbsp;по&nbsp;итогам последовавшей коммуникации Банка России денежно-кредитные условия дополнительно ужесточились. Это&nbsp;продолжит влиять на&nbsp;динамику кредитования и&nbsp;сберегательную активность. Кроме того, отдельные автономные от&nbsp;денежно-кредитной политики факторы могут дополнительно ужесточить денежно-кредитные условия (сворачивание безадресной льготной ипотеки, макропруденциальные меры, отмена регуляторных послаблений).</li>
+<li><span>Возможна недооценка дезинфляционных эффектов от&nbsp;расширения потенциала</span> (за&nbsp;счет повышения гибкости рынка труда и/или роста производительности).</li>
+<li><span>Необходимо получить больше данных, чтобы достоверно оценить ситуацию в&nbsp;экономике, скорость и&nbsp;устойчивость инфляционного тренда. </span>Полученные с&nbsp;прошлого решения по&nbsp;ключевой ставке статистические данные в&nbsp;значительной степени зашумлены разовыми факторами (индексация цен&nbsp;на&nbsp;автомобили и&nbsp;услуги связи, эффект високосного&nbsp;года в&nbsp;динамике&nbsp;ВВП, выплаты повышенных премий). По&nbsp;многим важным показателям на&nbsp;момент решения отсутствуют данные за&nbsp;апрель&nbsp;&mdash; май.</li>
+</ul>
+<p>Все&nbsp;участники согласились, что&nbsp;<strong>вероятность реализации альтернативного сценария выросла</strong>. Однако, учитывая зашумленность многих макроэкономических показателей за&nbsp;I&nbsp;квартал&nbsp;&mdash; начало&nbsp;II&nbsp;квартала, требуются дополнительные данные по&nbsp;динамике кредитования, экономической активности, а&nbsp;также рынку труда и&nbsp;инфляции, чтобы понять, по&nbsp;какому сценарию развивается ситуация в&nbsp;экономике. На&nbsp;момент июньского решения по&nbsp;ключевой ставке <strong>нет&nbsp;решающих аргументов, чтобы отвергнуть базовый сценарий в&nbsp;пользу альтернативного и&nbsp;повысить ключевую ставку</strong>. Однако если будут получены убедительные свидетельства реализации альтернативного сценария в&nbsp;статистических данных, на&nbsp;июльском заседании может быть принято решение о&nbsp;повышении ключевой ставки, причем существенном.</p>
+<p>По&nbsp;итогам состоявшейся дискуссии <strong>Совет директоров Банка России 7&nbsp;июня 2024&nbsp;года сохранил ключевую ставку на&nbsp;уровне 16,00% годовых с&nbsp;10&nbsp;июня 2024&nbsp;года</strong>. Совет директоров ужесточил сигнал, указав на&nbsp;<strong>возможность повышения ключевой ставки на&nbsp;ближайшем заседании и&nbsp;необходимость поддержания жестких денежно-кредитных условий в&nbsp;экономике существенно более продолжительный период</strong>, чем&nbsp;предполагалось в&nbsp;апреле. Проводимая денежно-кредитная политика позволит закрепить эффекты от&nbsp;произошедшего в&nbsp;апреле ужесточения денежно-кредитных условий и&nbsp;обеспечит возвращение инфляции к&nbsp;цели в&nbsp;2025&nbsp;году и&nbsp;ее&nbsp;поддержание вблизи&nbsp;4%&nbsp;в&nbsp;дальнейшем.</p></div><div class="row constructor">
+<div class="col-md-4 offset-md-1 constructor_icon"><img  class="constructor_img" src="/StaticHtml/File/161635/info.svg"  
+ /></div>
+<div class="col-md-15 offset-md-1 constructor_info">
+<div class="body-2 constructor_info_subtitle"><strong>Замечания и&nbsp;предложения вы&nbsp;можете направить по&nbsp;адресу <a href="mailto:odkp@cbr.ru">odkp@cbr.ru</a>.</strong></div>
+</div>
+</div>
+<h2><span class="referenceable" id="a_161646">Дополнительные материалы</span></h2>
+    <div class="document-regular">
+        <div class="document-regular_inner">
+            <div class="document-regular_top">
+                                    <div class="document-regular_format icon-pdf"></div>
+                                    <div class="document-regular_date">20.06.2024</div>
+            </div>
+            <div class="body-2 document-regular_main">
+                <div class="document-regular_texts">
+                    <div class="document-regular_name" data-toggle="">
+                        <a href="/Content/Document/File/161651/summary_key_rate_20062024.pdf" target=_blank><span class="document-regular_name_visible referenceable" id="a_161651">Резюме обсуждения ключевой ставки</span>
+</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="document-regular">
+        <div class="document-regular_inner">
+            <div class="document-regular_top">
+                                    <div class="document-regular_left_icon"></div>
+                                    <div class="document-regular_date">07.06.2024</div>
+            </div>
+            <div class="body-2 document-regular_main">
+                <div class="document-regular_texts">
+                    <div class="document-regular_name" data-toggle="">
+                        <a href="/press/pr/?file=07062024_133000Key.htm" ><span class="document-regular_name_visible referenceable" id="a_161649">Банк России принял решение сохранить ключевую ставку на&#160;уровне 16,00% годовых</span>
+</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="document-regular">
+        <div class="document-regular_inner">
+            <div class="document-regular_top">
+                                    <div class="document-regular_left_icon"></div>
+                                    <div class="document-regular_date">07.06.2024</div>
+            </div>
+            <div class="body-2 document-regular_main">
+                <div class="document-regular_texts">
+                    <div class="document-regular_name" data-toggle="">
+                        <a href="/press/event/?id=18753" ><span class="document-regular_name_visible referenceable" id="a_161647">Заявление Председателя Банка России Эльвиры Набиуллиной по&#160;итогам заседания Совета директоров Банка России 7&#160;июня&#160;2024&#160;года</span>
+</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<meta property="og:title" content="Резюме обсуждения ключевой ставки" />
+<meta property="og:type" content="article" />
+<meta property="article:section" content="Деятельность-ДДКП (Резюме обсуждения ключевой ставки)" />
+
+
+<!--noindex-->
+<div class="print-button-wrap">
+    <a data-cms-save-to-pdf-btn="" data-cms-save-to-pdf-page-orientation="portrait" class="btn _medium _outline" href="/Content/SaveToPdf/Page?url=%2Fdkp%2Fmp_dec%2Fdecision_key_rate%2Fsummary_key_rate_20062024%2F" target="_blank" rel="nofollow">Сохранить в PDF</a>
+    <div class="copy-btn" data-copy-url="https://www.cbr.ru/dkp/mp_dec/decision_key_rate/summary_key_rate_20062024/" data-tooltip-content="Ссылка скопирована">
+        <div class="chain"></div>
+        <button class="btn _small _copy ">Копировать ссылку</button>
+    </div>
+</div>
+<!--/noindex--><div class="responsible-unit">
+<div class="responsible-unit_text">Ответственное структурное подразделение: <a href="/about_br/bankstructute/ddkp/"> Департамент денежно-кредитной политики</a></div>
+</div>
+                    
+                    <!--/index-->
+                    
+    <div class="page-info">
+        <!--noindex-->
+        
+
+
+<div class="page-info_helpful"
+     data-page-feedback=""
+     data-feedback-url="/Content/PageInfo/RegisterFeedback">
+    <!--noindex-->
+    <div class="helpful" data-helpful="">
+        Страница была полезной?
+        <div class="helpful_btns">
+            <button class="helpful_btn _yes" data-helpful-btn="yes"><i class="helpful_icon"></i><span>Да</span></button>
+            <button class="helpful_btn _no" data-helpful-btn="no"><i class="helpful_icon"></i><span>Нет</span></button>
+        </div>
+    </div>
+    <!--/noindex-->
+</div>
+
+            <div class="page-info_last-update">Последнее обновление страницы: 20.06.2024</div>
+        <!--/noindex-->
+    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" id="footer">
+    <div class="offsetMenu footer_margin-left">
+        <div class="footer_main">
+            <div class="col-md-23 col-xl-22 offset-md-1 offset-xl-2 footer-size">
+                <div class="footer_top">
+                    <a class="footer_logo" href="/"></a>
+                    <div class="footer_up gotoUp">
+                        <div class="footer_up_title">Наверх</div>
+                        <div class="footer_up_icon"></div>
+                    </div>
+                </div>
+                
+<div class="footer_contacts">
+<div class="footer_address">107016, Москва, ул. Неглинная, д.&nbsp;12, к. В, Банк
+России</div>
+<div class="footer_phones">
+<div class="footer_phone"><a class="footer_phone_val" href="tel:300">300</a><span>(круглосуточно, бесплатно для&nbsp;звонков с&nbsp;мобильных телефонов)</span></div>
+<div class="footer_phone"><a class="footer_phone_val" href="tel:88003003000">8&nbsp;800 300-30-00</a><span>(круглосуточно, бесплатно для&nbsp;звонков из&nbsp;регионов России)</span></div>
+<div class="footer_phone"><a class="footer_phone_val" href="tel:+74993003000">+7&nbsp;499 300-30-00</a><span>(круглосуточно, в&nbsp;соответствии с&nbsp;тарифами вашего оператора)</span></div>
+
+</div>
+</div>
+<div class="footer_main_block">
+<div class="footer_left-menu">
+<div class="footer_left-menu_item"><a href="/lk_uio/">Личный кабинет участника информационного обмена</a></div>
+<div class="footer_left-menu_item"><a href="/about_br/irp/">Отношения с&nbsp;инвесторами</a></div>
+<div class="footer_left-menu_item"><a href="/rbr/list_inside/">Перечень инсайдерской информации Банка России</a></div>
+<div class="footer_left-menu_item"><a href="/analytics/na_vr/">Официальное опубликование нормативных актов Банка России</a></div>
+<div class="footer_left-menu_item"><a href="/project_na/">Проекты нормативных актов Банка России</a></div>
+<div class="footer_left-menu_item"><a href="/other/holidays/">Перечень нерабочих праздничных дней и&nbsp;перенесенных выходных дней</a></div>
+</div>
+<div class="networks-circle footer_networks">
+<a class="networks-circle_item _vk" href="https://vk.com/cbr_official"></a>
+<a class="networks-circle_item _yt" href="https://www.youtube.com/user/BankofRussia"></a>
+<a class="networks-circle_item _tg" href="https://telegram.me/centralbank_russia" title="Telegram"></a>
+<a class="networks-circle_item _ydzen" href="https://dzen.ru/cbr" title="Яндекс Дзен"></a>
+<a class="networks-circle_item _ok" href="https://ok.ru/group/68858679787580" title="Одноклассники"></a>
+<a class="networks-circle_item _rt" href="https://rutube.ru/channel/23873201/" title="RUTUBE"></a>
+<a class="networks-circle_item _max" href="https://max.ru/cbr_official" title="Макс"></a>
+</div>
+</div>
+<div class="footer_menu">
+<div class="footer_menu_items">
+<div class="footer_menu_item"><a href="/about/">О&nbsp;сайте</a></div>
+<div class="footer_menu_item"><a href="/contacts/">Контакты</a></div>
+<div class="footer_menu_item"><a href="/about_br/anticor/">Противодействие коррупции</a></div>
+<div class="footer_menu_item"><a href="/development/">Технические ресурсы</a></div>
+</div>
+<a class="footer_menu_item _visually-impaired" href="#" title="Версия для слабовидящих">
+	<div class="footer_visually-impaired-icon"></div>
+	<div><span class="visually-impaired-on">Версия для&nbsp;слабовидящих</span><span class="visually-impaired-off">Обычная версия</span></div>
+</a>
+</div>
+
+            </div>
+        </div>
+        <div class="footer_bottom">
+            <div class="col-md-23 col-xl-23 offset-md-1 offset-xl-2 row footer_bottom-container">
+                <div class="footer_bottom_text col-md-11 col-xl-11">&#169; Банк России, 2000–2026.</div>
+<div class="footer_bottom_aic col-md-12 col-xl-11">Дизайн сайта — <a href="https://aic.ru" target="_blank"><img src="/common/images/icons/aic-logo.svg" /></a></div>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+    
+    
+
+        <div class="popup-cookies" data-popup-cookies>
+            <div class="popup-cookies_title">
+                На сайте Банка России используются файлы cookie
+            </div>
+            <div class="popup-cookies_subtitle">
+                Оставаясь на <a href="/">www.cbr.ru</a>, вы принимаете
+                <a href='/user_agreement/'>пользовательское соглашение</a>
+            </div>
+            <button class="btn _medium _blue " data-popup-cookies-btn>
+                Подтвердить
+            </button>
+        </div>
+
+    
+<!--[if IE 9]><script>$('body').addClass('ie9')</script><![endif]-->
+<script src="/Modules/Content/Scripts/PageInfo.js?v=v3116962712" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            Content_PageInfo.init($('[data-page-feedback]'));
+        });
+    </script>
+
+
+
+</body>
+</html>
