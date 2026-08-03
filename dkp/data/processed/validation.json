@@ -1,13 +1,37 @@
 {
   "test1": {
-    "n": 15,
-    "spearman": 0.989,
-    "pearson": 0.979,
-    "t": 24.55,
+    "n": 20,
+    "spearman": 0.992,
+    "pearson": 0.981,
+    "t": 32.67,
     "p": 0.0,
-    "sign_agreement": "15/15",
+    "sign_agreement": "20/20",
     "sign_agreement_pct": 100.0,
     "pairs": [
+      {
+        "date": "2024-02-16",
+        "index": 0.0,
+        "cbr_label": "нейтральный",
+        "cbr_score": 0.0
+      },
+      {
+        "date": "2024-03-22",
+        "index": 0.0,
+        "cbr_label": "нейтральный",
+        "cbr_score": 0.0
+      },
+      {
+        "date": "2024-04-26",
+        "index": 0.0,
+        "cbr_label": "нейтральный",
+        "cbr_score": 0.0
+      },
+      {
+        "date": "2024-06-07",
+        "index": 0.582,
+        "cbr_label": "жесткий",
+        "cbr_score": 1.0
+      },
       {
         "date": "2024-07-26",
         "index": 0.402,
@@ -35,6 +59,12 @@
       {
         "date": "2025-02-14",
         "index": 0.244,
+        "cbr_label": "умеренно жесткий",
+        "cbr_score": 0.5
+      },
+      {
+        "date": "2025-03-21",
+        "index": 0.266,
         "cbr_label": "умеренно жесткий",
         "cbr_score": 0.5
       },
@@ -101,15 +131,51 @@
     ]
   },
   "test2": {
-    "n": 15,
-    "n_covered": 15,
-    "exact_match": 15,
-    "exact_match_pct": 100.0,
+    "n": 20,
+    "n_covered": 17,
+    "exact_match": 17,
+    "exact_match_pct": 85.0,
     "match_where_covered_pct": 100.0,
-    "n_independent": 9,
-    "independent_match": 9,
+    "n_independent": 11,
+    "independent_match": 11,
     "independent_match_pct": 100.0,
     "rows": [
+      {
+        "date": "2024-02-16",
+        "modality": "",
+        "direction": "none",
+        "predicted": "—",
+        "cbr_actual": "нейтральный",
+        "match": false,
+        "independent": false
+      },
+      {
+        "date": "2024-03-22",
+        "modality": "",
+        "direction": "none",
+        "predicted": "—",
+        "cbr_actual": "нейтральный",
+        "match": false,
+        "independent": false
+      },
+      {
+        "date": "2024-04-26",
+        "modality": "",
+        "direction": "none",
+        "predicted": "—",
+        "cbr_actual": "нейтральный",
+        "match": false,
+        "independent": false
+      },
+      {
+        "date": "2024-06-07",
+        "modality": "possibility",
+        "direction": "up",
+        "predicted": "жесткий",
+        "cbr_actual": "жесткий",
+        "match": true,
+        "independent": true
+      },
       {
         "date": "2024-07-26",
         "modality": "delayed_evaluation",
@@ -148,6 +214,15 @@
       },
       {
         "date": "2025-02-14",
+        "modality": "delayed_evaluation",
+        "direction": "up",
+        "predicted": "умеренно жесткий",
+        "cbr_actual": "умеренно жесткий",
+        "match": true,
+        "independent": true
+      },
+      {
+        "date": "2025-03-21",
         "modality": "delayed_evaluation",
         "direction": "up",
         "predicted": "умеренно жесткий",
@@ -250,9 +325,9 @@
   "test3": {
     "n": 102,
     "index_v2": {
-      "spearman": 0.568,
-      "pearson": 0.29,
-      "t": 6.9,
+      "spearman": 0.54,
+      "pearson": 0.278,
+      "t": 6.41,
       "p": 0.0
     },
     "dictionary_baseline": {
@@ -263,8 +338,8 @@
     },
     "index_v2_2022plus": {
       "n": 39,
-      "spearman": 0.736,
-      "t": 6.62,
+      "spearman": 0.739,
+      "t": 6.68,
       "p": 0.0
     }
   }

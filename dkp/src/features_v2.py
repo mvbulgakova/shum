@@ -100,9 +100,21 @@ def find_signal(text: str) -> tuple[str, str, int]:
     for i, s in enumerate(sents):
         for rank, anchor in enumerate(FG_ANCHORS):
             if re.search(anchor, s):
-                cands.append((rank, i,
-                              bool(SCENARIO_PREFIX.search(s)),
-                              bool(BASELINE_HINT.search(s))))
+                has_agent = bool(BASELINE_HINT.search(s))
+                # Условная конструкция считается сценарной оговоркой только
+                # если в главной части НЕТ регулятора как субъекта действия.
+                #   «В случае роста расходов потребуется более жёсткая ДКП»
+                #       — безличная апо́досис, это описание риск-сценария;
+                #   «Если дезинфляция не обеспечит цель, Банк России рассмотрит
+                #    вопрос о повышении ставки»
+                #       — регулятор назван, это state-contingent guidance,
+                #         полноценная форма сигнала.
+                # Без этой оговорки условный сигнал теряется целиком: в марте
+                # 2025 года ЦБ намеренно выбрал именно такую форму, отметив,
+                # что «стандартные формы умеренно жёсткого сигнала недостаточно
+                # чётко отражают условия, при которых это может произойти».
+                is_scenario = bool(SCENARIO_PREFIX.search(s)) and not has_agent
+                cands.append((rank, i, is_scenario, has_agent))
                 break
     if not cands:
         return "", "", 0
