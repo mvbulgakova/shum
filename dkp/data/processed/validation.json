@@ -1,0 +1,271 @@
+{
+  "test1": {
+    "n": 15,
+    "spearman": 0.989,
+    "pearson": 0.979,
+    "t": 24.55,
+    "p": 0.0,
+    "sign_agreement": "15/15",
+    "sign_agreement_pct": 100.0,
+    "pairs": [
+      {
+        "date": "2024-07-26",
+        "index": 0.402,
+        "cbr_label": "умеренно жесткий",
+        "cbr_score": 0.5
+      },
+      {
+        "date": "2024-09-13",
+        "index": 0.419,
+        "cbr_label": "жесткий",
+        "cbr_score": 1.0
+      },
+      {
+        "date": "2024-10-25",
+        "index": 0.419,
+        "cbr_label": "жесткий",
+        "cbr_score": 1.0
+      },
+      {
+        "date": "2024-12-20",
+        "index": 0.244,
+        "cbr_label": "умеренно жесткий",
+        "cbr_score": 0.5
+      },
+      {
+        "date": "2025-02-14",
+        "index": 0.244,
+        "cbr_label": "умеренно жесткий",
+        "cbr_score": 0.5
+      },
+      {
+        "date": "2025-04-25",
+        "index": 0.0,
+        "cbr_label": "нейтральный",
+        "cbr_score": 0.0
+      },
+      {
+        "date": "2025-06-06",
+        "index": 0.0,
+        "cbr_label": "нейтральный",
+        "cbr_score": 0.0
+      },
+      {
+        "date": "2025-07-25",
+        "index": 0.0,
+        "cbr_label": "нейтральный",
+        "cbr_score": 0.0
+      },
+      {
+        "date": "2025-09-12",
+        "index": 0.0,
+        "cbr_label": "нейтральный",
+        "cbr_score": 0.0
+      },
+      {
+        "date": "2025-10-24",
+        "index": 0.0,
+        "cbr_label": "нейтральный",
+        "cbr_score": 0.0
+      },
+      {
+        "date": "2025-12-19",
+        "index": 0.0,
+        "cbr_label": "нейтральный",
+        "cbr_score": 0.0
+      },
+      {
+        "date": "2026-02-13",
+        "index": -0.267,
+        "cbr_label": "умеренно мягкий",
+        "cbr_score": -0.5
+      },
+      {
+        "date": "2026-03-20",
+        "index": -0.244,
+        "cbr_label": "умеренно мягкий",
+        "cbr_score": -0.5
+      },
+      {
+        "date": "2026-04-24",
+        "index": -0.267,
+        "cbr_label": "умеренно мягкий",
+        "cbr_score": -0.5
+      },
+      {
+        "date": "2026-06-19",
+        "index": -0.244,
+        "cbr_label": "умеренно мягкий",
+        "cbr_score": -0.5
+      }
+    ]
+  },
+  "test2": {
+    "n": 15,
+    "n_covered": 15,
+    "exact_match": 15,
+    "exact_match_pct": 100.0,
+    "match_where_covered_pct": 100.0,
+    "n_independent": 9,
+    "independent_match": 9,
+    "independent_match_pct": 100.0,
+    "rows": [
+      {
+        "date": "2024-07-26",
+        "modality": "delayed_evaluation",
+        "direction": "up",
+        "predicted": "умеренно жесткий",
+        "cbr_actual": "умеренно жесткий",
+        "match": true,
+        "independent": true
+      },
+      {
+        "date": "2024-09-13",
+        "modality": "possibility",
+        "direction": "up",
+        "predicted": "жесткий",
+        "cbr_actual": "жесткий",
+        "match": true,
+        "independent": true
+      },
+      {
+        "date": "2024-10-25",
+        "modality": "possibility",
+        "direction": "up",
+        "predicted": "жесткий",
+        "cbr_actual": "жесткий",
+        "match": true,
+        "independent": true
+      },
+      {
+        "date": "2024-12-20",
+        "modality": "delayed_evaluation",
+        "direction": "up",
+        "predicted": "умеренно жесткий",
+        "cbr_actual": "умеренно жесткий",
+        "match": true,
+        "independent": true
+      },
+      {
+        "date": "2025-02-14",
+        "modality": "delayed_evaluation",
+        "direction": "up",
+        "predicted": "умеренно жесткий",
+        "cbr_actual": "умеренно жесткий",
+        "match": true,
+        "independent": true
+      },
+      {
+        "date": "2025-04-25",
+        "modality": "intention_directed",
+        "direction": "hold",
+        "predicted": "нейтральный",
+        "cbr_actual": "нейтральный",
+        "match": true,
+        "independent": false
+      },
+      {
+        "date": "2025-06-06",
+        "modality": "intention_directed",
+        "direction": "hold",
+        "predicted": "нейтральный",
+        "cbr_actual": "нейтральный",
+        "match": true,
+        "independent": false
+      },
+      {
+        "date": "2025-07-25",
+        "modality": "intention_directed",
+        "direction": "hold",
+        "predicted": "нейтральный",
+        "cbr_actual": "нейтральный",
+        "match": true,
+        "independent": false
+      },
+      {
+        "date": "2025-09-12",
+        "modality": "intention_directed",
+        "direction": "hold",
+        "predicted": "нейтральный",
+        "cbr_actual": "нейтральный",
+        "match": true,
+        "independent": false
+      },
+      {
+        "date": "2025-10-24",
+        "modality": "intention_directed",
+        "direction": "hold",
+        "predicted": "нейтральный",
+        "cbr_actual": "нейтральный",
+        "match": true,
+        "independent": false
+      },
+      {
+        "date": "2025-12-19",
+        "modality": "intention_directed",
+        "direction": "hold",
+        "predicted": "нейтральный",
+        "cbr_actual": "нейтральный",
+        "match": true,
+        "independent": false
+      },
+      {
+        "date": "2026-02-13",
+        "modality": "delayed_evaluation",
+        "direction": "down",
+        "predicted": "умеренно мягкий",
+        "cbr_actual": "умеренно мягкий",
+        "match": true,
+        "independent": true
+      },
+      {
+        "date": "2026-03-20",
+        "modality": "delayed_evaluation",
+        "direction": "down",
+        "predicted": "умеренно мягкий",
+        "cbr_actual": "умеренно мягкий",
+        "match": true,
+        "independent": true
+      },
+      {
+        "date": "2026-04-24",
+        "modality": "delayed_evaluation",
+        "direction": "down",
+        "predicted": "умеренно мягкий",
+        "cbr_actual": "умеренно мягкий",
+        "match": true,
+        "independent": true
+      },
+      {
+        "date": "2026-06-19",
+        "modality": "delayed_evaluation",
+        "direction": "down",
+        "predicted": "умеренно мягкий",
+        "cbr_actual": "умеренно мягкий",
+        "match": true,
+        "independent": true
+      }
+    ]
+  },
+  "test3": {
+    "n": 102,
+    "index_v2": {
+      "spearman": 0.568,
+      "pearson": 0.29,
+      "t": 6.9,
+      "p": 0.0
+    },
+    "dictionary_baseline": {
+      "spearman": 0.453,
+      "pearson": 0.223,
+      "t": 5.08,
+      "p": 0.0
+    },
+    "index_v2_2022plus": {
+      "n": 39,
+      "spearman": 0.736,
+      "t": 6.62,
+      "p": 0.0
+    }
+  }
+}

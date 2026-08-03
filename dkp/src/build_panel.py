@@ -1,9 +1,12 @@
-"""Собирает единую панель для анализа: решение × сигнал × инФОМ.
+"""Собирает единую панель для анализа: решение × сигнал × ярлык ЦБ × инФОМ.
 
 Логика привязки инФОМ к заседанию:
 - pre  — последнее наблюдение инФОМ *до* заседания (то, что видел ЦБ).
 - post — первое наблюдение инФОМ *после* заседания (реакция).
 - delta = post − pre  (сдвиг ожиданий вокруг решения).
+
+Ярлык сигнала ЦБ (из резюме обсуждения) добавляется там, где доступен — то
+есть с февраля 2024. Для более ранних заседаний поле пустое.
 
 На выходе: data/processed/panel.csv, по одной строке на решение.
 """
@@ -12,20 +15,24 @@ from __future__ import annotations
 
 import csv
 import sys
-from datetime import date, datetime
+from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-FEATS = ROOT / "data" / "processed" / "features.csv"
+FEATS = ROOT / "data" / "processed" / "features_v2.csv"
+LABELS = ROOT / "data" / "processed" / "signal_labels.csv"
+SUMMF = ROOT / "data" / "processed" / "summary_features.csv"
 INFOM = ROOT / "data" / "processed" / "infom.csv"
+DECS = ROOT / "data" / "reference" / "decisions.csv"
 OUT = ROOT / "data" / "processed" / "panel.csv"
 
 
 def load_infom() -> list[dict]:
+    rows = []
     with INFOM.open(encoding="utf-8") as f:
-        rows = []
         for r in csv.DictReader(f):
-            def num(x): return float(x) if x else None
+            def num(x):
+                return float(x) if x else None
             rows.append({
                 "month": date.fromisoformat(r["month"]),
                 "observed": num(r["observed_med"]),
@@ -35,86 +42,105 @@ def load_infom() -> list[dict]:
     return sorted(rows, key=lambda r: r["month"])
 
 
-def pick_nearest(infom: list[dict], dt: date, side: str, key: str) -> tuple[date | None, float | None]:
+def pick(infom: list[dict], dt: date, side: str, key: str) -> tuple[date | None, float | None]:
     """side='pre': последнее <= dt; side='post': первое > dt."""
     if side == "pre":
-        cands = [r for r in infom if r["month"] <= dt and r[key] is not None]
-        cands.sort(key=lambda r: r["month"])
-        return (cands[-1]["month"], cands[-1][key]) if cands else (None, None)
-    else:
-        cands = [r for r in infom if r["month"] > dt and r[key] is not None]
-        cands.sort(key=lambda r: r["month"])
-        return (cands[0]["month"], cands[0][key]) if cands else (None, None)
+        c = [r for r in infom if r["month"] <= dt and r[key] is not None]
+        return (c[-1]["month"], c[-1][key]) if c else (None, None)
+    c = [r for r in infom if r["month"] > dt and r[key] is not None]
+    return (c[0]["month"], c[0][key]) if c else (None, None)
+
+
+FIELDS = [
+    "date", "rate_new", "delta_bp", "direction_actual",
+    "modality", "direction_signal", "level_stance", "direction_withheld",
+    "agent_explicit", "impersonal", "passive",
+    "hedge_count", "cond_count", "nominalization_ratio",
+    "commitment", "hardness_v2", "stance",
+    "cbr_label", "cbr_label_score", "cbr_labels_discussed",
+    "summary_words", "summary_dissent_per_1k",
+    "infom_pre_month", "infom_expected_pre",
+    "infom_post_month", "infom_expected_post",
+    "infom_expected_delta", "infom_observed_pre",
+    "n_words",
+]
 
 
 def main() -> int:
     with FEATS.open(encoding="utf-8") as f:
         feats = list(csv.DictReader(f))
+    with LABELS.open(encoding="utf-8") as f:
+        labels = {r["decision_date"]: r for r in csv.DictReader(f)}
+    with SUMMF.open(encoding="utf-8") as f:
+        summf = {r["decision_date"]: r for r in csv.DictReader(f)}
+    with DECS.open(encoding="utf-8") as f:
+        decs = {r["date"]: r for r in csv.DictReader(f)}
     infom = load_infom()
 
-    out_rows = []
+    out = []
     for r in feats:
         dt = date.fromisoformat(r["date"])
-        pre_m, pre_v = pick_nearest(infom, dt, "pre", "expected")
-        post_m, post_v = pick_nearest(infom, dt, "post", "expected")
-        obs_pre_m, obs_pre_v = pick_nearest(infom, dt, "pre", "observed")
+        pre_m, pre_v = pick(infom, dt, "pre", "expected")
+        post_m, post_v = pick(infom, dt, "post", "expected")
+        _, obs_pre = pick(infom, dt, "pre", "observed")
+        lab = labels.get(r["date"], {})
+        sm = summf.get(r["date"], {})
 
-        delta_exp = None
-        if pre_v is not None and post_v is not None:
-            delta_exp = round(post_v - pre_v, 3)
-
-        out_rows.append({
+        out.append({
             "date": r["date"],
-            "rate_new": float(r["delta_bp"]) / 100 + None if False else "",  # placeholder
+            "rate_new": decs.get(r["date"], {}).get("rate_new", ""),
             "delta_bp": int(r["delta_bp"]),
             "direction_actual": r["direction_actual"],
             "modality": r["modality"],
             "direction_signal": r["direction_signal"],
-            "hedge_count": int(r["hedge_count"]),
-            "has_conditionality": int(r["has_conditionality"]),
-            "hardness_v1": float(r["hardness_v1"]),
-            "n_words": int(r["n_words"]),
+            "level_stance": r["level_stance"],
+            "direction_withheld": r["direction_withheld"],
+            "agent_explicit": r["agent_explicit"],
+            "impersonal": r["impersonal"],
+            "passive": r["passive"],
+            "hedge_count": r["hedge_count"],
+            "cond_count": r["cond_count"],
+            "nominalization_ratio": r["nominalization_ratio"],
+            "commitment": r["commitment"],
+            "hardness_v2": r["hardness_v2"],
+            "stance": r["stance"],
+            "cbr_label": lab.get("label_chosen", ""),
+            "cbr_label_score": lab.get("label_score", ""),
+            "cbr_labels_discussed": lab.get("labels_discussed", ""),
+            "summary_words": sm.get("n_words", ""),
+            "summary_dissent_per_1k": sm.get("dissent_per_1k", ""),
             "infom_pre_month": pre_m.isoformat() if pre_m else "",
             "infom_expected_pre": pre_v if pre_v is not None else "",
             "infom_post_month": post_m.isoformat() if post_m else "",
             "infom_expected_post": post_v if post_v is not None else "",
-            "infom_expected_delta": delta_exp if delta_exp is not None else "",
-            "infom_observed_pre": obs_pre_v if obs_pre_v is not None else "",
+            "infom_expected_delta": round(post_v - pre_v, 3)
+            if (pre_v is not None and post_v is not None) else "",
+            "infom_observed_pre": obs_pre if obs_pre is not None else "",
+            "n_words": r["n_words"],
         })
 
-    # Уберём мусорный placeholder — просто напишем reasonable order.
-    fieldnames = [
-        "date", "delta_bp", "direction_actual",
-        "modality", "direction_signal", "hedge_count", "has_conditionality",
-        "hardness_v1", "n_words",
-        "infom_pre_month", "infom_expected_pre",
-        "infom_post_month", "infom_expected_post",
-        "infom_expected_delta", "infom_observed_pre",
-    ]
     with OUT.open("w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+        w = csv.DictWriter(f, fieldnames=FIELDS)
         w.writeheader()
-        w.writerows(out_rows)
+        w.writerows(out)
 
-    n = len(out_rows)
-    filled_delta = sum(1 for r in out_rows if r["infom_expected_delta"] != "")
-    print(f"panel: {n} строк; delta ожиданий вычислен для {filled_delta} решений")
+    n = len(out)
+    with_lab = sum(1 for r in out if r["cbr_label"])
+    print(f"panel: {n} решений; ярлык ЦБ доступен для {with_lab}")
 
-    # квик-стата: средний delta ожиданий по знаку сигнала (пилотный «действует ли»)
     from collections import defaultdict
     buckets: dict[str, list[float]] = defaultdict(list)
-    for r in out_rows:
+    for r in out:
         if r["infom_expected_delta"] == "":
             continue
-        sign = ("hawkish" if r["hardness_v1"] > 0.15
-                else "dovish" if r["hardness_v1"] < -0.15
-                else "neutral")
-        buckets[sign].append(float(r["infom_expected_delta"]))
-    print("\nсредний Δ ожидаемой инфляции (после − до), по знаку сигнала:")
-    for label in ("hawkish", "neutral", "dovish"):
-        vs = buckets.get(label, [])
-        if vs:
-            print(f"  {label:>8s}: n={len(vs):>3}  mean={sum(vs)/len(vs):+.3f} пп")
+        h = float(r["hardness_v2"])
+        key = "hawkish" if h > 0.12 else "dovish" if h < -0.12 else "neutral"
+        buckets[key].append(float(r["infom_expected_delta"]))
+    print("\nсредний Δ ожидаемой инфляции (месяц после − месяц до), по знаку сигнала:")
+    for k in ("hawkish", "neutral", "dovish"):
+        v = buckets.get(k, [])
+        if v:
+            print(f"  {k:>8s}: n={len(v):>3}  mean={sum(v)/len(v):+.3f} пп")
     return 0
 
 
