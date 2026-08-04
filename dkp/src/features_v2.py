@@ -132,8 +132,83 @@ def find_signal(text: str) -> tuple[str, str, int]:
     return sents[i].strip(), (sents[i] + " " + tail).strip(), len(cands)
 
 
+def signal_breadth(text: str, primary_core: str) -> tuple[int, str]:
+    """Сколько ЕЩЁ предложений релиза несут направленное содержание.
+
+    Найдено при ручной разметке (см. markup/manual_markup_10.md, находка №1):
+    сигнал бывает распределён. В релизах 26.07.2024 и 25.10.2024 ястребиное
+    содержание разложено на два предложения — утверждение о необходимости
+    («требуется дополнительное ужесточение», «потребуется значительно более
+    высокая траектория») и указание о ближайших заседаниях («будет оценивать
+    целесообразность повышения»). Основной индекс берёт одно предложение и
+    добавку теряет.
+
+    Основной индекс НЕ меняется: он валидирован против таксономии ЦБ, а она
+    описывает ровно одно указание — о следующих заседаниях. Поэтому широта
+    сигнала выносится отдельным признаком.
+
+    Возвращает (число дополнительных направленных предложений, их направления).
+    """
+    sents = re.split(r"(?<=[.!?])\s+", text)
+    primary = re.sub(r"\s+", " ", primary_core).strip()
+    extra_dirs: list[str] = []
+    for s in sents:
+        clean = re.sub(r"\s+", " ", s).strip()
+        if not clean or clean == primary:
+            continue
+        # Сценарные оговорки не в счёт — это альтернатива, а не базовый путь.
+        if SCENARIO_PREFIX.search(clean) and not BASELINE_HINT.search(clean):
+            continue
+        # Ретроспектива: описание эффекта уже принятого решения, не сигнал.
+        if RETROSPECTIVE.search(clean):
+            continue
+        # Нужна связка «необходимость/возможность» + названное направление
+        # применительно к ставке или ДКП.
+        m = MODAL_MARKER.search(clean)
+        if not m:
+            continue
+        sub = analyze(clean, clean)
+        if sub.direction not in ("up", "down"):
+            continue
+        # Модальный маркер должен УПРАВЛЯТЬ направлением, а не просто стоять
+        # в том же предложении. Проверка отсеивает «Повышение ключевой ставки
+        # позволит … до уровней, необходимых, чтобы …»: там «необходимых»
+        # относится к депозитным ставкам, а не к политике, и стоит далеко.
+        if not _modal_governs_direction(clean, m):
+            continue
+        extra_dirs.append(sub.direction)
+    return len(extra_dirs), "|".join(extra_dirs)
+
+
+MODAL_MARKER = re.compile(r"требуется|потребуется|необходим\w+|допускает", re.I)
+DIRECTION_WORD = re.compile(
+    r"ужесточени\w+|повышени\w+|снижени\w+|смягчени\w+|ужесточ\w+|смягч\w+", re.I)
+
+# Описание эффекта уже принятого решения, а не обещания на будущее.
+RETROSPECTIVE = re.compile(
+    r"позволит|позволяет|принято\w*\s+решени|произошедш\w+|реализованн\w+|"
+    r"принятое\s+решение|уже\s+принят",
+    re.I,
+)
+
+# Максимальное расстояние в словах между модальным маркером и направлением.
+GOVERN_WINDOW = 6
+
+
+def _modal_governs_direction(sentence: str, modal_match: re.Match) -> bool:
+    """Стоит ли направление достаточно близко к модальному маркеру."""
+    words = sentence.split()
+    # позиция модального маркера в словах
+    prefix_words = len(sentence[: modal_match.start()].split())
+    for i, w in enumerate(words):
+        if DIRECTION_WORD.search(w) and abs(i - prefix_words) <= GOVERN_WINDOW:
+            return True
+    return False
+
+
 PRESS_FIELDS = [
     "date", "direction_actual", "delta_bp", "rate_new", "n_fg_candidates",
+    "extra_directional_sents", "extra_directions",
     "modality", "modality_weight",
     "direction_signal", "level_stance", "direction_withheld",
     "agent_explicit", "impersonal", "passive",
@@ -153,9 +228,12 @@ def process_press() -> list[dict]:
             r = json.loads(line)
             core, ctx, n_cand = find_signal(r["text"])
             s = analyze(core, ctx)
+            n_extra, extra_dirs = signal_breadth(r["text"], core)
             rows.append({
                 "date": r["date"],
                 "n_fg_candidates": n_cand,
+                "extra_directional_sents": n_extra,
+                "extra_directions": extra_dirs,
                 "direction_actual": r.get("direction", ""),
                 "delta_bp": r.get("delta_bp") or 0,
                 "rate_new": r.get("rate_new") or "",
