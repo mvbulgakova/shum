@@ -17,7 +17,8 @@
 \newfontfamily\handB{MariaHand-B.otf}[Path=\handdir,Ligatures=TeX,Scale=\fpeval{1.03*\handscale},FakeSlant=0.03]
 \newfontfamily\handC{MariaHand-C.otf}[Path=\handdir,Ligatures=TeX,Scale=\fpeval{0.97*\handscale},FakeSlant=-0.02]
 \setmainfont{MariaHand-A.otf}[Path=\handdir,Scale=\handscale]
-\setmathfont{Latin Modern Math}[Scale=0.95]
+% каркас формул (индексы, дроби) — под размер её букв, иначе индексы проваливаются вниз
+\setmathfont{Latin Modern Math}[Scale=\fpeval{1.05*\handscale}]
 \setmathfont{MariaHand-A.otf}[Path=\handdir,Scale=\handscale,range={it/{Latin,latin}->up,up/{Latin,latin,num}}]
 \input{\handdir hand-math.tex}
 % перед каждым словом — случайный вариант (XeTeX interchar: граница -> буква)
@@ -57,18 +58,30 @@
     plot[smooth, samples=36, domain=\hcS:\hcS+360+\hcO, variable=\t]
     ({\hcX*(1+\hcK*(\t-\hcS)/360)*cos(\t)*1pt},{\hcY*(1+\hcK*(\t-\hcS)/360)*sin(\t)*1pt});
   \end{scope}}
+% 8 видов шапки (как в её тетрадях); вид, наклон, сдвиг и шрифт — случайно на каждом листе
 \newcommand{\shapka}{\AddToShipoutPictureFG{\put(\LenToUnit{\paperwidth-62mm},\LenToUnit{\paperheight-30mm}){%
   \begin{tikzpicture}[ink]
-  \pgfmathsetmacro{\shR}{(rnd-0.35)*5}\pgfmathsetmacro{\shX}{(rnd-0.5)*8}\pgfmathsetmacro{\shY}{(rnd-0.5)*5}%
-  \pgfmathtruncatemacro{\shV}{int(rnd*3)}%
+  \pgfmathsetmacro{\shR}{(rnd-0.35)*6}\pgfmathsetmacro{\shX}{(rnd-0.5)*10}\pgfmathsetmacro{\shY}{(rnd-0.5)*6}%
+  \pgfmathtruncatemacro{\shV}{int(rnd*8)}%
   \node[inner xsep=2.5pt,inner ysep=2.5pt,rotate=\shR,font=\fontsize{14pt}{14pt}\selectfont\color{ink}] (sh) at (\shX pt,\shY pt)
-    {\handstampfont\ifnum\shV=0 \begin{tabular}{@{}c@{}}Булгакова,\\305\end{tabular}\else Булгакова, 305\fi};
-  \ifnum\shV<2
+    {\handstampfont\ifcase\shV
+       \begin{tabular}{@{}c@{}}Булгакова,\\305\end{tabular}\or   % 0: две строки, рамка
+       Булгакова, 305\or                                         % 1: строка, рамка
+       Булгакова, 305\or                                         % 2: строка без рамки
+       Булгакова\or                                              % 3: только фамилия в рамке
+       \begin{tabular}{@{}l@{}}Булгакова,\\\ \ 305\end{tabular}\or % 4: две строки без рамки
+       Булгакова, 305\or                                         % 5: подчёркнуто
+       Булгакова, 305\or                                         % 6: рамка, номер слева
+       \begin{tabular}{@{}c@{}}Булгакова\\305\end{tabular}\fi};  % 7: две строки, номер слева
+  \ifnum\shV=0 \def\shBox{1}\fi \ifnum\shV=1 \def\shBox{1}\fi \ifnum\shV=3 \def\shBox{1}\fi
+  \ifnum\shV=6 \def\shBox{1}\fi \ifnum\shV=7 \def\shBox{1}\fi
+  \ifdefined\shBox
     \handseg{(sh.south west)}{(sh.south east)}\handseg{(sh.north west)}{(sh.north east)}
     \handseg{(sh.south west)}{(sh.north west)}\handseg{(sh.south east)}{(sh.north east)}
   \fi
+  \ifnum\shV=5 \handseg{($(sh.south west)+(0,1pt)$)}{($(sh.south east)+(3pt,2pt)$)}\fi
   \pgfmathsetmacro{\pnX}{0.5+rnd*0.2}\pgfmathsetmacro{\pnY}{(rnd-0.3)*0.15}%
-  \coordinate (pc) at ($(sh.east)+(\pnX,\pnY)$);
+  \ifnum\shV>5 \coordinate (pc) at ($(sh.west)+(-\pnX,\pnY)$);\else \coordinate (pc) at ($(sh.east)+(\pnX,\pnY)$);\fi
   \node[inner sep=0pt,font=\fontsize{15pt}{15pt}\selectfont\color{ink}] at (pc) {\handstampfont\thepage};
   \handcircle{(pc)}\end{tikzpicture}}}}
 \newcommand{\lk}[2]{{\fontsize{20pt}{10mm}\selectfont Лк №#1.\ \ #2}\par}
