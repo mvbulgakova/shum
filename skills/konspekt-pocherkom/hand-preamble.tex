@@ -1,0 +1,59 @@
+% ===== рукописный конспект почерком Марии на листе в клетку =====
+\documentclass[a4paper]{article}
+\usepackage{fontspec}
+\usepackage{unicode-math}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{eso-pic}
+\usepackage{bussproofs}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage[a4paper,top=20mm,bottom=15mm,left=14mm,right=14mm,headheight=0pt,headsep=0pt,footskip=0pt]{geometry}
+% --- шрифт: три варианта одного почерка (разные начертания букв), случайно по словам
+\providecommand{\handdir}{./}
+\providecommand{\handscale}{1.7}
+\newfontfamily\handA{MariaHand-A.otf}[Path=\handdir,Ligatures=TeX,Scale=\handscale]
+\newfontfamily\handB{MariaHand-B.otf}[Path=\handdir,Ligatures=TeX,Scale=\fpeval{1.03*\handscale},FakeSlant=0.03]
+\newfontfamily\handC{MariaHand-C.otf}[Path=\handdir,Ligatures=TeX,Scale=\fpeval{0.97*\handscale},FakeSlant=-0.02]
+\setmainfont{MariaHand-A.otf}[Path=\handdir,Scale=\handscale]
+\setmathfont{Latin Modern Math}[Scale=0.95]
+\setmathfont{MariaHand-A.otf}[Path=\handdir,Scale=\handscale,range={it/{Latin,latin}->up,up/{Latin,latin,num}}]
+% перед каждым словом — случайный вариант (XeTeX interchar: граница -> буква)
+\newcommand{\handpick}{\ifcase\uniformdeviate 3 \handA\or\handB\or\handC\fi}
+\XeTeXinterchartoks 4095 0 = {\handpick}
+\AtBeginDocument{\XeTeXinterchartokenstate=1}
+% --- чернила и клетка
+\definecolor{ink}{RGB}{28,45,150}
+\definecolor{grid}{RGB}{165,190,215}
+\definecolor{redink}{RGB}{190,30,40}
+\color{ink}
+\AddToShipoutPictureBG{\begin{tikzpicture}[remember picture,overlay]
+  \draw[grid,line width=0.25pt,step=5mm] (current page.south west) grid (current page.north east);
+\end{tikzpicture}}
+% --- строки по клетке: 2 клетки на строку
+\fontsize{17pt}{10mm}\selectfont
+\AtBeginDocument{\fontsize{17pt}{10mm}\selectfont}
+\setlength{\topskip}{10mm}
+\setlength{\parindent}{0pt}\setlength{\parskip}{0pt}
+\raggedright
+\setlist{nosep,leftmargin=8mm}
+\setlength{\abovedisplayskip}{0pt}\setlength{\belowdisplayskip}{0pt}
+\pagestyle{empty}
+% --- её элементы оформления
+\newcommand{\shapka}{\AddToShipoutPictureFG{\put(\LenToUnit{\paperwidth-62mm},\LenToUnit{\paperheight-17mm}){%
+  \begin{tikzpicture}\node[draw=ink,line width=0.6pt,inner sep=2pt,rotate=1.5,font=\fontsize{14pt}{14pt}\selectfont\color{ink}]{\begin{tabular}{@{}c@{}}Булгакова,\\305\end{tabular}};
+  \node[draw=ink,circle,line width=0.6pt,inner sep=1.5pt,font=\fontsize{15pt}{15pt}\selectfont\color{ink}] at (2.1,0.1) {\thepage};\end{tikzpicture}}}}
+\newcommand{\lk}[2]{{\fontsize{20pt}{10mm}\selectfont Лк №#1.\ \ #2}\par}
+\newcommand{\term}[1]{\underline{#1}}          % термин подчёркнут
+\newcommand{\red}[1]{{\color{redink}#1}}
+\newcommand{\opr}{\underline{Опр.}\ }
+\newcommand{\dvo}{Д-во.\ }
+\newcommand{\ctd}{\hfill ч.т.д.}
+\providecommand{\blacksquare}{\mdlgblksquare}
+\newcommand{\rul}[2]{\dfrac{\;#1\;}{\;#2\;}}
+\newcommand{\lab}[1]{\RightLabel{\fontsize{12pt}{12pt}\selectfont\;#1}}
+\newcommand{\nv}{\vdash_{N}}
+\newcommand{\Dv}[2]{\begin{matrix}#1\\[-4pt]=\!=\\[-4pt]#2\end{matrix}}
+\newcommand{\nb}[1]{{\fontsize{13pt}{13pt}\selectfont #1}} % мелкая приписка
+\newcommand{\dand}{\mathbin{\dot{\&}}}\newcommand{\dor}{\mathbin{\dot{\vee}}}
+\newcommand{\dimp}{\mathbin{\dot{\supset}}}\newcommand{\dneg}{\mathop{\dot{\neg}}}
