@@ -4,11 +4,12 @@
 \usepackage{unicode-math}
 \usepackage{xcolor}
 \usepackage{tikz}
+\usetikzlibrary{decorations.pathmorphing,calc}
 \usepackage{eso-pic}
 \usepackage{bussproofs}
 \usepackage{amsmath}
 \usepackage{enumitem}
-\usepackage[a4paper,top=20mm,bottom=15mm,left=14mm,right=14mm,headheight=0pt,headsep=0pt,footskip=0pt]{geometry}
+\usepackage[a4paper,top=32mm,bottom=15mm,left=14mm,right=14mm,headheight=0pt,headsep=0pt,footskip=0pt]{geometry}
 % --- шрифт: три варианта одного почерка (разные начертания букв), случайно по словам
 \providecommand{\handdir}{./}
 \providecommand{\handscale}{1.7}
@@ -41,17 +42,47 @@
 \setlength{\abovedisplayskip}{0pt}\setlength{\belowdisplayskip}{0pt}
 \pagestyle{empty}
 % --- её элементы оформления
-\newcommand{\shapka}{\AddToShipoutPictureFG{\put(\LenToUnit{\paperwidth-62mm},\LenToUnit{\paperheight-17mm}){%
-  \begin{tikzpicture}\node[draw=ink,line width=0.6pt,inner sep=2pt,rotate=1.5,font=\fontsize{14pt}{14pt}\selectfont\color{ink}]{\begin{tabular}{@{}c@{}}Булгакова,\\305\end{tabular}};
-  \node[draw=ink,circle,line width=0.6pt,inner sep=1.5pt,font=\fontsize{15pt}{15pt}\selectfont\color{ink}] at (2.1,0.1) {\thepage};\end{tikzpicture}}}}
+% рамка от руки: четыре отдельных штриха по углам надписи, углы сходятся неидеально
+\newcommand{\shapka}{\AddToShipoutPictureFG{\put(\LenToUnit{\paperwidth-62mm},\LenToUnit{\paperheight-30mm}){%
+  \begin{tikzpicture}[ink]
+  \node[inner xsep=4pt,inner ysep=5pt,rotate=1.5,font=\fontsize{14pt}{14pt}\selectfont\color{ink}] (sh) {\XeTeXinterchartokenstate=0 \handA\begin{tabular}{@{}c@{}}Булгакова,\\305\end{tabular}};
+  \handseg{(sh.south west)}{(sh.south east)}\handseg{(sh.north west)}{(sh.north east)}
+  \handseg{(sh.south west)}{(sh.north west)}\handseg{(sh.south east)}{(sh.north east)}
+  \node[inner sep=1.5pt,font=\fontsize{15pt}{15pt}\selectfont\color{ink}] (pn) at ($(sh.east)+(0.45,0.1)$) {\XeTeXinterchartokenstate=0 \handA\thepage};
+  \pgfmathsetmacro{\pnR}{rnd*30}\draw[line width=0.6pt, rounded corners=1.5pt, decorate, decoration={random steps, segment length=3pt, amplitude=0.35pt}, rotate around={\pnR:(pn)}] (pn) ellipse (8.5pt and 7.5pt);\end{tikzpicture}}}}
 \newcommand{\lk}[2]{{\fontsize{20pt}{10mm}\selectfont Лк №#1.\ \ #2}\par}
-\newcommand{\term}[1]{\underline{#1}}          % термин подчёркнут
+\makeatletter
+% --- линии от руки: каждая чуть кривая, с наклоном, разной длины и толщины
+% \handseg{(A)}{(B)}: штрих от A до B — прогиб, дрожание, недолёт/перелёт концов
+\newcommand{\handseg}[2]{%
+  \path #1 coordinate (hsA) #2 coordinate (hsB);%
+  \pgfpointdiff{\pgfpointanchor{hsA}{center}}{\pgfpointanchor{hsB}{center}}%
+  \pgfmathsetmacro{\hlL}{veclen(\pgf@x,\pgf@y)}%
+  \pgfmathsetmacro{\hlA}{(rnd-0.5)*(0.05*\hlL+3)}\pgfmathsetmacro{\hlB}{(rnd-0.5)*(0.05*\hlL+3)}%
+  \pgfmathsetmacro{\hlY}{(rnd-0.5)*(0.035*\hlL+1.5)}%
+  \pgfmathsetmacro{\hlW}{0.5+rnd*0.45}\pgfmathsetmacro{\hlS}{(rnd-0.4)*0.06}\pgfmathsetmacro{\hlE}{1+(rnd-0.3)*0.06}%
+  \draw[line width=\hlW pt, line cap=round, rounded corners=2pt,
+        decorate, decoration={random steps, segment length=9pt, amplitude=0.45pt}]
+    ($(hsA)!\hlS!(hsB)$) .. controls ($(hsA)!0.33!(hsB)!\hlA pt!90:(hsB)$) and ($(hsA)!0.66!(hsB)!\hlB pt!90:(hsB)$) .. ($(hsA)!\hlE!(hsB)+(0,\hlY pt)$);}
+\newcommand{\handline}[2]{\handseg{(0,0)}{(#1,#2)}}
+\makeatother
+% подчёркивание от руки (не на всю ширину ровно, с наклоном)
+\newcommand{\hunder}[1]{\begin{tikzpicture}[baseline=(hu.base)]
+  \node[inner sep=0pt, outer sep=0pt, anchor=base west] (hu) {#1};
+  \pgfmathsetmacro{\huY}{-2.6-rnd*1.5}\pgfmathsetmacro{\huD}{(rnd-0.5)*3.5}%
+  \begin{scope}[shift={($(hu.base west)+(0,\huY pt)$)}]\handline{\huW}{\huD pt}\end{scope}
+\end{tikzpicture}}
+\newcommand{\term}[1]{{\setbox0\hbox{#1}\edef\huW{\the\wd0}\hunder{#1}}}  % термин подчёркнут от руки
 \newcommand{\red}[1]{{\color{redink}#1}}
-\newcommand{\opr}{\underline{Опр.}\ }
+\newcommand{\opr}{\term{Опр.}\ }
 \newcommand{\dvo}{Д-во.\ }
 \newcommand{\ctd}{\hfill ч.т.д.}
 \providecommand{\blacksquare}{\mdlgblksquare}
-\newcommand{\rul}[2]{\dfrac{\;#1\;}{\;#2\;}}
+% дробь / черта вывода: черта рисуется от руки
+\newcommand{\handbar}[1]{\begin{tikzpicture}[baseline=-0.5ex]\pgfmathsetmacro{\hbD}{(rnd-0.5)*4}\handline{#1}{\hbD pt}\end{tikzpicture}}
+\newcommand{\rul}[2]{\mathord{\setbox1\hbox{$\displaystyle\;#1\;$}\setbox2\hbox{$\displaystyle\;#2\;$}%
+  \dimen0=\ifdim\wd1>\wd2 \wd1\else\wd2\fi
+  \vcenter{\offinterlineskip\halign{\hfil##\hfil\cr\box1\cr\noalign{\vskip3pt}\handbar{\the\dimen0}\cr\noalign{\vskip4pt}\box2\cr}}}}
 \newcommand{\lab}[1]{\RightLabel{\fontsize{12pt}{12pt}\selectfont\;#1}}
 \newcommand{\nv}{\vdash_{N}}
 \newcommand{\Dv}[2]{\begin{matrix}#1\\[-4pt]=\!=\\[-4pt]#2\end{matrix}}
