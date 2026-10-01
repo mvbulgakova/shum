@@ -9,7 +9,6 @@ from fontTools.feaLib.builder import addOpenTypeFeaturesFromString
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "..", "data")
-FALLBACK = os.path.join(HERE, "BadScript-Regular.ttf")
 XH = 380          # высота строчной буквы в единицах шрифта
 UP = 4            # во сколько раз увеличиваем скан перед обводкой
 # glyphs.pkl — все вырезанные из лекций экземпляры (картинка, базовая линия, соседи);
@@ -122,11 +121,14 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     for lo, up in zip("абвгдежзийклмнопрстуфхцчшщъыьэюя", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"):
         if up not in variants: copy(lo, up, 1.35)
     # латиница/цифры, которых нет: похожие по форме её буквы
-    LAT = {"D": "Д", "a": "а", "e": "е", "o": "о", "c": "с", "x": "х", "y": "у", "u": "и", "n": "п", "r": "г",
-           "k": "к", "d": "д", "b": "б", "C": "С", "E": "Е", "O": "О", "P": "Р", "T": "Т", "K": "К",
-           "M": "М", "H": "Н", "X": "Х", "0": "о", "—": "–", "−": "–"}
+    # латиница, которой нет в её записях: её же буквы того же начертания (в прописи они совпадают)
+    LAT = {"a": "а", "e": "е", "o": "о", "c": "с", "x": "х", "y": "у", "u": "и", "n": "п", "r": "г",
+           "k": "к", "g": "д", "m": "т", "z": "з", "C": "С", "E": "Е", "O": "О", "P": "Р", "T": "Т", "K": "К",
+           "M": "М", "H": "Н", "X": "Х", "B": "В", "A": "А", "D": "Д", "0": "о", "—": "–", "−": "–",
+           "ℎ": "h", "φ": "ф", "ε": "з", "ρ": "р", "β": "б", "μ": "м", "S": "s", "U": "u", "W": "w", "Z": "з"}
     for dst, src in LAT.items():
-        if dst not in variants and src in variants: copy(src, dst, 1.0 if dst != "0" else 1.25)
+        if dst not in variants and src in variants:
+            copy(src, dst, 1.25 if dst in "0SUWZ" else (0.8 if dst == "ε" else 1.0))
     # знаки, составленные из её же штрихов
     def compose(dst, parts, n=4):
         # parts: [(src_ch, sx, dx_frac_of_prev_adv, dy)] ; dx считается от конца предыдущей части
@@ -153,22 +155,26 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     symbols.build(shapes, variants, base, meta, gname, XH, seed)
     for src, dst in (("⊨", "⊧"), ("−", "−"), ("|", "∣"), ("∨", "∨")):
         if src in variants and dst not in variants: copy(src, dst)
-    # --- всё, чего нет в лекциях вовсе, берём из Bad Script (самый похожий готовый шрифт), подогнав по высоте
-    import os
-    if os.path.exists(FALLBACK):
-        from fontTools.ttLib import TTFont
-        fb_font = TTFont(FALLBACK); fgs = fb_font.getGlyphSet(); fcm = fb_font.getBestCmap()
-        k = XH / 505.0
-        want = [c for c in range(0x20, 0x250)] + list(range(0x400, 0x460)) + list(range(0x2010, 0x2070)) + [0x2116, 0x2192, 0x2190, 0x2194]
-        for cp in want:
-            ch = chr(cp)
-            if ch in variants or cp not in fcm or ch.isspace(): continue
-            gn = fcm[cp]; r2 = RecordingPen()
-            from fontTools.pens.recordingPen import DecomposingRecordingPen
-            dr = DecomposingRecordingPen(fgs); fgs[gn].draw(dr)
-            dr.replay(TransformPen(r2, (k, 0, 0.18 * k, k, 0, 0)))   # лёгкий наклон как у неё
-            variants[ch] = [0]; base[ch] = 0
-            shapes[gname(ch, 0)] = (r2, fgs[gn].width * k); meta[gname(ch, 0)] = ("^", "$")
+    # комбинируемые точка и тильда над буквой (U+0307, U+0303): нулевая ширина, её точка / её волна
+    for cch, src, sc, dy in (("\u0307", ".", 1.0, XH * 1.25), ("\u0303", "∼", 0.55, XH * 1.05)):
+        if src not in variants or cch in variants: continue
+        variants[cch] = []; base[cch] = 0
+        for k in range(len(variants[src])):
+            rp, a = shapes[gname(src, k)]
+            r2 = RecordingPen(); rp.replay(TransformPen(r2, (sc, 0, 0, sc, -a * sc * 0.5 - XH * 0.15, dy)))
+            shapes[gname(cch, k)] = (r2, 0); meta[gname(cch, k)] = ("^", "$"); variants[cch].append(k)
+    # --- редкие знаки: если настоящих экземпляров меньше трёх, добавляем копии её же экземпляров
+    #     с небольшим разбросом наклона, ширины и толщины (не чужой шрифт)
+    rj = np.random.RandomState(500 + seed)
+    for ch in list(variants):
+        n = len(variants[ch])
+        if n == 0 or n >= 3: continue
+        for j in range(3 - n):
+            rp, adv = shapes[gname(ch, j % n)]
+            sx = 1 + rj.uniform(-0.08, 0.08); sl = rj.uniform(-0.07, 0.07); sy = 1 + rj.uniform(-0.06, 0.06)
+            r2 = RecordingPen(); rp.replay(TransformPen(r2, (sx, 0, sl, sy, 0, 0)))
+            k = n + j; shapes[gname(ch, k)] = (r2, adv * sx); meta[gname(ch, k)] = meta[gname(ch, j % n)]
+            variants[ch].append(k)
     # --- сборка
     order = [".notdef", "space"] + sorted(shapes)
     fb = FontBuilder(1000, isTTF=False); fb.setupGlyphOrder(order)
@@ -257,7 +263,11 @@ MATHCMD = {
     "equiv": "≡", "neq": "≠", "ne": "≠", "times": "×", "le": "≤", "leq": "≤", "ge": "≥", "geq": "≥",
     "setminus": "∖", "emptyset": "∅", "varnothing": "∅", "forall": "∀", "exists": "∃", "top": "⊤", "bot": "⊥",
     "Gamma": "Γ", "Delta": "Δ", "ldots": "…", "cdots": "⋯", "cdot": "⋅", "circ": "∘", "mid": "|", "vert": "|",
-    "lbrace": "{", "rbrace": "}", "{": "{", "}": "}", "&": "&", "cup": "∪", "cap": "∩", "rightleftharpoons": "⇋",
+    "lbrace": "{", "rbrace": "}", "nvdash": "⊬", "nvDash": "⊭", "nmodels": "⊭", "sim": "∼",
+    "langle": "⟨", "rangle": "⟩", "vdots": "⋮", "mapsto": "↦", "longleftrightarrow": "⟷",
+    "Longleftrightarrow": "⟺", "ast": "∗", "bullet": "•", "alpha": "α", "beta": "β", "theta": "θ",
+    "vartheta": "ϑ", "nu": "ν", "sigma": "σ", "rho": "ρ", "lambda": "λ", "pi": "π", "tau": "τ", "mu": "μ",
+    "prime": "′", "varepsilon": "ε", "epsilon": "ε", "varphi": "φ", "phi": "φ", "lt": "<", "gt": ">", "{": "{", "}": "}", "&": "&", "cup": "∪", "cap": "∩", "rightleftharpoons": "⇋",
 }
 # знаки, которые набираются прямо символом
 MATHCHAR = "()[],.;:=+<>|/0123456789!?"
@@ -282,6 +292,10 @@ def write_math_tex(pua, path):
         if ch not in names: continue
         if cmd in "{}&": L.append(f"  \\def\\{cmd}{{\\ifmmode\\{names[ch]}\\else\\char`\\{cmd}\\fi}}%")
         else: L.append(f"  \\def\\{cmd}{{\\{names[ch]}}}%")
+    if "ℕ" in names and "ℝ" in names:
+        L.append(f"  \\def\\mathbb##1{{\\ifx N##1\\{names['ℕ']}\\else\\ifx R##1\\{names['ℝ']}\\else##1\\fi\\fi}}%")
+    if "′" in names:   # штрих: ' в формулах = её штрих в верхнем индексе
+        L.append(f"  \\def\\hm@pr{{{{}}^{{\\{names['′']}}}}}\\begingroup\\lccode`\\~=`\\'\\lowercase{{\\endgroup\\def~}}{{\\hm@pr}}\\mathcode`\\'=\"8000 %")
     L.append("  \\def\\dots{\\ifmmode\\hm@dots\\else\\textellipsis\\fi}%")
     for ch in MATHCHAR:
         if ch not in names: continue
