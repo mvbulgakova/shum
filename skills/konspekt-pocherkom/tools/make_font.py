@@ -148,8 +148,11 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     compose("»", [(",", 1, 0, XH * 1.6), (",", 1, -10, XH * 1.6)])
     compose("\"", [(",", 1, 0, XH * 1.6), (",", 1, -10, XH * 1.6)])
     compose("'", [(",", 1, 0, XH * 1.6)])
-    compose("=", [("-", 0.8, 0, XH * 0.25), ("-", 0.8, ("abs", 15), XH * 0.6)])
-    compose("+", [("-", 0.8, 0, XH * 0.45), ("1", 0.6, ("abs", 60), 0)])
+    # математика и прочие знаки — её штрихами (symbols.py)
+    import symbols
+    symbols.build(shapes, variants, base, meta, gname, XH, seed)
+    for src, dst in (("⊨", "⊧"), ("−", "−"), ("|", "∣"), ("∨", "∨")):
+        if src in variants and dst not in variants: copy(src, dst)
     # --- всё, чего нет в лекциях вовсе, берём из Bad Script (самый похожий готовый шрифт), подогнав по высоте
     import os
     if os.path.exists(FALLBACK):
@@ -171,6 +174,13 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     fb = FontBuilder(1000, isTTF=False); fb.setupGlyphOrder(order)
     cmap = {32: "space", 160: "space"}
     for ch in variants: cmap[ord(ch)] = gname(ch, base[ch])
+    # каждый вариант знака — ещё и на своём коде в области U+E000…, чтобы в формулах выбирать вариант случайно
+    pua = {}; code = 0xE000
+    for ch in sorted(symbols.MATHCLASS):
+        if ch not in variants: continue
+        pua[ch] = []
+        for k in range(len(variants[ch])):
+            cmap[code] = gname(ch, k); pua[ch].append(code); code += 1
     fb.setupCharacterMap(cmap)
     cs, adv = {}, {}
     p = T2CharStringPen(500, None); cs[".notdef"] = p.getCharString(); adv[".notdef"] = 500
@@ -233,9 +243,56 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     fea_s = "\n".join(fea)
     addOpenTypeFeaturesFromString(fb.font, fea_s)
     fb.save(out)
+    if seed == 0: write_math_tex(pua, os.path.join(os.path.dirname(out), "hand-math.tex"))
     cnt = {c: len(v) for c, v in variants.items()}
     print(out, "глифов:", len(order), "правил calt:", len(rules))
     return cnt
+
+# команды формул -> знак
+MATHCMD = {
+    "vee": "∨", "lor": "∨", "wedge": "∧", "land": "∧", "neg": "¬", "lnot": "¬",
+    "supset": "⊃", "subset": "⊂", "supseteq": "⊇", "subseteq": "⊆", "in": "∈", "notin": "∉",
+    "vdash": "⊢", "models": "⊨", "vDash": "⊨", "to": "→", "rightarrow": "→", "leftarrow": "←", "gets": "←",
+    "leftrightarrow": "↔", "Rightarrow": "⇒", "Leftarrow": "⇐", "Leftrightarrow": "⇔", "iff": "⇔",
+    "equiv": "≡", "neq": "≠", "ne": "≠", "times": "×", "le": "≤", "leq": "≤", "ge": "≥", "geq": "≥",
+    "setminus": "∖", "emptyset": "∅", "varnothing": "∅", "forall": "∀", "exists": "∃", "top": "⊤", "bot": "⊥",
+    "Gamma": "Γ", "Delta": "Δ", "ldots": "…", "cdots": "⋯", "cdot": "⋅", "circ": "∘", "mid": "|", "vert": "|",
+    "lbrace": "{", "rbrace": "}", "{": "{", "}": "}", "&": "&", "cup": "∪", "cap": "∩", "rightleftharpoons": "⇋",
+}
+# знаки, которые набираются прямо символом
+MATHCHAR = "()[],.;:=+<>|/0123456789!?"
+
+def write_math_tex(pua, path):
+    from symbols import MATHCLASS
+    L = ["% создано make_font.py: знаки в формулах — её почерком, каждый раз случайный вариант",
+         "\\ExplSyntaxOff\\makeatletter"]
+    def body(ch):
+        cl = MATHCLASS.get(ch, 0)
+        alts = " \\or ".join(f'\\Umathchar{cl}\\hm@fam"{c:X} ' for c in pua[ch])
+        return f"\\ifcase\\uniformdeviate{len(pua[ch])} {alts}\\fi"
+    names = {}
+    for i, ch in enumerate(sorted(pua)):
+        nm = "hm@" + "abcdefghijklmnopqrstuvwxyz"[i // 26] + "abcdefghijklmnopqrstuvwxyz"[i % 26]
+        names[ch] = nm
+        L.append(f"\\def\\{nm}{{{body(ch)}}}% {ch}")
+    L.append("\\newcommand\\handmathsetup{%")
+    # семейство, в котором стоит её шрифт: его уже назначил unicode-math латинским буквам (биты 24..31)
+    L.append('  \\chardef\\hm@fam=\\numexpr(\\Umathcodenum`A-"800000)/"1000000\\relax')
+    for cmd, ch in MATHCMD.items():
+        if ch not in names: continue
+        if cmd in "{}&": L.append(f"  \\def\\{cmd}{{\\ifmmode\\{names[ch]}\\else\\char`\\{cmd}\\fi}}%")
+        else: L.append(f"  \\def\\{cmd}{{\\{names[ch]}}}%")
+    L.append("  \\def\\dots{\\ifmmode\\hm@dots\\else\\textellipsis\\fi}%")
+    for ch in MATHCHAR:
+        if ch not in names: continue
+        L.append(f"  \\begingroup\\lccode`\\~=`\\{ch}\\lowercase{{\\endgroup\\def~}}{{\\{names[ch]}}}\\mathcode`\\{ch}=\"8000 %")
+    if "−" in names:
+        L.append(f"  \\begingroup\\lccode`\\~=`\\-\\lowercase{{\\endgroup\\def~}}{{\\{names['−']}}}\\mathcode`\\-=\"8000 %")
+    L.append("}")
+    if "…" in names: L.append(f"\\def\\hm@dots{{\\{names['…']}}}")
+    L.append("\\AddToHook{begindocument/end}{\\handmathsetup}")
+    L.append("\\makeatother")
+    open(path, "w").write("\n".join(L) + "\n")
 
 if __name__ == "__main__":
     outdir = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "..", "fonts")

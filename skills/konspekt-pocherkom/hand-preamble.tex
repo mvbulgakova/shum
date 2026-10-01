@@ -18,6 +18,7 @@
 \setmainfont{MariaHand-A.otf}[Path=\handdir,Scale=\handscale]
 \setmathfont{Latin Modern Math}[Scale=0.95]
 \setmathfont{MariaHand-A.otf}[Path=\handdir,Scale=\handscale,range={it/{Latin,latin}->up,up/{Latin,latin,num}}]
+\input{\handdir hand-math.tex}
 % перед каждым словом — случайный вариант (XeTeX interchar: граница -> буква)
 \newcommand{\handpick}{\ifcase\uniformdeviate 3 \handA\or\handB\or\handC\fi}
 \XeTeXinterchartoks 4095 0 = {\handpick}
