@@ -267,7 +267,7 @@ MATHCMD = {
     "langle": "⟨", "rangle": "⟩", "vdots": "⋮", "mapsto": "↦", "longleftrightarrow": "⟷",
     "Longleftrightarrow": "⟺", "ast": "∗", "bullet": "•", "alpha": "α", "beta": "β", "theta": "θ",
     "vartheta": "ϑ", "nu": "ν", "sigma": "σ", "rho": "ρ", "lambda": "λ", "pi": "π", "tau": "τ", "mu": "μ",
-    "prime": "′", "varepsilon": "ε", "epsilon": "ε", "varphi": "φ", "phi": "φ", "lt": "<", "gt": ">", "{": "{", "}": "}", "&": "&", "cup": "∪", "cap": "∩", "rightleftharpoons": "⇋",
+    "prime": "′", "blacksquare": "■", "qed": "■", "varepsilon": "ε", "epsilon": "ε", "varphi": "φ", "phi": "φ", "lt": "<", "gt": ">", "{": "{", "}": "}", "&": "&", "cup": "∪", "cap": "∩", "rightleftharpoons": "⇋",
 }
 # знаки, которые набираются прямо символом
 MATHCHAR = "()[],.;:=+<>|/0123456789!?"

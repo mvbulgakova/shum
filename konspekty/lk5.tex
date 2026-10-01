@@ -1,0 +1,99 @@
+\input{hand-preamble.tex}
+\newcommand{\ncl}{\vdash_{Ncl}}
+\newcommand{\nint}{\vdash_{Nint}}
+\newcommand{\rr}{\,\rho\,}
+\begin{document}\shapka
+\lk{5}{Основные характеристики сев}
+\term{Отношения типа следования}\par
+Мы изучили отн-я: сс $\models$\par
+и выводимости $\nint$, $\ncl$.\par
+Все они --- отн-я между мн-вами ф-л и ф-лами.\par
+\opr Будем гов., что \term{$N$-правила сохраняют}\par
+\term{отн. $\rho$}, если для любых $\Gamma, A, B, C$:\par
+\hspace*{5mm}$\rul{\Gamma\rr A \text{ и } \Gamma\rr B}{\Gamma\rr A\&B}$\ \nb{(\&вв) сохр $\rho$}\par
+\hspace*{5mm}$\rul{\Gamma\rr A\&B}{\Gamma\rr A}\quad\rul{\Gamma\rr A\&B}{\Gamma\rr B}$\ \nb{(\&уд) сохр $\rho$}\par
+\hspace*{5mm}$\rul{\Gamma\rr A}{\Gamma\rr A\vee B}\quad\rul{\Gamma\rr B}{\Gamma\rr A\vee B}$\ \nb{($\vee$вв) сохр $\rho$}\par
+\hspace*{5mm}$\rul{\Gamma\rr A\vee B;\ \Gamma,A\rr C;\ \Gamma,B\rr C}{\Gamma\rr C}$\ \nb{($\vee$уд) сохр $\rho$}\par
+\hspace*{5mm}$\rul{\Gamma,A\rr B}{\Gamma\rr A\supset B}$\ \nb{($\supset$вв) сохр $\rho$}\par
+\hspace*{5mm}$\rul{\Gamma\rr A \text{ и } \Gamma\rr A\supset B}{\Gamma\rr B}$\ \nb{($\supset$уд) сохр $\rho$}\par
+\hspace*{5mm}$\rul{\Gamma,A\rr B \text{ и } \Gamma,A\rr\neg B}{\Gamma\rr\neg A}$\ \nb{($\neg$вв) сохр $\rho$}\par
+\hspace*{5mm}$\rul{\Gamma\rr A \text{ и } \Gamma\rr\neg A}{\Gamma\rr B}$\ \nb{($\neg$уд) сохр $\rho$}\par
+\hspace*{5mm}$\rul{\Gamma\rr\neg\neg A}{\Gamma\rr A}$\ \nb{($\neg\neg$уд) сохр $\rho$}\par
+\red{Метод д-ва утв. вида}\par
+<<Отношение $\nv$ \term{согласовано} с отношением $\rho$>>, т.е.\par
+\hspace*{20mm}$(\Gamma)(F)(\Gamma\nv F\to\Gamma\rr F)$\par
+\term{Теорема*} (\red{принцип индукции для отн $N$-выводимости})\par
+Пусть $\rho$ --- произв. отн-е между мн-вами ф-л и ф-лами.\par
+\term{Если} $\rho$ --- рефл. и монот., а \red{все} $N$-правила \term{сохраняют} $\rho$,\par
+\term{то} отн-е $\nv$ согласовано с отн-ем $\rho$:\par
+\hspace*{20mm}$(\Gamma)(F)(\Gamma\nv F\to\Gamma\rr F)$\par
+\term{Теорема} (Гливенко). Для всякой $N_{cl}$-выводимой ф-лы\par
+$N_{int}$-выводимо её двойное отрицание.\par
+Симв.: \hspace{10mm}$(F)(\ncl F\to\ \nint\neg\neg F)$\par
+Докажем более сильное утв.:\par
+\term{Лемма.} $(\Gamma)(F)(\Gamma\ncl F\to\neg\neg\Gamma\nint\neg\neg F)$,\par
+где $\neg\neg\Gamma$ \dots\par
+Воспользуемся принципом инд для $N_{cl}$-выводимости,\par
+где $\Gamma\rr F\leftrightarrow\neg\neg\Gamma\nint\neg\neg F$\par
+\dvo При $\Gamma=\emptyset$ в лемме получаем: $(F)(\ncl F\to\ \nint\neg\neg F)$\par
+4. \term{Следствие.} $(F)(\ncl\neg F\to\ \nint\neg F)$\par
+\term{1. Семантическая корректность}\par
+\term{Теорема} (\red{о сем. корректности $N_{cl}$ и $N_{int}$}). Сев $N_{cl}$ и $N_{int}$\par
+сем. корректны, т.е. всякая $N_{int/cl}$-выводимая ф-ла явл. тавтологией\par
+\hspace*{20mm}$(F)(\nv F\to\ \models F)$\par
+Дост. док.: $(\Gamma)(F)(\Gamma\nv F\to\Gamma\models F)$, поскольку\par
+при $\Gamma=\emptyset$: $(F)(\nv F\to\ \models F)$\par
+\term{Лемма} (о согласованности $\ncl$ и $\nint$ с отн-ем сс).\par
+Отн-я выводимости $\ncl$ и $\nint$ \term{согласованы с отн-ем сс}, т.е.\par
+\hspace*{20mm}$(\Gamma)(F)(\Gamma\nv F\to\Gamma\models F)$\par
+\dvo Воспользуемся \term{принципом индукции} для $N$-выводимости:\par
+1) отн сс $\models$ реф. и монотонно (см. осн св-ва сс);\par
+2) каждое $N$-правило сохр отн. сс $\models$\par
+\hspace*{5mm}\nb{(см. св-ва сс, связ. с вв и уд связок)}\par
+Согласно \red{принципу индукции для отн-я $N$-выв-ти $\nv$} из 1) и 2)\par
+следует: \hspace{10mm}$(\Gamma)(F)(\Gamma\nv F\to\Gamma\models F)$. $\blacksquare$\par
+\term{2. Непротиворечивость}\par
+\red{Пусть $N$ --- произв сев} (не обязательно $N_{cl}$ или $N_{int}$)\par
+\opr Сев $N$ наз \term{противоречивой}, если \red{сущ} ф-ла $F$, т.ч. $\nv F$ и $\nv\neg F$\par
+Симв.: $N$ противоречива $\leftrightarrow(\exists F)(\nv F$ и $\nv\neg F)$\par
+\opr Сев $N$ наз \term{непротиворечивой}, если \red{не} сущ ф-лы $F$,\par
+\hspace*{10mm}т.ч. $\nv F$ и $\nv\neg F$\par
+Симв.: $N$ непротиворечива $\leftrightarrow$ не$(\exists F)(\nv F$ и $\nv\neg F)$\par
+\term{Теорема} (критерий противоречивости сев). Сев $N$ с прав $\neg$у\par
+противоречива т.и т.т., когда $N$-выводима любая ф-ла\par
+\dvo ($\to$) \dots Пусть ф $F$ такая, что $\nv F$ и $\nv\neg F$,\par
+а $\Dv{\emptyset}{F}$ и $\Dv{\emptyset}{\neg F}$ --- соотв $N$-выводы.\par
+Пусть $A$ --- произв ф-ла. Тогда $\rul{\Dv{\emptyset}{F}\ \ \Dv{\emptyset}{\neg F}}{A}$ --- есть $N$-$\emptyset$-$A$-вывод.\par
+Значит, $\nv A$\par
+($\leftarrow$) Очевидно, \dots\par
+\term{Теорема} (\red{о непр. $N_{cl}$ и $N_{int}$}). Сев $N_{cl}$ и $N_{int}$ --- непротиворечивы,\par
+т.е. не сущ ф-лы $F$, т.ч. $\nv F$ и $\nv\neg F$, где $N$ есть $N_{cl}$ или $N_{int}$\par
+Д. Привед к нелеп док: не сущ ф-лы $F$, т.ч. \dots\par
+Допустим, что сущ ф-ла, т.ч. $\nv F$ и $\nv\neg F$. \dots\par
+\term{3. Семантическая полнота} (полнота отн-но класса тавтологий)\par
+Пусть $N$ --- произв сев\par
+Сев $N$ наз \term{семантически полной}, если всякая тавтология\par
+$N$-выводима.\par
+Симв.: $N$ --- сем. полна $\leftrightarrow(F)(\models F\to\ \nv F)$\par
+Далее докажем теорему о сем полноте $N_{cl}$,\par
+но сначала докажем две леммы.\par
+Для д-ва леммы 1 (основной) используем след принцип. \dots\par
+\term{4. Разрешимость}\par
+Пусть $N$ --- произв сев.\par
+\opr Сев $N$ наз \term{разрешимой}, если сущ алгоритм, который\par
+позволяет по произвольной ф-ле ЯЛВ выяснить,\par
+явл-ся ли она $N$-выводимой.\par
+\term{Теорема} (\red{о разрешимости $N_{cl}$}). Сев $N_{cl}$ разрешима,\par
+т.е. сущ алгоритм, \dots\par
+\dvo Согласно Т о сем. корр и Т о сем. полноте $N_{cl}$:\par
+\hspace*{20mm}$(F)(\ncl F\leftrightarrow\ \models F)$\par
+Т.о., чтобы выяснить, явл. ли ф-ла $F$ $N_{cl}$-выводимой,\par
+дост выяснить: $\models F$?\par
+Сущ. алгоритм, который позволяет по произвольной ф-ле выяснить,\par
+явл-ся ли она тавтологией.\par
+Разр $N_{cl}$: алгоритм сводится к построению таблицы истинности\par
+для ф-лы. $\blacksquare$\par
+Разрешима ли $N_{int}$?\par
+\term{Теорема}. \red{Сев $N_{int}$ разрешима.}\par
+Доказывать не будем, т.к. д-во очень сложное.\par
+\end{document}

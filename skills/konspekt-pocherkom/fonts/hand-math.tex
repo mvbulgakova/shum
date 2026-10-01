@@ -95,10 +95,11 @@
 \def\hm@do{\ifcase\uniformdeviate6 \Umathchar2\hm@fam"E2EC  \or \Umathchar2\hm@fam"E2ED  \or \Umathchar2\hm@fam"E2EE  \or \Umathchar2\hm@fam"E2EF  \or \Umathchar2\hm@fam"E2F0  \or \Umathchar2\hm@fam"E2F1 \fi}% ⋅
 \def\hm@dp{\ifcase\uniformdeviate6 \Umathchar0\hm@fam"E2F2  \or \Umathchar0\hm@fam"E2F3  \or \Umathchar0\hm@fam"E2F4  \or \Umathchar0\hm@fam"E2F5  \or \Umathchar0\hm@fam"E2F6  \or \Umathchar0\hm@fam"E2F7 \fi}% ⋮
 \def\hm@dq{\ifcase\uniformdeviate6 \Umathchar0\hm@fam"E2F8  \or \Umathchar0\hm@fam"E2F9  \or \Umathchar0\hm@fam"E2FA  \or \Umathchar0\hm@fam"E2FB  \or \Umathchar0\hm@fam"E2FC  \or \Umathchar0\hm@fam"E2FD \fi}% ⋯
-\def\hm@dr{\ifcase\uniformdeviate6 \Umathchar4\hm@fam"E2FE  \or \Umathchar4\hm@fam"E2FF  \or \Umathchar4\hm@fam"E300  \or \Umathchar4\hm@fam"E301  \or \Umathchar4\hm@fam"E302  \or \Umathchar4\hm@fam"E303 \fi}% ⟨
-\def\hm@ds{\ifcase\uniformdeviate6 \Umathchar5\hm@fam"E304  \or \Umathchar5\hm@fam"E305  \or \Umathchar5\hm@fam"E306  \or \Umathchar5\hm@fam"E307  \or \Umathchar5\hm@fam"E308  \or \Umathchar5\hm@fam"E309 \fi}% ⟩
-\def\hm@dt{\ifcase\uniformdeviate6 \Umathchar3\hm@fam"E30A  \or \Umathchar3\hm@fam"E30B  \or \Umathchar3\hm@fam"E30C  \or \Umathchar3\hm@fam"E30D  \or \Umathchar3\hm@fam"E30E  \or \Umathchar3\hm@fam"E30F \fi}% ⟷
-\def\hm@du{\ifcase\uniformdeviate6 \Umathchar3\hm@fam"E310  \or \Umathchar3\hm@fam"E311  \or \Umathchar3\hm@fam"E312  \or \Umathchar3\hm@fam"E313  \or \Umathchar3\hm@fam"E314  \or \Umathchar3\hm@fam"E315 \fi}% ⟺
+\def\hm@dr{\ifcase\uniformdeviate3 \Umathchar0\hm@fam"E2FE  \or \Umathchar0\hm@fam"E2FF  \or \Umathchar0\hm@fam"E300 \fi}% ■
+\def\hm@ds{\ifcase\uniformdeviate6 \Umathchar4\hm@fam"E301  \or \Umathchar4\hm@fam"E302  \or \Umathchar4\hm@fam"E303  \or \Umathchar4\hm@fam"E304  \or \Umathchar4\hm@fam"E305  \or \Umathchar4\hm@fam"E306 \fi}% ⟨
+\def\hm@dt{\ifcase\uniformdeviate6 \Umathchar5\hm@fam"E307  \or \Umathchar5\hm@fam"E308  \or \Umathchar5\hm@fam"E309  \or \Umathchar5\hm@fam"E30A  \or \Umathchar5\hm@fam"E30B  \or \Umathchar5\hm@fam"E30C \fi}% ⟩
+\def\hm@du{\ifcase\uniformdeviate6 \Umathchar3\hm@fam"E30D  \or \Umathchar3\hm@fam"E30E  \or \Umathchar3\hm@fam"E30F  \or \Umathchar3\hm@fam"E310  \or \Umathchar3\hm@fam"E311  \or \Umathchar3\hm@fam"E312 \fi}% ⟷
+\def\hm@dv{\ifcase\uniformdeviate6 \Umathchar3\hm@fam"E313  \or \Umathchar3\hm@fam"E314  \or \Umathchar3\hm@fam"E315  \or \Umathchar3\hm@fam"E316  \or \Umathchar3\hm@fam"E317  \or \Umathchar3\hm@fam"E318 \fi}% ⟺
 \newcommand\handmathsetup{%
   \chardef\hm@fam=\numexpr(\Umathcodenum`A-"800000)/"1000000\relax
   \def\vee{\hm@cw}%
@@ -154,12 +155,12 @@
   \def\nvDash{\hm@dn}%
   \def\nmodels{\hm@dn}%
   \def\sim{\hm@cz}%
-  \def\langle{\hm@dr}%
-  \def\rangle{\hm@ds}%
+  \def\langle{\hm@ds}%
+  \def\rangle{\hm@dt}%
   \def\vdots{\hm@dp}%
   \def\mapsto{\hm@cg}%
-  \def\longleftrightarrow{\hm@dt}%
-  \def\Longleftrightarrow{\hm@du}%
+  \def\longleftrightarrow{\hm@du}%
+  \def\Longleftrightarrow{\hm@dv}%
   \def\ast{\hm@ct}%
   \def\bullet{\hm@by}%
   \def\alpha{\hm@bl}%
@@ -174,6 +175,8 @@
   \def\tau{\hm@bv}%
   \def\mu{\hm@bq}%
   \def\prime{\hm@ca}%
+  \def\blacksquare{\hm@dr}%
+  \def\qed{\hm@dr}%
   \def\varepsilon{\hm@bn}%
   \def\epsilon{\hm@bn}%
   \def\varphi{\hm@bw}%
