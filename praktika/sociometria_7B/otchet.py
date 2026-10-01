@@ -19,6 +19,7 @@ def P(text='', bold=False, italic=False, align=None, size=None, indent=True, spa
     if indent and align is None: p.paragraph_format.first_line_indent = Cm(1.25)
     if align == 'c': p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     elif align == 'r': p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    elif align == 'l': p.alignment = WD_ALIGN_PARAGRAPH.LEFT
     elif align is None: p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
     for part in re.split(r'(\*\*.+?\*\*)', text):
         if not part: continue
@@ -47,8 +48,8 @@ for s in ['МИНИСТЕРСТВО ПРОСВЕЩЕНИЯ РОССИЙСКОЙ 
     P(s, align='c', bold=bool(s))
 P('ПРОИЗВОДСТВЕННАЯ ПЕДАГОГИЧЕСКАЯ ПРАКТИКА', bold=True, align='c'); P('', align='c')
 P('Социометрическое изучение коллектива класса', bold=True, align='c', size=16); P('', align='c')
-P('Направление подготовки: 44.03.05 Педагогическое образование (с двумя профилями подготовки)', indent=False)
-P('Место прохождения практики: МБОУ «Образовательный центр им. А. Н. Косыгина», г. Красногорск, 7-Б класс', indent=False)
+P('Направление подготовки: 44.03.05 Педагогическое образование (с двумя профилями подготовки)', indent=False, align='l')
+P('Место прохождения практики: МБОУ СОШ № 74, г. Воронеж, ул. Переверткина, д. 34, 7-Б класс', indent=False, align='l')
 for _ in range(1): P('')
 for s in ['Выполнила студентка заочной формы обучения,', '4 курс, 1 группа, гуманитарный факультет', 'Бычкова Ульяна Андреевна', '',
           'Руководитель по кафедре общей и педагогической психологии:', 'доцент кафедры общей и педагогической психологии', 'Колосова Е. В.', '', 'Оценка: ____________________', '', 'Подпись: ___________________']:
@@ -98,17 +99,15 @@ FORM = [
  ('10. Как ты проводишь время на перемене? (выбери один вариант)', ['Общаюсь с друзьями из класса', 'Общаюсь с друзьями из других классов', 'Читаю / сижу в телефоне', 'Другое: ____________________']),
  ('11. Если бы твой класс поехал на экскурсию в другой город, с кем из одноклассников ты хотел(а) бы ехать в одном купе (комнате)? Напиши 3 фамилии в порядке предпочтения.', 3),
  ('12. С кем из учеников вашего класса ты хотел(а) бы готовиться к контрольной работе или делать совместный проект? Напиши 3 фамилии в порядке предпочтения.', 3)]
-P('Анкета учащегося', bold=True, align='c', size=12)
-P('Фамилия, имя: ______________________________ Класс: ________ Дата: ________', indent=False, size=12, space=4)
+P('Анкета учащегося', bold=True, align='c', size=13)
+P('Фамилия, имя: ____________________________ Класс: _______ Дата: _______', align='l', indent=False, size=12, space=4)
 for q, opts in FORM:
-    p = P(q, bold=True, indent=False, size=12); p.paragraph_format.space_before = Pt(4); p.paragraph_format.keep_with_next = True
-    if isinstance(opts, list):
-        for o in opts:
-            p = P('•  ' + o, indent=False, size=12); p.paragraph_format.left_indent = Cm(1); p.paragraph_format.keep_with_next = True
-    else:
-        for k in range(opts):
-            p = P((f'{k + 1}. ' if opts > 1 else '') + '_' * 60, indent=False, size=12); p.paragraph_format.left_indent = Cm(1)
-P('Вопросы 11 и 12 — социометрические (эмоциональный и деловой критерии).', italic=True, indent=False, size=12)
+    p = P(q, bold=True, align='l', indent=False, size=12); p.paragraph_format.space_before = Pt(6); p.paragraph_format.keep_with_next = True
+    lines = ['•  ' + o for o in opts] if isinstance(opts, list) else [(f'{k + 1}. ' if opts > 1 else '') + '_' * 55 for k in range(opts)]
+    for n, line in enumerate(lines):
+        p = P(line, align='l', indent=False, size=12); p.paragraph_format.left_indent = Cm(1)
+        p.paragraph_format.keep_with_next = n < len(lines) - 1
+p = P('Вопросы 11 и 12 — социометрические (эмоциональный и деловой критерии).', italic=True, align='l', indent=False, size=12); p.paragraph_format.space_before = Pt(8)
 
 # ---------- социоматрицы (альбомная ориентация)
 def landscape():
