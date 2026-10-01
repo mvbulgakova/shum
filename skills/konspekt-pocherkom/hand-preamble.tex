@@ -29,9 +29,12 @@
 \definecolor{grid}{RGB}{165,190,215}
 \definecolor{redink}{RGB}{190,30,40}
 \color{ink}
+% клетка выключена; чтобы включить: \def\handgrid{} перед \input
+\ifdefined\handgrid
 \AddToShipoutPictureBG{\begin{tikzpicture}[remember picture,overlay]
   \draw[grid,line width=0.25pt,step=5mm] (current page.south west) grid (current page.north east);
 \end{tikzpicture}}
+\fi
 % --- строки по клетке: 2 клетки на строку
 \fontsize{17pt}{10mm}\selectfont
 \AtBeginDocument{\fontsize{17pt}{10mm}\selectfont}
@@ -42,14 +45,32 @@
 \setlength{\abovedisplayskip}{0pt}\setlength{\belowdisplayskip}{0pt}
 \pagestyle{empty}
 % --- её элементы оформления
-% рамка от руки: четыре отдельных штриха по углам надписи, углы сходятся неидеально
+% шапка: каждый лист по-своему — разный шрифт, наклон, сдвиг и вид надписи
+% (в две строки в рамке / в строку в рамке / в строку без рамки), как в её тетради
+\newcommand{\handstampfont}{\ifcase\uniformdeviate 3 \handA\or\handB\or\handC\fi}
+% номер страницы в кружке: один штрих по кругу с заходом за начало (не замкнутый ровный круг)
+\newcommand{\handcircle}[1]{% центр
+  \pgfmathsetmacro{\hcS}{40+rnd*60}\pgfmathsetmacro{\hcO}{25+rnd*45}\pgfmathsetmacro{\hcR}{(rnd-0.5)*30}%
+  \pgfmathsetmacro{\hcX}{8.5+rnd*1.5}\pgfmathsetmacro{\hcY}{7.5+rnd*1.2}\pgfmathsetmacro{\hcK}{(rnd-0.3)*0.12}%
+  \begin{scope}[shift={#1}, rotate=\hcR]
+  \draw[line width=0.65pt, line cap=round]
+    plot[smooth, samples=36, domain=\hcS:\hcS+360+\hcO, variable=\t]
+    ({\hcX*(1+\hcK*(\t-\hcS)/360)*cos(\t)*1pt},{\hcY*(1+\hcK*(\t-\hcS)/360)*sin(\t)*1pt});
+  \end{scope}}
 \newcommand{\shapka}{\AddToShipoutPictureFG{\put(\LenToUnit{\paperwidth-62mm},\LenToUnit{\paperheight-30mm}){%
   \begin{tikzpicture}[ink]
-  \node[inner xsep=4pt,inner ysep=5pt,rotate=1.5,font=\fontsize{14pt}{14pt}\selectfont\color{ink}] (sh) {\XeTeXinterchartokenstate=0 \handA\begin{tabular}{@{}c@{}}Булгакова,\\305\end{tabular}};
-  \handseg{(sh.south west)}{(sh.south east)}\handseg{(sh.north west)}{(sh.north east)}
-  \handseg{(sh.south west)}{(sh.north west)}\handseg{(sh.south east)}{(sh.north east)}
-  \node[inner sep=1.5pt,font=\fontsize{15pt}{15pt}\selectfont\color{ink}] (pn) at ($(sh.east)+(0.45,0.1)$) {\XeTeXinterchartokenstate=0 \handA\thepage};
-  \pgfmathsetmacro{\pnR}{rnd*30}\draw[line width=0.6pt, rounded corners=1.5pt, decorate, decoration={random steps, segment length=3pt, amplitude=0.35pt}, rotate around={\pnR:(pn)}] (pn) ellipse (8.5pt and 7.5pt);\end{tikzpicture}}}}
+  \pgfmathsetmacro{\shR}{(rnd-0.35)*5}\pgfmathsetmacro{\shX}{(rnd-0.5)*8}\pgfmathsetmacro{\shY}{(rnd-0.5)*5}%
+  \pgfmathtruncatemacro{\shV}{int(rnd*3)}%
+  \node[inner xsep=2.5pt,inner ysep=2.5pt,rotate=\shR,font=\fontsize{14pt}{14pt}\selectfont\color{ink}] (sh) at (\shX pt,\shY pt)
+    {\handstampfont\ifnum\shV=0 \begin{tabular}{@{}c@{}}Булгакова,\\305\end{tabular}\else Булгакова, 305\fi};
+  \ifnum\shV<2
+    \handseg{(sh.south west)}{(sh.south east)}\handseg{(sh.north west)}{(sh.north east)}
+    \handseg{(sh.south west)}{(sh.north west)}\handseg{(sh.south east)}{(sh.north east)}
+  \fi
+  \pgfmathsetmacro{\pnX}{0.5+rnd*0.2}\pgfmathsetmacro{\pnY}{(rnd-0.3)*0.15}%
+  \coordinate (pc) at ($(sh.east)+(\pnX,\pnY)$);
+  \node[inner sep=0pt,font=\fontsize{15pt}{15pt}\selectfont\color{ink}] at (pc) {\handstampfont\thepage};
+  \handcircle{(pc)}\end{tikzpicture}}}}
 \newcommand{\lk}[2]{{\fontsize{20pt}{10mm}\selectfont Лк №#1.\ \ #2}\par}
 \makeatletter
 % --- линии от руки: каждая чуть кривая, с наклоном, разной длины и толщины

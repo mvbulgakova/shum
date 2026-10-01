@@ -45,7 +45,23 @@ def _trace(g):
             out = (y + h < bl - 2.4 * ref) or (y > bl + 1.3 * ref)
             hi = (y + h < bl - 1.15 * ref) and ar < 0.35 * big and not keepdia
             lo = (y > bl + 0.15 * ref) and ar < 0.35 * big and g["ch"] not in ",;"
-            if out or hi or lo: a[lab == i] = 0
+            # обрывки соседних букв у краёв разреза и мелкие кляксы
+            x, w = st[i, cv2.CC_STAT_LEFT], st[i, cv2.CC_STAT_WIDTH]
+            cyr = g["ch"].islower() and "а" <= g["ch"] <= "я" and g["ch"] not in "ыйюжк"
+            edge = cyr and (x <= 1 or x + w >= a.shape[1] - 1) and ar < 0.3 * big
+            speck = ar < (0.04 if (keepdia or not cyr) else 0.12) * big
+            if out or hi or lo or edge or speck: a[lab == i] = 0
+    # тонкие «хвосты» на краях разреза (кусок связки соседней буквы): срезаем, если штрих
+    # у самого края уходит выше или ниже основной полосы строчной буквы
+    if g["ch"].isalpha() and a.shape[1] > 6:
+        bl = g["bl"]; top = bl - 1.25 * ref; bot = bl + 0.25 * ref
+        if g["ch"] not in "бвдйруфцщзЁёБВДЙРУФЦЩЗbdfhklpqyt" and g["ch"].islower():
+            for side in (range(0, min(4, a.shape[1])), range(a.shape[1] - 1, max(a.shape[1] - 5, -1), -1)):
+                for xx in side:
+                    ys = np.nonzero(a[:, xx] > 60)[0]
+                    if len(ys) == 0: continue
+                    bad = (ys < top) | (ys > bot)
+                    a[ys[bad], xx] = 0
     big = cv2.resize(a, (a.shape[1] * UP, a.shape[0] * UP), interpolation=cv2.INTER_CUBIC)
     big = cv2.GaussianBlur(big, (0, 0), UP * 0.35)
     m = big > 105
@@ -270,7 +286,7 @@ MATHCMD = {
     "prime": "′", "blacksquare": "■", "qed": "■", "varepsilon": "ε", "epsilon": "ε", "varphi": "φ", "phi": "φ", "lt": "<", "gt": ">", "{": "{", "}": "}", "&": "&", "cup": "∪", "cap": "∩", "rightleftharpoons": "⇋",
 }
 # знаки, которые набираются прямо символом
-MATHCHAR = "()[],.;:=+<>|/0123456789!?"
+MATHCHAR = "()[],.;:=+<>|/0123456789!?" + "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
 def write_math_tex(pua, path):
     from symbols import MATHCLASS
