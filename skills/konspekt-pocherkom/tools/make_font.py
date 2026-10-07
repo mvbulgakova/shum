@@ -101,6 +101,7 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     rs = np.random.RandomState(100 + seed)
     variants = {}                       # ch -> list of (glyph-id in G)
     for ch, ids in K.items():
+        if len(ch) != 1: continue
         if ch.strip() and ids: variants[ch] = ids
     shapes = {}                         # glyph name -> (RecordingPen, advance)
     meta = {}                           # glyph name -> (prev, next)
