@@ -67,9 +67,13 @@ def _trace(g):
                     if len(ys) == 0: continue
                     bad = (ys < top) | (ys > bot)
                     a[ys[bad], xx] = 0
+    # пустые поля слева/справа (бывают у перевырезанных букв) — убираем, иначе разрыв в слове
+    if g["ch"].isalpha():
+        cols = np.nonzero((a > 60).any(0))[0]
+        if len(cols): a = a[:, cols[0]:cols[-1] + 1]
     big = cv2.resize(a, (a.shape[1] * UP, a.shape[0] * UP), interpolation=cv2.INTER_CUBIC)
     big = cv2.GaussianBlur(big, (0, 0), UP * 0.35)
-    m = big > 105
+    m = big > 90
     # выравниваем толщину линии (сканы разных лекций темнее/светлее)
     # толщину меряем по самой маске (у фото и сканов разная «мягкость» краёв)
     dtm = cv2.distanceTransform(m.astype(np.uint8), cv2.DIST_L2, 5)
@@ -79,7 +83,11 @@ def _trace(g):
     r = (0.088 * ref * UP - swm) / 2
     r = float(np.clip(r, -0.4 * swm, 1.2 * UP))
     if r < -0.5:
-        m = cv2.distanceTransform(m.astype(np.uint8), cv2.DIST_L2, 5) > -r
+        # утоньшаем, но тонкие штрихи (петли «д», «у», «з», соединения) не теряем:
+        # оставляем вокруг скелета линию не тоньше целевой
+        tr = 0.4 * 0.088 * ref * UP
+        near_sk = cv2.distanceTransform((~sk).astype(np.uint8), cv2.DIST_L2, 5) <= tr
+        m = (dtm > -r) | (near_sk & m)
     elif r > 0.5:
         m = cv2.distanceTransform((~m).astype(np.uint8), cv2.DIST_L2, 5) <= r
     m = np.pad(m, 2)
@@ -97,6 +105,119 @@ def _trace(g):
     w = a.shape[1] * S
     return rp, w, S
 
+# ---------- соединения между буквами
+RS = 0.25                                  # масштаб растра для поиска входа/выхода штриха
+YT, YB = 1150, 500                         # растр по высоте: от YT до -YB единиц шрифта
+NB = 6                                     # число корзин по высоте входа
+BTARGET = [XH * (0.06 + 0.17 * b) for b in range(NB)]
+
+class _Flat(RecordingPen):
+    pass
+
+def raster(rp, adv):
+    """контуры -> маска (even-odd) в масштабе RS; x от -50 единиц"""
+    from fontTools.pens.basePen import BasePen
+    polys = []
+    class P(BasePen):
+        def __init__(s): super().__init__(None); s.cur = []
+        def _moveTo(s, p): s.cur = [p]
+        def _lineTo(s, p): s.cur.append(p)
+        def _curveToOne(s, a, b, c):
+            p0 = np.array(s.cur[-1], float)
+            for t in np.linspace(0, 1, 6)[1:]:
+                s.cur.append(tuple((1-t)**3*p0 + 3*(1-t)**2*t*np.array(a) + 3*(1-t)*t*t*np.array(b) + t**3*np.array(c)))
+        def _closePath(s):
+            if len(s.cur) > 2: polys.append(s.cur)
+            s.cur = []
+        _endPath = _closePath
+    pen = P(); rp.replay(pen)
+    W = int((adv + 200) * RS) + 2; H = int((YT + YB) * RS) + 2
+    m = np.zeros((H, W), np.uint8)
+    for q in polys:
+        t = np.zeros_like(m)
+        cv2.fillPoly(t, [np.array([[(x + 50) * RS, (YT - y) * RS] for x, y in q], np.int32)], 1)
+        m ^= t
+    return m
+
+def _orient(rp):
+    """знак площади самого большого контура (чтобы связка шла в ту же сторону и не дырявила букву)"""
+    best, sg = 0, 1; cur = []
+    for op, args in rp.value:
+        if op == "moveTo": cur = [args[0]]
+        elif op in ("lineTo", "curveTo", "qCurveTo"): cur.append(args[-1])
+        elif op in ("closePath", "endPath") and len(cur) > 2:
+            a = np.array(cur); ar = 0.5 * np.sum(a[:, 0] * np.roll(a[:, 1], -1) - np.roll(a[:, 0], -1) * a[:, 1])
+            if abs(ar) > best: best, sg = abs(ar), np.sign(ar)
+    return sg
+
+def stroke_poly(p0, p1, c1, c2, w, rnd, sg):
+    """штрих её толщины по кривой Безье: многоугольник, концы скруглены сужением"""
+    ts = np.linspace(0, 1, 14)
+    P0, P1, C1, C2 = map(lambda v: np.array(v, float), (p0, p1, c1, c2))
+    pts = np.array([(1-t)**3*P0 + 3*(1-t)**2*t*C1 + 3*(1-t)*t*t*C2 + t**3*P1 for t in ts])
+    d = np.gradient(pts, axis=0); d /= np.linalg.norm(d, axis=1, keepdims=True) + 1e-9
+    nrm = np.stack([-d[:, 1], d[:, 0]], 1)
+    wob = 1 + 0.08 * np.sin(ts * np.pi * rnd.uniform(1, 3) + rnd.uniform(0, 6))
+    hw = 0.5 * w * wob * (0.75 + 0.25 * np.sin(np.pi * np.clip(ts * 1.15, 0, 1)) ** 0.5)
+    left = pts + nrm * hw[:, None]; right = pts - nrm * hw[:, None]
+    poly = np.vstack([left, right[::-1]])
+    a = 0.5 * np.sum(poly[:, 0] * np.roll(poly[:, 1], -1) - np.roll(poly[:, 0], -1) * poly[:, 1])
+    if np.sign(a) != sg: poly = poly[::-1]
+    return poly
+
+def connections(shapes, variants):
+    """для букв: версии .cN с дописанной связкой к входу на высоте BTARGET[N].
+    Возвращает {N: (исходные глифы, новые глифы, глифы-следующие с входом в корзине N)}"""
+    CYR = lambda c: ("а" <= c.lower() <= "я" or c in "ёЁ")
+    src = [c for c in variants if c.isalpha() and CYR(c)]
+    dstl = [c for c in variants if c.isalpha() and CYR(c) and c.islower()]
+    ent, ext = {}, {}
+    for c in set(src) | set(dstl):
+        for k in range(len(variants[c])):
+            n = gname(c, k); rp, adv = shapes[n]; m = raster(rp, adv)
+            ys, xs = np.nonzero(m)
+            if len(xs) == 0: continue
+            yv = YT - ys / RS; xv = xs / RS - 50
+            band = (yv > -0.15 * XH) & (yv < 1.15 * XH)
+            if not band.any(): continue
+            xb, yb = xv[band], yv[band]
+            # вход: самые левые точки в полосе строчных
+            L = xb <= xb.min() + 30
+            ent[n] = (float(xb.min()), float(np.median(yb[L])))
+            # выход: самые правые точки
+            R = xb >= xb.max() - 30
+            ext[n] = (float(xb.max()), float(np.median(yb[R])), adv)
+    bucket = lambda y: int(np.clip(np.argmin([abs(y - t) for t in BTARGET]), 0, NB - 1))
+    nxt = defaultdict(list)
+    for n, (x, y) in ent.items():
+        if n.startswith(tuple(gname(c) for c in dstl)) and x < 60: nxt[bucket(y)].append(n)
+    rnd = np.random.RandomState(11)
+    W = 0.085 * XH
+    out = {b: ([], [], nxt[b]) for b in range(NB)}
+    for c in src:
+        for k in range(len(variants[c])):
+            n = gname(c, k)
+            if n not in ext: continue
+            ex, ey, adv = ext[n]
+            if ex < adv - 120: continue                 # буква кончается далеко от края — не тянем
+            rp = shapes[n][0]; sg = _orient(rp)
+            for b in range(NB):
+                ty = BTARGET[b]
+                if abs(ty - ey) < 0.07 * XH and ex > adv - 15: continue   # и так сходятся
+                x0, y0 = ex - 0.6 * W, ey
+                x1 = adv + 0.55 * W; y1 = ty
+                dx = max(x1 - x0, 30)
+                poly = stroke_poly((x0, y0), (x1, y1), (x0 + 0.45 * dx, y0 + 0.15 * (y1 - y0)),
+                                   (x1 - 0.4 * dx, y1 - 0.05 * (y1 - y0)), W, rnd, sg)
+                r2 = RecordingPen(); rp.replay(r2)
+                r2.moveTo(tuple(poly[0]))
+                for p in poly[1:]: r2.lineTo(tuple(p))
+                r2.closePath()
+                nn = f"{n}.c{b}"; shapes[nn] = (r2, adv)
+                out[b][0].append(n); out[b][1].append(nn)
+    print("связки:", sum(len(v[1]) for v in out.values()))
+    return out
+
 def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     rs = np.random.RandomState(100 + seed)
     variants = {}                       # ch -> list of (glyph-id in G)
@@ -112,6 +233,19 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
             adv = max(40, w - ov)
             if not (g["ch"].isalpha() or g["ch"].isdigit()): adv += 25    # знаки чуть свободнее
             shapes[gname(ch, k)] = (rp, adv); meta[gname(ch, k)] = (g["prev"], g["next"])
+    # метрики букв — по полосе строчных: хвосты вниз (у, р, д, з) и вверх могут заходить под соседей,
+    # а расстояние между буквами считается по основной части (как пишется слитно)
+    for n, (rp, adv) in list(shapes.items()):
+        ch = chr(int(n[3:7], 16))
+        if not ch.isalpha(): continue
+        m = raster(rp, adv); ys, xs = np.nonzero(m)
+        if len(xs) == 0: continue
+        yv = YT - ys / RS; xv = xs / RS - 50
+        band = (yv > -0.05 * XH) & (yv < 1.05 * XH)
+        if band.sum() < 5: continue
+        x0, x1 = float(xv[band].min()), float(xv[band].max())
+        r2 = RecordingPen(); rp.replay(TransformPen(r2, (1, 0, 0, 1, -x0, 0)))
+        shapes[n] = (r2, max(40, x1 - x0 + 0.13 * XH))
     # базовый (cmap) глиф: лучший экземпляр в начале слова, иначе первый (самый типичный)
     base = {}
     for ch, ids in variants.items():
@@ -202,6 +336,8 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
             r2 = RecordingPen(); rp.replay(TransformPen(r2, (sx, 0, sl, sy, 0, 0)))
             k = n + j; shapes[gname(ch, k)] = (r2, adv * sx); meta[gname(ch, k)] = meta[gname(ch, j % n)]
             variants[ch].append(k)
+    # --- соединения: «дописываем» штрих от выхода буквы к входу следующей (по высоте входа)
+    conn = connections(shapes, variants)
     # --- сборка
     order = [".notdef", "space"] + sorted(shapes)
     fb = FontBuilder(1000, isTTF=False); fb.setupGlyphOrder(order)
@@ -272,7 +408,13 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
             k = (gidx + 1 + seed) % n
             rules.append(f"sub [{' '.join(cls(x) for x in grp if x in variants)}] {gname(c, base[c])}' by {gname(c, k)};")
     fea.append("lookup ctx {"); fea += ["  " + r for r in rules]; fea.append("} ctx;")
-    fea.append("feature calt { lookup ctx; } calt;")
+    # после выбора вариантов: буква перед буквой с входом на высоте b -> её версия с дописанной связкой
+    crules = []
+    for b, (src, dst, nxt) in conn.items():
+        if not src or not nxt: continue
+        crules.append(f"sub [{' '.join(src)}]' [{' '.join(nxt)}] by [{' '.join(dst)}];")
+    fea.append("lookup conn {"); fea += ["  " + r for r in crules]; fea.append("} conn;")
+    fea.append("feature calt { lookup ctx; lookup conn; } calt;")
     fea_s = "\n".join(fea)
     addOpenTypeFeaturesFromString(fb.font, fea_s)
     fb.save(out)
