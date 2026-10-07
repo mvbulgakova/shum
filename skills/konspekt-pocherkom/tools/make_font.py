@@ -42,15 +42,20 @@ def _trace(g):
         for i in range(1, n):
             y, h, ar = st[i, cv2.CC_STAT_TOP], st[i, cv2.CC_STAT_HEIGHT], st[i, cv2.CC_STAT_AREA]
             if ar == big: continue
-            out = (y + h < bl - 2.4 * ref) or (y > bl + 1.3 * ref)
-            hi = (y + h < bl - 1.15 * ref) and ar < 0.35 * big and not keepdia
-            lo = (y > bl + 0.15 * ref) and ar < 0.35 * big and g["ch"] not in ",;"
+            DESC = "друзфцщДЦЩУЗфy"
+            out = (y + h < bl - (2.6 if g["ch"].isupper() or g["ch"] in "бдвфйё" else 2.0) * ref) or (y > bl + (1.9 if g["ch"] in DESC else 1.0) * ref)
+            hi = (y + h < bl - 1.15 * ref) and ar < 0.35 * big and not keepdia and not g["ch"].isupper() and g["ch"] not in "бвдфйё"
+            lo = (y > bl + 0.15 * ref) and ar < 0.35 * big and g["ch"] not in ",;" + DESC
             # обрывки соседних букв у краёв разреза и мелкие кляксы
             x, w = st[i, cv2.CC_STAT_LEFT], st[i, cv2.CC_STAT_WIDTH]
             cyr = g["ch"].islower() and "а" <= g["ch"] <= "я" and g["ch"] not in "ыйюжк"
             edge = cyr and (x <= 1 or x + w >= a.shape[1] - 1) and ar < 0.3 * big
             speck = ar < (0.04 if (keepdia or not cyr) else 0.12) * big
-            if out or hi or lo or edge or speck: a[lab == i] = 0
+            # отдельный кусок далеко над/под основной частью буквы — чужой штрих
+            bi = 1 + int(np.argmax(areas)); by, bh = st[bi, cv2.CC_STAT_TOP], st[bi, cv2.CC_STAT_HEIGHT]
+            gap = max(y - (by + bh), by - (y + h))
+            far = gap > 0.35 * ref and ar < 0.3 * big and not keepdia and g["ch"] not in "йЙёЁ"
+            if out or hi or lo or edge or speck or far: a[lab == i] = 0
     # тонкие «хвосты» на краях разреза (кусок связки соседней буквы): срезаем, если штрих
     # у самого края уходит выше или ниже основной полосы строчной буквы
     if g["ch"].isalpha() and a.shape[1] > 6:
@@ -66,8 +71,13 @@ def _trace(g):
     big = cv2.GaussianBlur(big, (0, 0), UP * 0.35)
     m = big > 105
     # выравниваем толщину линии (сканы разных лекций темнее/светлее)
-    r = (0.088 * ref - g["sw"]) * UP / 2
-    r = float(np.clip(r, -0.35 * g["sw"] * UP, 1.2 * UP))
+    # толщину меряем по самой маске (у фото и сканов разная «мягкость» краёв)
+    dtm = cv2.distanceTransform(m.astype(np.uint8), cv2.DIST_L2, 5)
+    from skimage.morphology import skeletonize
+    sk = skeletonize(m)
+    swm = 2 * float(np.median(dtm[sk])) if sk.any() else g["sw"] * UP
+    r = (0.088 * ref * UP - swm) / 2
+    r = float(np.clip(r, -0.4 * swm, 1.2 * UP))
     if r < -0.5:
         m = cv2.distanceTransform(m.astype(np.uint8), cv2.DIST_L2, 5) > -r
     elif r > 0.5:
@@ -135,7 +145,7 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     copy("ь", "ъ", extra=tick)
     # заглавные, которых нет: увеличенная строчная (в прописях у этих букв та же форма)
     for lo, up in zip("абвгдежзийклмнопрстуфхцчшщъыьэюя", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"):
-        if up not in variants: copy(lo, up, 1.35)
+        if up not in variants and up not in "ГР": copy(lo, up, 1.35)
     # латиница/цифры, которых нет: похожие по форме её буквы
     # латиница, которой нет в её записях: её же буквы того же начертания (в прописи они совпадают)
     LAT = {"a": "а", "e": "е", "o": "о", "c": "с", "x": "х", "y": "у", "u": "и", "n": "п", "r": "г",
