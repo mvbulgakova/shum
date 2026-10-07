@@ -431,7 +431,7 @@ MATHCMD = {
     "leftrightarrow": "↔", "Rightarrow": "⇒", "Leftarrow": "⇐", "Leftrightarrow": "⇔", "iff": "⇔",
     "equiv": "≡", "neq": "≠", "ne": "≠", "times": "×", "le": "≤", "leq": "≤", "ge": "≥", "geq": "≥",
     "setminus": "∖", "emptyset": "∅", "varnothing": "∅", "forall": "∀", "exists": "∃", "top": "⊤", "bot": "⊥",
-    "Gamma": "Γ", "Delta": "Δ", "ldots": "…", "cdots": "⋯", "cdot": "⋅", "circ": "∘", "mid": "|", "vert": "|",
+    "angle": "∠", "parallel": "∥", "triangle": "Δ", "Gamma": "Γ", "Delta": "Δ", "ldots": "…", "cdots": "⋯", "cdot": "⋅", "circ": "∘", "mid": "|", "vert": "|",
     "lbrace": "{", "rbrace": "}", "nvdash": "⊬", "nvDash": "⊭", "nmodels": "⊭", "sim": "∼",
     "langle": "⟨", "rangle": "⟩", "vdots": "⋮", "mapsto": "↦", "longleftrightarrow": "⟷",
     "Longleftrightarrow": "⟺", "ast": "∗", "bullet": "•", "alpha": "α", "beta": "β", "theta": "θ",

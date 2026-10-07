@@ -1,0 +1,42 @@
+\input{hand-preamble.tex}
+\newcommand{\gr}{\text{°}}
+\newcommand{\ug}{\angle}
+% дуга угла от руки
+\newcommand{\harc}[4]{\draw[line width=0.6pt, decorate, decoration={random steps, segment length=5pt, amplitude=0.3pt}] ($(#1)+(#2:#4)$) arc (#2:#3:#4);}
+\begin{document}\shapka
+{\fontsize{20pt}{10mm}\selectfont Задание 1. Запись доказательства}\par
+Теорема о сумме углов треугольника \framebox{Атанасян, 7--9, п. 30}\par\vspace{2mm}
+\term{Категорическая форма.}\par
+Сумма углов треугольника равна $180\gr$.\par
+\term{Условная (импликативная) форма.}\par
+Если $ABC$ --- треугольник, то $\ug A+\ug B+\ug C=180\gr$.\par\vspace{1mm}
+\noindent\begin{minipage}[t]{0.5\textwidth}
+\term{Дано:}\par
+1. $\triangle ABC$\par
+\term{Доказать:}\par
+2. $\ug A+\ug B+\ug C=180\gr$\par
+\nb{обозн.: $\ug 1=\ug A$, $\ug 2=\ug B$,}\par\nb{\hspace*{12mm}$\ug 3=\ug C$}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.47\textwidth}\vspace{-6mm}
+\begin{tikzpicture}[scale=1.05]
+\coordinate (A) at (0,0); \coordinate (C) at (5.6,0.05); \coordinate (B) at (2.1,2.9);
+\handseg{(A)}{(C)}\handseg{(A)}{(B)}\handseg{(B)}{(C)}
+\handseg{(-0.6,2.88)}{(6.4,2.98)}
+\node at (6.3,3.3) {$a$};
+\node at (-0.3,-0.3) {$A$}; \node at (5.9,-0.25) {$C$}; \node at (2.05,3.35) {$B$};
+\harc{A}{2}{54}{0.6} \node at (0.95,0.32) {\nb{1}};
+\harc{B}{-126}{-55}{0.5} \node at (2.2,2.05) {\nb{2}};
+\harc{C}{142}{178}{0.75} \node at (4.6,0.3) {\nb{3}};
+\harc{B}{181}{233}{0.55} \node at (1.25,2.55) {\nb{4}};
+\harc{B}{-52}{-1}{0.65} \node at (3.0,2.5) {\nb{5}};
+\end{tikzpicture}
+\end{minipage}\par\vspace{2mm}
+\term{Доказательство:}\par
+\def\st{\par\hangindent=7mm\hangafter=1\noindent}
+\st 3. Через $B$ проведём прямую $a\parallel AC$ (доп. построение; через точку вне прямой можно провести прямую, параллельную данной).
+\st 4. $\ug 4=\ug 1$ (накрест лежащие углы при $a\parallel AC$ и секущей $AB$; св-во параллельных прямых, 3).
+\st 5. $\ug 5=\ug 3$ (накрест лежащие углы при $a\parallel AC$ и секущей $BC$; св-во параллельных прямых, 3).
+\st 6. $\ug 4+\ug 2+\ug 5=180\gr$ (углы $4$, $2$, $5$ образуют развёрнутый угол с вершиной $B$, 3).
+\st 7. $\ug 1+\ug 2+\ug 3=180\gr$ (6, 4, 5).
+\st 8 (2). $\ug A+\ug B+\ug C=180\gr$ (7, обозн.). $\blacksquare$\par
+\end{document}
