@@ -22,17 +22,17 @@ def gname(ch, k=None):
     return b if k is None else f"{b}.v{k}"
 
 _TC = {}
-def trace(g):
-    if id(g) in _TC: return _TC[id(g)]
-    r = _trace(g); _TC[id(g)] = r; return r
-def _trace(g):
+def trace(g, cs=1.0):
+    if (id(g), cs) in _TC: return _TC[(id(g), cs)]
+    r = _trace(g, cs); _TC[(id(g), cs)] = r; return r
+def _trace(g, cs=1.0):
     """контуры экземпляра в единицах шрифта -> RecordingPen, ширина"""
     a = g["img"].astype(np.float32)
     rows = np.nonzero((a > 60).any(1))[0]
     ref = g["xh"] if (g["lower_word"] or not g["ch"].isalpha()) else g["lxh"]
     if g["ch"].isupper() and g["lower_word"]: ref = g["lxh"] if g["lxh"] > 0 else g["xh"]
     ref = (0.5 * ref + 0.5 * g["lxh"]) if g["lower_word"] else g["lxh"]   # гасим ошибки оценки высоты
-    S = XH / ref
+    S = XH * cs / ref        # cs > 1: строчная буква рисуется крупнее (заглавная), толщина линии прежняя
     # убираем обрывки соседних строк и чужие надстрочные штрихи
     m0 = (a > 60).astype(np.uint8)
     n, lab, st, _ = cv2.connectedComponentsWithStats(m0, 8)
@@ -80,16 +80,20 @@ def _trace(g):
     from skimage.morphology import skeletonize
     sk = skeletonize(m)
     swm = 2 * float(np.median(dtm[sk])) if sk.any() else g["sw"] * UP
-    r = (0.088 * ref * UP - swm) / 2
+    r = (0.088 * ref * UP / cs - swm) / 2
     r = float(np.clip(r, -0.4 * swm, 1.2 * UP))
     if r < -0.5:
         # утоньшаем, но тонкие штрихи (петли «д», «у», «з», соединения) не теряем:
         # оставляем вокруг скелета линию не тоньше целевой
-        tr = 0.4 * 0.088 * ref * UP
+        tr = 0.4 * 0.088 * ref * UP / cs
         near_sk = cv2.distanceTransform((~sk).astype(np.uint8), cv2.DIST_L2, 5) <= tr
         m = (dtm > -r) | (near_sk & m)
     elif r > 0.5:
         m = cv2.distanceTransform((~m).astype(np.uint8), cv2.DIST_L2, 5) <= r
+    if cs > 1.0:
+        # заглавная из строчной: линия равной толщины по скелету (без «капель» в начале штриха)
+        half = 0.5 * 0.088 * ref * UP / cs
+        m = cv2.distanceTransform((~sk).astype(np.uint8), cv2.DIST_L2, 5) <= half
     m = np.pad(m, 2)
     pl = potrace.Bitmap(~m[::-1]).trace(turdsize=UP * UP * 4, alphamax=1.0, opticurve=True, opttolerance=0.25)
     H = m.shape[0]
@@ -280,7 +284,14 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     copy("ь", "ъ", extra=tick)
     # заглавные, которых нет: увеличенная строчная (в прописях у этих букв та же форма)
     for lo, up in zip("абвгдежзийклмнопрстуфхцчшщъыьэюя", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"):
-        if up not in variants and up not in "ГР": copy(lo, up, 1.35)
+        if up not in variants and up not in "ГР" and lo in variants:
+            variants[up] = []
+            for k, gi in enumerate(variants[lo]):
+                g = G[gi]; rp, w, S = trace(g, 1.35)
+                ov = 0.35 * g["sw"] * S if g["next"].isalpha() else 0
+                shapes[gname(up, k)] = (rp, max(40, w - ov)); meta[gname(up, k)] = meta[gname(lo, k)]
+                variants[up].append(k)
+            base[up] = base[lo]
     # латиница/цифры, которых нет: похожие по форме её буквы
     # латиница, которой нет в её записях: её же буквы того же начертания (в прописи они совпадают)
     LAT = {"a": "а", "e": "е", "o": "о", "c": "с", "x": "х", "y": "у", "u": "и", "n": "п", "r": "г",
