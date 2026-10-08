@@ -35,7 +35,7 @@ chars = sys.argv[1]
 rows = []
 for ch in chars:
     base = f"uni{ord(ch):04X}"
-    names = [n for n in order if n.startswith(base + ".v")]
+    names = [n for n in order if n.startswith(base + ".v") and ".c" not in n]
     names.sort(key=lambda n: int(n.split(".v")[1]))
     tiles = [Image.new("L", (36, int(1500 * SC) + 15), 200)]
     ImageDraw.Draw(tiles[0]).text((6, 20), ch, font=LB, fill=0)
