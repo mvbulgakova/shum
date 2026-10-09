@@ -6,13 +6,8 @@
   \draw[line width=0.6pt,line cap=round] ($(hv.north west)+(-0.5pt,1.6pt+\hvA pt)$) -- ($(hv.north east)+(0.8pt,1.6pt+\hvB pt)$);\end{tikzpicture}}}
 \newcommand{\rt}[1]{\surd\!\hov{#1}}
 % ответ в кружке: один штрих с заходом
-\newcommand{\otv}[1]{\begin{tikzpicture}[baseline=(o.base)]\hspace*{3pt}\node[inner sep=2pt](o){#1};
-  \path (o.south west) coordinate (oa) (o.north east) coordinate (ob);
-  \pgfpointdiff{\pgfpointanchor{oa}{center}}{\pgfpointanchor{ob}{center}}%
-  \pgfmathsetmacro{\ow}{\pgf@x/2*1.12+5}\pgfmathsetmacro{\oh}{\pgf@y/2*1.25+3}%
-  \pgfmathsetmacro{\oS}{60+rnd*80}\pgfmathsetmacro{\oO}{20+rnd*40}\pgfmathsetmacro{\oR}{(rnd-0.5)*6}%
-  \begin{scope}[shift={(o.center)},rotate=\oR]\draw[line width=0.6pt,line cap=round] plot[smooth,samples=40,domain=\oS:\oS+360+\oO,variable=\t] ({\ow*cos(\t)*1pt},{\oh*sin(\t)*1pt});\end{scope}
-  \end{tikzpicture}}
+% ответ без обводки
+\newcommand{\otv}[1]{\ #1}
 \makeatother
 \newcommand{\xv}{\hov{x}_{\text{в}}}
 \newcommand{\ch}{\chi^2}
