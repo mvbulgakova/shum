@@ -1,0 +1,54 @@
+\input{hand-preamble.tex}
+\makeatletter
+% черта сверху от руки (x̄, корень)
+\newcommand{\hov}[1]{\mathord{\begin{tikzpicture}[baseline=(hv.base)]\node[inner sep=0pt,outer sep=0pt](hv){$#1$};
+  \pgfmathsetmacro{\hvA}{(rnd-0.5)*1.2}\pgfmathsetmacro{\hvB}{(rnd-0.5)*1.2}%
+  \draw[line width=0.6pt,line cap=round] ($(hv.north west)+(-0.5pt,1.6pt+\hvA pt)$) -- ($(hv.north east)+(0.8pt,1.6pt+\hvB pt)$);\end{tikzpicture}}}
+\newcommand{\rt}[1]{\surd\!\hov{#1}}
+% ответ в кружке: один штрих с заходом
+\newcommand{\otv}[1]{\begin{tikzpicture}[baseline=(o.base)]\hspace*{3pt}\node[inner sep=2pt](o){#1};
+  \path (o.south west) coordinate (oa) (o.north east) coordinate (ob);
+  \pgfpointdiff{\pgfpointanchor{oa}{center}}{\pgfpointanchor{ob}{center}}%
+  \pgfmathsetmacro{\ow}{\pgf@x/2*1.12+5}\pgfmathsetmacro{\oh}{\pgf@y/2*1.25+3}%
+  \pgfmathsetmacro{\oS}{60+rnd*80}\pgfmathsetmacro{\oO}{20+rnd*40}\pgfmathsetmacro{\oR}{(rnd-0.5)*6}%
+  \begin{scope}[shift={(o.center)},rotate=\oR]\draw[line width=0.6pt,line cap=round] plot[smooth,samples=40,domain=\oS:\oS+360+\oO,variable=\t] ({\ow*cos(\t)*1pt},{\oh*sin(\t)*1pt});\end{scope}
+  \end{tikzpicture}}
+\makeatother
+\newcommand{\xv}{\hov{x}_{\text{в}}}
+\newcommand{\ch}{\chi^2}
+\newcommand{\n}[1]{\par\vspace{1.5mm}\noindent #1)\ }
+\begin{document}\shapka
+\noindent\hspace*{20mm}{\fontsize{20pt}{10mm}\selectfont СРС 2}\par\vspace{2mm}
+\n{14} $\sigma$ изв. $\Rightarrow$ $\xv-t\,\rul{\sigma}{\rt{n}}<a<\xv+t\,\rul{\sigma}{\rt{n}}$\par
+$2\Phi(t)=0{,}95\Rightarrow\Phi(t)=0{,}475\Rightarrow t=1{,}96$\par
+$\delta=t\,\rul{\sigma}{\rt{n}}=\rul{1{,}96\cdot3}{6}=0{,}98$\par
+$4{,}1-0{,}98<a<4{,}1+0{,}98$ \otv{$3{,}12<a<5{,}08$}
+\n{15} $t=1{,}96$;\ $\delta=\rul{1{,}96\cdot2}{\rt{10}}\approx1{,}24$\ \ \otv{$4{,}16<a<6{,}64$}
+\n{16} $2\Phi(t)=0{,}99\Rightarrow t=2{,}58$;\ $\delta=\rul{2{,}58\cdot3}{5}\approx1{,}55$\ \ \otv{$18{,}57<a<21{,}67$}
+\n{17--19} $\sigma$ неизв. $\Rightarrow$ по Стьюденту: $\delta=t_\gamma\,\rul{s}{\rt{n}}$,\ $t_\gamma=t(\gamma;n)$ по табл.
+\n{17} $t(0{,}95;16)=2{,}13$;\ $\delta=\rul{2{,}13\cdot0{,}8}{4}=0{,}426$\ \ \otv{$19{,}774<a<20{,}626$}
+\n{18} $t(0{,}95;12)=2{,}20$;\ $\delta=\rul{2{,}2\cdot1{,}5}{\rt{12}}\approx0{,}95$\ \ \otv{$15{,}85<a<17{,}75$}
+\n{19} $t(0{,}99;9)=3{,}36$;\ $\delta=\rul{3{,}36\cdot2{,}4}{3}=2{,}688$\ \ \otv{$11{,}512<a<16{,}888$}
+\n{20} $s(1-q)<\sigma<s(1+q)$,\ $q(0{,}95;25)=0{,}32$\par
+$0{,}8\cdot0{,}68<\sigma<0{,}8\cdot1{,}32$\ \ \otv{$0{,}544<\sigma<1{,}056$}
+\n{21} $t(0{,}95;9)=2{,}31$;\ $\delta=\rul{2{,}31\cdot5}{3}=3{,}85$;\ $42{,}319\pm3{,}85$\par
+\hspace*{30mm}\otv{$38{,}469<a<46{,}169$}
+\n{22} $q(0{,}99;15)=0{,}73$;\ $0{,}12\cdot0{,}27<\sigma<0{,}12\cdot1{,}73$\ \ \otv{$0{,}03<\sigma<0{,}21$}
+\n{23} $t(0{,}95;16)=2{,}13$;\ $\delta=\rul{2{,}13\cdot0{,}4}{4}=0{,}213$\ \ \otv{$22{,}948<a<23{,}374$}\par
+$q(0{,}95;16)=0{,}44$;\ $0{,}4\cdot0{,}56<\sigma<0{,}4\cdot1{,}44$\ \ \otv{$0{,}224<\sigma<0{,}576$}
+\n{24--26} $\ch_{\text{набл}}=\Sigma\,\rul{(n_i-n_i')^2}{n_i'}$;\ $k=s-3$ ($s$ --- число групп)
+\n{24} $\ch=1+0{,}09+0{,}07+0{,}21+$\par$+0{,}27+0{,}67+0{,}17\approx2{,}5$\par
+$k=7-3=4$;\ $\ch_{\text{кр}}(0{,}05;4)=9{,}5$;\ $2{,}5<9{,}5$\par
+\otv{нет оснований отвергнуть гипотезу}
+\n{25} $\ch=0{,}25+0{,}14+0{,}33+0{,}31+0{,}52+0{,}46+0{,}47+0{,}22+0{,}14+0{,}17\approx3$\par
+$k=10-3=7$;\ $\ch_{\text{кр}}(0{,}05;7)=14{,}07$;\ $3<14{,}07$\par
+\otv{нет оснований отвергнуть гипотезу}
+\n{26} $\ch=4{,}5+2{,}45+0+2{,}31+3{,}27+0{,}4+0\approx13$\par
+$k=4$;\ $\ch_{\text{кр}}(0{,}05;4)=9{,}5$;\ $13>9{,}5$\ \ \otv{гипотеза отвергается}
+\n{27} $y=\rho x+b$;\ $n=5$,\ $\Sigma x=15$,\ $\Sigma y=8{,}15$,\ $\Sigma x^2=57{,}5$,\ $\Sigma xy=26{,}975$\par\vspace{1mm}
+$\rho=\rul{n\Sigma xy-\Sigma x\Sigma y}{n\Sigma x^2-(\Sigma x)^2}=\rul{134{,}875-122{,}25}{287{,}5-225}$\par\vspace{1mm}\hspace*{8mm}$=\rul{12{,}625}{62{,}5}=0{,}202$\par\vspace{1mm}
+$b=\rul{\Sigma x^2\Sigma y-\Sigma x\Sigma xy}{n\Sigma x^2-(\Sigma x)^2}=\rul{468{,}625-404{,}625}{62{,}5}=$\par\hspace*{8mm}$=1{,}024$\hspace*{15mm}\otv{$y=0{,}202x+1{,}024$}
+\n{28} $n=12$;\ $\hov{x}=84{,}83$;\ $\hov{y}=79$;\ $\hov{xy}=6712{,}92$\par
+$\sigma_x=\rt{\hov{x^2}-\hov{x}^2}\approx4{,}26$;\ $\sigma_y\approx3{,}49$\par\vspace{1mm}
+$r_{\text{в}}=\rul{\hov{xy}-\hov{x}\cdot\hov{y}}{\sigma_x\sigma_y}=\rul{6712{,}92-6701{,}83}{4{,}26\cdot3{,}49}\approx\rul{11{,}08}{14{,}86}$\ \ \otv{$r_{\text{в}}\approx0{,}746$}\par
+\end{document}

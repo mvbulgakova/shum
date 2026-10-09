@@ -297,7 +297,7 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     LAT = {"a": "а", "e": "е", "o": "о", "c": "с", "x": "х", "y": "у", "u": "и", "n": "п", "r": "г",
            "k": "к", "g": "д", "m": "т", "z": "з", "C": "С", "E": "Е", "O": "О", "P": "Р", "T": "Т", "K": "К",
            "M": "М", "H": "Н", "X": "Х", "B": "В", "A": "А", "D": "Д", "0": "о", "—": "–", "−": "–",
-           "ℎ": "h", "φ": "ф", "ε": "з", "β": "б", "μ": "м", "S": "s", "U": "u", "W": "w", "Z": "з"}
+           "ℎ": "h", "φ": "ф", "Φ": "Ф", "ε": "з", "β": "б", "μ": "м", "S": "s", "U": "u", "W": "w", "Z": "з"}
     for dst, src in LAT.items():
         if dst not in variants and src in variants:
             copy(src, dst, 1.25 if dst in "0SUWZ" else (0.8 if dst == "ε" else 1.0))
@@ -442,7 +442,7 @@ MATHCMD = {
     "leftrightarrow": "↔", "Rightarrow": "⇒", "Leftarrow": "⇐", "Leftrightarrow": "⇔", "iff": "⇔",
     "equiv": "≡", "neq": "≠", "ne": "≠", "times": "×", "le": "≤", "leq": "≤", "ge": "≥", "geq": "≥",
     "setminus": "∖", "emptyset": "∅", "varnothing": "∅", "forall": "∀", "exists": "∃", "top": "⊤", "bot": "⊥",
-    "angle": "∠", "parallel": "∥", "triangle": "Δ", "Gamma": "Γ", "Delta": "Δ", "ldots": "…", "cdots": "⋯", "cdot": "⋅", "circ": "∘", "mid": "|", "vert": "|",
+    "angle": "∠", "Phi": "Φ", "pm": "±", "gamma": "γ", "delta": "δ", "chi": "χ", "approx": "≈", "Sigma": "Σ", "surd": "√", "parallel": "∥", "triangle": "Δ", "Gamma": "Γ", "Delta": "Δ", "ldots": "…", "cdots": "⋯", "cdot": "⋅", "circ": "∘", "mid": "|", "vert": "|",
     "lbrace": "{", "rbrace": "}", "nvdash": "⊬", "nvDash": "⊭", "nmodels": "⊭", "sim": "∼",
     "langle": "⟨", "rangle": "⟩", "vdots": "⋮", "mapsto": "↦", "longleftrightarrow": "⟷",
     "Longleftrightarrow": "⟺", "ast": "∗", "bullet": "•", "alpha": "α", "beta": "β", "theta": "θ",
