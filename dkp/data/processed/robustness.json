@@ -1,21 +1,21 @@
 {
   "ordinal": {
-    "n": 20,
+    "n": 21,
     "spearman_ordinal_vs_label": 1.0,
-    "spearman_original_vs_label": 0.992,
-    "spearman_ordinal_vs_original": 0.992,
-    "sign_agreement": 20
+    "spearman_original_vs_label": 0.993,
+    "spearman_ordinal_vs_original": 0.993,
+    "sign_agreement": 21
   },
   "perturbation": {
     "n_iter": 2000,
-    "spearman_median": 0.996,
+    "spearman_median": 0.997,
     "spearman_ci95": [
-      0.943,
-      0.996
+      0.95,
+      0.997
     ],
-    "spearman_min": 0.926,
+    "spearman_min": 0.935,
     "share_above_0_8": 1.0,
-    "sign_agreement_median": 20
+    "sign_agreement_median": 21
   },
   "permutation": {
     "base_spearman": 1.0,
@@ -23,7 +23,7 @@
     "permutation_median": 1.0,
     "n_permutations_at_least_as_good": 2510,
     "empirical_p": 0.5057,
-    "spearman_direction_only": 0.982
+    "spearman_direction_only": 0.984
   },
   "modality_axis": {
     "up": {
@@ -54,10 +54,10 @@
     }
   },
   "loo": {
-    "n": 20,
-    "min": 0.99,
-    "max": 0.993,
-    "range": 0.0026,
+    "n": 21,
+    "min": 0.992,
+    "max": 0.994,
+    "range": 0.0023,
     "most_influential": "2024-02-16"
   }
 }

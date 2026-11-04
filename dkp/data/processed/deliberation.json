@@ -1,6 +1,20 @@
 {
   "rows": [
     {
+      "decision_date": "",
+      "n_words": 3345,
+      "dissent_direct": 3,
+      "majority_split": 7,
+      "consensus": 5,
+      "dissent_index": 0.448,
+      "n_signal_options": 0,
+      "cbr_label": "",
+      "delta_bp": 0,
+      "direction_actual": "",
+      "is_turning_point": 0,
+      "signal_changed": 0
+    },
+    {
       "decision_date": "2024-02-16",
       "n_words": 4269,
       "dissent_direct": 4,
@@ -219,8 +233,8 @@
       "dissent_index": 0.401,
       "n_signal_options": 0,
       "cbr_label": "нейтральный",
-      "delta_bp": 0,
-      "direction_actual": "hold",
+      "delta_bp": -50,
+      "direction_actual": "down",
       "is_turning_point": 0,
       "signal_changed": 0
     },
@@ -261,7 +275,7 @@
       "dissent_index": 0.598,
       "n_signal_options": 1,
       "cbr_label": "умеренно мягкий",
-      "delta_bp": -100,
+      "delta_bp": -50,
       "direction_actual": "down",
       "is_turning_point": 0,
       "signal_changed": 0
@@ -279,11 +293,25 @@
       "direction_actual": "down",
       "is_turning_point": 0,
       "signal_changed": 0
+    },
+    {
+      "decision_date": "2026-07-24",
+      "n_words": 4043,
+      "dissent_direct": 12,
+      "majority_split": 15,
+      "consensus": 2,
+      "dissent_index": 4.328,
+      "n_signal_options": 1,
+      "cbr_label": "нейтральный",
+      "delta_bp": -25,
+      "direction_actual": "down",
+      "is_turning_point": 0,
+      "signal_changed": 1
     }
   ],
-  "rho_dissent_vs_options": -0.322,
-  "rho_dissent_vs_abs_move": 0.043,
-  "mean_dissent_signal_changed": 0.32,
-  "mean_dissent_signal_same": 0.365,
-  "n_signal_changes": 6
+  "rho_dissent_vs_options": -0.402,
+  "rho_dissent_vs_abs_move": 0.048,
+  "mean_dissent_signal_changed": 0.892,
+  "mean_dissent_signal_same": 0.371,
+  "n_signal_changes": 7
 }
