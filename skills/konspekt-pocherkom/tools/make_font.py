@@ -325,6 +325,7 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     # математика и прочие знаки — её штрихами (symbols.py)
     import symbols
     symbols.build(shapes, variants, base, meta, gname, XH, seed)
+    if "P" not in variants and "Р" in variants: copy("Р", "P")      # латинская P = её печатная Р
     for src, dst in (("⊨", "⊧"), ("−", "−"), ("|", "∣"), ("∨", "∨")):
         if src in variants and dst not in variants: copy(src, dst)
     # комбинируемые точка и тильда над буквой (U+0307, U+0303): нулевая ширина, её точка / её волна
