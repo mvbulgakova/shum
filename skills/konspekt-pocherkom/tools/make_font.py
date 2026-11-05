@@ -491,6 +491,6 @@ def write_math_tex(pua, path):
 
 if __name__ == "__main__":
     outdir = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "..", "fonts")
-    for seed, suf in enumerate("ABC"):
+    for seed, suf in enumerate("ABCDE"):
         cnt = main(f"{outdir}/MariaHand-{suf}.otf", seed, f"MariaHand {suf}")
     print(" ".join(f"{c}:{n}" for c, n in sorted(cnt.items())))

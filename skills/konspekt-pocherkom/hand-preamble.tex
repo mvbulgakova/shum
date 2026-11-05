@@ -16,13 +16,15 @@
 \newfontfamily\handA{MariaHand-A.otf}[Path=\handdir,Ligatures=TeX,Scale=\handscale]
 \newfontfamily\handB{MariaHand-B.otf}[Path=\handdir,Ligatures=TeX,Scale=\fpeval{1.03*\handscale},FakeSlant=0.03]
 \newfontfamily\handC{MariaHand-C.otf}[Path=\handdir,Ligatures=TeX,Scale=\fpeval{0.97*\handscale},FakeSlant=-0.02]
+\newfontfamily\handD{MariaHand-D.otf}[Path=\handdir,Ligatures=TeX,Scale=\fpeval{1.01*\handscale},FakeSlant=0.01]
+\newfontfamily\handE{MariaHand-E.otf}[Path=\handdir,Ligatures=TeX,Scale=\fpeval{0.99*\handscale},FakeSlant=0.02]
 \setmainfont{MariaHand-A.otf}[Path=\handdir,Scale=\handscale]
 % каркас формул (индексы, дроби) — под размер её букв, иначе индексы проваливаются вниз
 \setmathfont{Latin Modern Math}[Scale=\fpeval{1.05*\handscale}]
 \setmathfont{MariaHand-A.otf}[Path=\handdir,Scale=\handscale,range={it/{Latin,latin}->up,up/{Latin,latin,num}}]
 \input{\handdir hand-math.tex}
 % перед каждым словом — случайный вариант (XeTeX interchar: граница -> буква)
-\newcommand{\handpick}{\ifcase\uniformdeviate 3 \handA\or\handB\or\handC\fi}
+\newcommand{\handpick}{\ifcase\uniformdeviate 5 \handA\or\handB\or\handC\or\handD\or\handE\fi}
 \XeTeXinterchartoks 4095 0 = {\handpick}
 \AtBeginDocument{\XeTeXinterchartokenstate=1}
 % --- чернила и клетка
