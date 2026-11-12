@@ -527,8 +527,7 @@ def write_math_tex(pua, path):
         cl = MATHCLASS.get(ch, 0)
         alts = " \\or ".join(f'\\Umathchar{cl}\\hm@fam"{c:X} ' for c in pua[ch])
         n = len(pua[ch])
-        if n < 2: return f"\\ifcase\\uniformdeviate{n} {alts}\\fi"
-        return f"\\hm@roll{{{n}}}{{hm@l@{ord(ch):X}}}\\ifcase\\count@ {alts}\\fi"
+        return f"\\ifcase\\uniformdeviate{n} {alts}\\fi"   # только раскрываемое: иначе ломаются индексы вида E_1
     names = {}
     for i, ch in enumerate(sorted(pua)):
         nm = "hm@" + "abcdefghijklmnopqrstuvwxyz"[i // 26] + "abcdefghijklmnopqrstuvwxyz"[i % 26]
