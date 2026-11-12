@@ -228,6 +228,30 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     for ch, ids in K.items():
         if len(ch) != 1: continue
         if ch.strip() and ids: variants[ch] = ids
+    # отбор по типичности: у частых букв выкидываем варианты, далёкие от «среднего» облика буквы
+    # (обрывки, склейки с соседями, неверно нарезанные куски) — они и делают текст нечитаемым
+    KEEPQ = float(os.environ.get("HANDKEEP", "0.55"))
+    def sig(g):
+        a = (g["img"] > 90).astype(np.float32); xh = max(g["lxh"], 8); bl = g["bl"]
+        y0 = int(bl - 1.6 * xh); y1 = int(bl + 0.9 * xh)
+        a = np.pad(a, ((max(0, -y0), max(0, y1 - a.shape[0])), (0, 0)))[max(0, y0):max(0, y0) + (y1 - y0)]
+        cols = np.nonzero(a.any(0))[0]
+        if len(cols) == 0: return None, 0
+        a = a[:, cols[0]:cols[-1] + 1]; w = a.shape[1] / xh
+        a = cv2.GaussianBlur(cv2.resize(a, (20, 26), interpolation=cv2.INTER_AREA), (0, 0), 1.2)
+        return a / (a.sum() + 1e-6), w
+    for ch, ids in list(variants.items()):
+        if not (ch.isalpha() and len(ids) >= 12): continue
+        S_ = [sig(G[i]) for i in ids]
+        ok = [k for k, (a, w) in enumerate(S_) if a is not None]
+        if ch == "т":       # рукописная «т» в виде «m»: узкая «т» с петлёй читается как «б»/«о»
+            ok = [k for k in ok if S_[k][1] >= 1.25] or ok
+        A = np.array([S_[k][0] for k in ok]); W = np.array([S_[k][1] for k in ok])
+        med = np.median(A, 0); wm = np.median(W)
+        d = np.abs(A - med).sum((1, 2)) + 0.25 * np.abs(np.log(W / wm))
+        n = max(8, int(len(ok) * KEEPQ))
+        best = sorted(range(len(ok)), key=lambda j: d[j])[:n]
+        variants[ch] = [ids[ok[j]] for j in sorted(best)]
     shapes = {}                         # glyph name -> (RecordingPen, advance)
     meta = {}                           # glyph name -> (prev, next)
     for ch, ids in variants.items():
@@ -249,7 +273,7 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
         if band.sum() < 5: continue
         x0, x1 = float(xv[band].min()), float(xv[band].max())
         r2 = RecordingPen(); rp.replay(TransformPen(r2, (1, 0, 0, 1, -x0, 0)))
-        shapes[n] = (r2, max(40, x1 - x0 + 0.13 * XH))
+        shapes[n] = (r2, max(40, x1 - x0 + float(os.environ.get("HANDGAP", "0.22")) * XH))
     # базовый (cmap) глиф: лучший экземпляр в начале слова, иначе первый (самый типичный)
     base = {}
     for ch, ids in variants.items():
@@ -349,7 +373,7 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
             k = n + j; shapes[gname(ch, k)] = (r2, adv * sx); meta[gname(ch, k)] = meta[gname(ch, j % n)]
             variants[ch].append(k)
     # --- соединения: «дописываем» штрих от выхода буквы к входу следующей (по высоте входа)
-    conn = connections(shapes, variants)
+    conn = connections(shapes, variants) if os.environ.get("HANDTAILS", "0") != "0" else {}
     # --- сборка
     order = [".notdef", "space"] + sorted(shapes)
     fb = FontBuilder(1000, isTTF=False); fb.setupGlyphOrder(order)
@@ -425,8 +449,11 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     for b, (src, dst, nxt) in conn.items():
         if not src or not nxt: continue
         crules.append(f"sub [{' '.join(src)}]' [{' '.join(nxt)}] by [{' '.join(dst)}];")
-    fea.append("lookup conn {"); fea += ["  " + r for r in crules]; fea.append("} conn;")
-    fea.append("feature calt { lookup ctx; lookup conn; } calt;")
+    if crules:
+        fea.append("lookup conn {"); fea += ["  " + r for r in crules]; fea.append("} conn;")
+        fea.append("feature calt { lookup ctx; lookup conn; } calt;")
+    else:
+        fea.append("feature calt { lookup ctx; } calt;")
     fea_s = "\n".join(fea)
     addOpenTypeFeaturesFromString(fb.font, fea_s)
     fb.save(out)

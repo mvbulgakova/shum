@@ -1,0 +1,49 @@
+\input{hand-preamble.tex}
+\newcommand{\pn}{\vdash_{PN}}
+\newcommand{\nm}[1]{\par\hangindent=8mm\hangafter=1\noindent #1\ }
+\newcommand{\dd}[2]{\rul{#1}{#2}}
+\begin{document}\shapka
+\lk{11}{Исчисления предикатов. Предикатные сев PN}
+Формальная лог. с-ма (исчисление) задаётся 4 комп.:\par
+\hspace*{20mm}Я;\ \ $Ax$;\ \ $Rul$;\ \ $Df_{Der}$\par
+\term{Классическая предикатная сев PN} задаётся след. компонентами:
+\nm{1.} Я$_{PN}$ = ЯЛП$_\sigma$ --- формальный язык сев $P_\sigma N$
+\nm{2.} $Ax_{PN}=\emptyset$ --- мн-во аксиом PN
+\nm{3.} $Rul_{PN}=Rul_{N_{cl}}+Rul_{\forall\exists}$ (кв) --- мн-во PN-правил
+\nm{4.} $Df_{Der}$ --- опр. PN-вывода\par
+Будем изучать только \red{классические} предикатные сев.\par
+PN --- обозн. произвольной \term{классической предикатной сев} (вместо $P_\sigma N_{cl}$).\par\vspace{2mm}
+\red{Кванторные PN-правила}\par\vspace{1mm}
+\term{Правила введения кванторов:}\par\vspace{1mm}
+\hspace*{10mm}$\rul{A(x)}{\forall xA(x)}$\ (\,$\forall$в) \nb{$x$ не вх. своб. в $\Delta$}\par\vspace{2mm}
+\hspace*{10mm}$\rul{A(t)}{\exists xA(x)}$\ (\,$\exists$в) \nb{$t$ --- $A$-$x$-доп.}\par\vspace{2mm}
+\term{Правила удаления кванторов:}\par\vspace{1mm}
+\hspace*{10mm}$\rul{\forall xA(x)}{A(t)}$\ (\,$\forall$у) \nb{$t$ --- $A$-$x$-доп.}\par\vspace{2mm}
+\hspace*{10mm}$\rul{\exists xA(x)\quad\begin{matrix}[A(x)]\\[-2pt]\vdots\\[-2pt]C\end{matrix}}{C}$\ (\,$\exists$у) \nb{$C$ не зав. от $x$}\par\vspace{3mm}
+\red{Содержательный смысл кванторных правил}\par\vspace{1mm}
+$\rul{A(x)}{\forall xA(x)}$\ (\,$\forall$в)\par
+\term{Если} доказано предл. $A(x)$ для \term{произвольного} $x$ из $M$, \term{то} считают доказанным утв-е „Для любого $x$ из $M$ верно $A(x)$“.\par
+Другими словами: чтобы доказать утв-е вида „Для любого $x$ из $M$ верно $A(x)$“, \red{достаточно} доказать предл-е $A(x)$ для произвольного $x$ из $M$.\par
+\term{Пример.}\hspace{10mm}$\rul{\rul{\Delta}{A(l)}}{(l)A(l)}$\par\vspace{3mm}
+$\rul{\exists xA(x)\quad\begin{matrix}[A(x)]\\[-2pt]\vdots\\[-2pt]C\end{matrix}}{C}$\ (\,$\exists$у)\par
+\term{Если} доказано утв-е вида „Существует $x$ из $M$, т.ч. $A(x)$“ и для \term{произвольного} $x$ из $M$ из допущения $A(x)$ выведено $C$, \term{то} считают доказанным утв. $C$ \red{(где утв. $C$ не зависит от $x$)}.\par
+Другими словами: чтобы доказать утв-е $C$ \red{(не зависящее от $x$)} при условии, что доказано утв-е вида „Существует $x$ из $M$, т.ч. $A(x)$“, \red{достаточно} для произв-го $x$ из $M$ из допущения $A(x)$ вывести $C$.\par
+\term{Пример.}\hspace{10mm}$\rul{(\exists l)A(l)\quad\begin{matrix}[A(l)]^1\\[-2pt]\vdots\\[-2pt]C\end{matrix}}{C}$\ \nb{(1)}\par\vspace{3mm}
+\red{Дерево PN-вывода}\par
+Неформально: \term{дерево PN-вывода} --- дерево ЯЛП-формул, в котором каждый переход происходит по какому-то PN-правилу.\par
+\term{Дерево PN-вывода с мн-вом зелёных листьев $\Delta$ и корнем $F$} (кратко: PN-$\Delta$-$F$-вывод).\par
+Обозн.: $\dd{\Delta}{F}$ вместо $D^\Delta_F$\par\vspace{1mm}
+\opr
+\nm{1.} Б.И. Любая ф-ла $F$ (ЯЛП) есть PN-$\Delta$-$F$-вывод, где $\Delta=\{F\}$.
+\nm{2.} Ш.И. К пунктам, соотв. всем $N_{cl}$-правилам (вв и уд связок), \red{добавим 4 пункта}, соотв-щих кванторным PN-пр.:\par\vspace{1mm}
+\nm{(PN$_{\forall\text{в}}$)} Если $\dd{\Delta}{A(x)}$ есть PN-$\Delta$-$A(x)$-вывод и \red{$x$ не вх. своб. в $\Delta$}, то $\rul{\dd{\Delta}{A(x)}}{\forall xA(x)}$ есть PN-$\Delta$-$\forall xA(x)$-вывод.\par\vspace{1mm}
+\nm{(PN$_{\exists\text{в}}$)} Если $\dd{\Delta}{A(t)}$ есть PN-$\Delta$-$A(t)$-вывод, \red{терм $t$ --- $A$-$x$-доп.}, то $\rul{\dd{\Delta}{A(t)}}{\exists xA(x)}$ есть PN-$\Delta$-$\exists xA(x)$-вывод.\par\vspace{1mm}
+\nm{(PN$_{\forall\text{у}}$)} Если $\dd{\Delta}{\forall xA(x)}$ есть PN-$\Delta$-$\forall xA(x)$-вывод, \red{терм $t$ --- $A$-$x$-доп.}, то $\rul{\dd{\Delta}{\forall xA(x)}}{A(t)}$ есть PN-$\Delta$-$A(t)$-вывод.\par\vspace{1mm}
+\nm{(PN$_{\exists\text{у}}$)} Если $\dd{\Delta_1}{\exists xA(x)}$ есть PN-$\Delta_1$-$\exists xA(x)$-вывод, $\dd{\Delta_2}{C}$ есть PN-$\Delta_2$-$C$-вывод, \dots\par\vspace{3mm}
+\red{Отношение PN-выводимости}\par
+Пусть $F$ --- формула ЯЛП, $\Gamma$ --- мн-во формул ЯЛП.\par
+\opr Б.г., что \term{ф-ла $F$ PN-выводима из мн-ва формул $\Gamma$} ($\Gamma\pn F$), если сущ. PN-$\Delta$-$F$-вывод, такой что $\Delta\subseteq\Gamma$.\par
+\opr Будем говорить, что ф-ла $F$ \term{PN-выводима} ($\pn F$), если сущ. PN-$\emptyset$-$F$-вывод.\par\vspace{1mm}
+\term{Основные свойства отношения PN-выводимости}\par
+\term{Утв.} Отношение PN-выводимости монот., рефл., транз. (мрт), \dots\par
+\end{document}
