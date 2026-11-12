@@ -1,0 +1,104 @@
+\input{hand-preamble.tex}
+\definecolor{ink}{RGB}{32,42,118}
+\newcommand{\nm}[1]{\par\hangindent=7mm\hangafter=1\noindent #1\ }
+\newcommand{\nbul}[1]{\par\hangindent=7mm\hangafter=1\noindent\hspace*{4mm}$\bullet$\ #1}
+\newcommand{\tP}{\tilde P}\newcommand{\tg}{\tilde g}\newcommand{\tf}{\tilde f}\newcommand{\tF}{\tilde F}
+\newcommand{\cm}{_{x\in M}}
+\newcommand{\eq}[2]{\par\noindent\hspace*{6mm}$\equiv #1$\par\nopagebreak\noindent\hfill{\color{ink!75}\nb{#2}}\hspace*{4mm}}
+\begin{document}\shapka
+\noindent{\fontsize{19pt}{10mm}\selectfont Д11. МЛ-2026. Общезначимость и выполнимость.}\par
+\noindent{\fontsize{19pt}{10mm}\selectfont Равносильные преобразования.}\par\vspace{2mm}
+\term{3.2.11 (1--4)} Исследовать на общезначимость и выполнимость ф-лу с фс.\par
+План: 1) сигнатура $\sigma_F$; 2) своб. перем. $F$ (нужна ли оценка); 3) прочтение $F$ в произв. инт. с оц.; 4) гипотеза; 5) д-во.\par\vspace{2mm}
+\red{1)}\ $F\rightleftharpoons\forall xP(x)\supset\exists xP(g(x,x))$
+\nm{1.} $\sigma_F=\{P;g\}$: $P$ --- 1-пс, $g$ --- 2-фс.
+\nm{2.} Своб. перем. нет ($F$ замкнута), оценка не нужна.
+\nm{3.} Пусть $\mathfrak M_\sigma\rightleftharpoons\langle M;\tP,\tg\rangle$, $M\neq\emptyset$, $\tP\colon M\to\{\text{И},\text{Л}\}$ --- 1-предикат на $M$, $\tg\colon M^2\to M$ --- 2-ф-ия на $M$ (опред.)\par
+\hspace*{10mm}$\tF$ есть $(x)\cm\tP(x)\to(\exists x)\cm\tP(\tg(x,x))$:\par
+„если всякий эл-т $M$ обладает св-вом $\tP$, то сущ. $x\in M$, для кот. эл-т $\tg(x,x)$ обладает св-вом $\tP$“.
+\nm{4.} Гипотеза: $F$ общезначима, а значит, и выполнима.
+\nm{5.} Д-во. Пусть $\mathfrak M_\sigma=\langle M;\tP,\tg\rangle$ --- произв. инт.
+\nbul{Если $|(x)\cm\tP(x)|=$ И, то всякий эл-т $M$ обладает св-вом $\tP$. Возьмём любой $a\in M$; $\tg(a,a)\in M$, значит $\tP(\tg(a,a))=$ И. Тогда $|(\exists x)\cm\tP(\tg(x,x))|=$ И и $|\tF|=$ И $\to$ И $=$ И.}
+\nbul{Если $|(x)\cm\tP(x)|=$ Л, то $|\tF|=$ Л $\to\ ?=$ И.}\par
+Итак, $\models F$; сл-но, $F$ и выполнима.\par\vspace{3mm}
+\red{2)}\ $F\rightleftharpoons P(f(y))\supset\exists xP(f(x))$
+\nm{1.} $\sigma_F=\{P;f\}$: $P$ --- 1-пс, $f$ --- 1-фс.
+\nm{2.} Своб. перем. $y$. Оценка нужна!
+\nm{3.} Пусть $\mathfrak M_\sigma\rightleftharpoons\langle M;\tP,\tf\rangle$, $M\neq\emptyset$, $\tP\colon M\to\{\text{И},\text{Л}\}$, $\tf\colon M\to M$; $v(y)=a$, $a\in M$.\par
+\hspace*{10mm}$\tF$ есть $\tP(\tf(a))\to(\exists x)\cm\tP(\tf(x))$:\par
+„если эл-т $\tf(a)$ обладает св-вом $\tP$, то сущ. $x\in M$, для кот. $\tf(x)$ обладает св-вом $\tP$“.
+\nm{4.} Гипотеза: $F$ общезначима, а значит, и выполнима.
+\nm{5.} Д-во. Пусть $\mathfrak M_\sigma$ --- произв. инт., $v(y)=a$ --- произв. оценка.
+\nbul{Если $\tP(\tf(a))=$ И, то при $x=a$ выполнено $\tP(\tf(x))=$ И, значит $|(\exists x)\cm\tP(\tf(x))|=$ И и $|\tF|=$ И $\to$ И $=$ И.}
+\nbul{Если $\tP(\tf(a))=$ Л, то $|\tF|=$ Л $\to\ ?=$ И.}\par
+Итак, $\models F$; сл-но, $F$ и выполнима.\par\vspace{3mm}
+\red{3)}\ $F\rightleftharpoons\exists xP(x)\supset P(g(y))$
+\nm{1.} $\sigma_F=\{P;g\}$: $P$ --- 1-пс, $g$ --- 1-фс.
+\nm{2.} Своб. перем. $y$. Оценка нужна!
+\nm{3.} Пусть $\mathfrak M_\sigma\rightleftharpoons\langle M;\tP,\tg\rangle$, $M\neq\emptyset$, $\tP\colon M\to\{\text{И},\text{Л}\}$, $\tg\colon M\to M$; $v(y)=a$, $a\in M$.\par
+\hspace*{10mm}$\tF$ есть $(\exists x)\cm\tP(x)\to\tP(\tg(a))$:\par
+„если нек. эл-т $M$ обладает св-вом $\tP$, то эл-т $\tg(a)$ обладает св-вом $\tP$“.
+\nm{4.} Гипотеза: $F$ не общезначима, но выполнима.
+\nm{5.} Д-во.\par
+\term{Не общезначима.} $\mathfrak M_1=\langle\mathbb N;\tP,\tg\rangle$, $\tP(x)$: „$x=0$“, $\tg(x)=x+1$; $v(y)=0$.\par
+$\tF$: „если сущ. натур. число, равное 0, то $0+1=0$“. $|\tF|=$ И $\to$ Л $=$ Л, т.е. $\not\models F$.\par
+\term{Выполнима.} $\mathfrak M_2=\langle\mathbb N;\tP,\tg\rangle$, $\tP(x)$: „$x>0$“, $\tg(x)=x+1$; $v(y)=0$.\par
+$\tF$: „если сущ. натур. число, большее 0, то $0+1>0$“. $|\tF|=$ И $\to$ И $=$ И.\par
+Итак, $F$ выполнима, но не общезначима.\par\vspace{3mm}
+\red{4)}\ $F\rightleftharpoons P(y)\supset\exists xP(f(x))$
+\nm{1.} $\sigma_F=\{P;f\}$: $P$ --- 1-пс, $f$ --- 1-фс.
+\nm{2.} Своб. перем. $y$. Оценка нужна!
+\nm{3.} Пусть $\mathfrak M_\sigma\rightleftharpoons\langle M;\tP,\tf\rangle$, $M\neq\emptyset$, $\tP\colon M\to\{\text{И},\text{Л}\}$, $\tf\colon M\to M$; $v(y)=a$, $a\in M$.\par
+\hspace*{10mm}$\tF$ есть $\tP(a)\to(\exists x)\cm\tP(\tf(x))$:\par
+„если эл-т $a$ обладает св-вом $\tP$, то сущ. $x\in M$, для кот. $\tf(x)$ обладает св-вом $\tP$“.
+\nm{4.} Гипотеза: $F$ не общезначима, но выполнима.
+\nm{5.} Д-во.\par
+\term{Не общезначима.} $\mathfrak M_1=\langle\mathbb N;\tP,\tf\rangle$, $\tP(x)$: „$x=0$“, $\tf(x)=x+1$; $v(y)=0$.\par
+$\tF$: „если $0=0$, то сущ. натур. $x$, для кот. $x+1=0$“. $|\tF|=$ И $\to$ Л $=$ Л (число $x+1$ никогда не равно 0), т.е. $\not\models F$.\par
+\term{Выполнима.} В той же $\mathfrak M_1$ возьмём $v(y)=1$: $\tF$: „если $1=0$, то \dots“. $|\tF|=$ Л $\to\ ?=$ И.\par
+Итак, $F$ выполнима, но не общезначима.\par\vspace{3mm}
+\term{3.4.7 (1--4)} С помощью равносильных преобразований привести ф-лу к ПНФ.\par
+Законы ($x$ не вх. своб. в $C$):
+\nbul{выр. $\supset$ через $\neg,\vee$: $A\supset B\equiv\neg A\vee B$;}
+\nbul{кв. з-ны де Моргана: $\neg\forall xA\equiv\exists x\neg A$, $\neg\exists xA\equiv\forall x\neg A$;}
+\nbul{з-н переим. связ. перем.: $\forall xA(x)\equiv\forall yA(y)$, $\exists xA(x)\equiv\exists yA(y)$, $y$ не вх. в $A(x)$;}
+\nbul{вынес. $\exists$ через $\vee$: $\exists xA(x)\vee\exists xB(x)\equiv\exists x(A(x)\vee B(x))$;}
+\nbul{вынес. кв.: $\forall xA(x)\vee C\equiv\forall x(A(x)\vee C)$, $\exists xA(x)\vee C\equiv\exists x(A(x)\vee C)$, $\forall xA(x)\,\&\,C\equiv\forall x(A(x)\,\&\,C)$, $\exists xA(x)\,\&\,C\equiv\exists x(A(x)\,\&\,C)$;}
+\nbul{з-ны ЛВ: де Моргана, двойного отриц., ком. и асс. $\vee$, $\&$.}\par
+Каждый переход внутри ф-лы --- по т. о равносильной замене.\par\vspace{3mm}
+\red{1)}\ $\exists xQ(x,y)\supset(\forall xP(x)\supset\neg\exists yQ(x,y))$
+\eq{\neg\exists xQ(x,y)\vee(\neg\forall xP(x)\vee\neg\exists yQ(x,y))}{выр. $\supset$ (2 раза)}
+\eq{\forall x\neg Q(x,y)\vee(\exists x\neg P(x)\vee\forall y\neg Q(x,y))}{кв. з-ны де Моргана}
+\eq{\forall z\neg Q(z,y)\vee(\exists u\neg P(u)\vee\forall w\neg Q(x,w))}{переим. (3 раза)}
+\eq{\forall z(\neg Q(z,y)\vee(\exists u\neg P(u)\vee\forall w\neg Q(x,w)))}{вынес. $\forall$, $C$ не сод. св. $z$}
+\eq{\forall z\exists u(\neg Q(z,y)\vee\neg P(u)\vee\forall w\neg Q(x,w))}{вынес. $\exists$, не сод. св. $u$}
+\eq{\forall z\exists u\forall w(\neg Q(z,y)\vee\neg P(u)\vee\neg Q(x,w))}{вынес. $\forall$, не сод. св. $w$}\par
+Переим. обязательно: $y$ своб. в $\neg Q(x,y)$, а $x$ своб. в $\neg\exists yQ(x,y)$. Без него вынесенные $\forall x$ и $\forall y$ связали бы эти своб. вхождения.\par
+\term{ПНФ:} $\forall z\exists u\forall w(\neg Q(z,y)\vee\neg P(u)\vee\neg Q(x,w))$\par\vspace{3mm}
+\red{2)}\ $\forall xQ(x,y)\supset(\exists yP(y)\supset\neg\exists zR(y,z))$
+\eq{\neg\forall xQ(x,y)\vee(\neg\exists yP(y)\vee\neg\exists zR(y,z))}{выр. $\supset$ (2 раза)}
+\eq{\exists x\neg Q(x,y)\vee(\forall y\neg P(y)\vee\forall z\neg R(y,z))}{кв. з-ны де Моргана}
+\eq{\exists x\neg Q(x,y)\vee(\forall u\neg P(u)\vee\forall z\neg R(y,z))}{переим. ($y$ своб. в др. частях)}
+\eq{\exists x(\neg Q(x,y)\vee(\forall u\neg P(u)\vee\forall z\neg R(y,z)))}{вынес. $\exists$, не сод. св. $x$}
+\eq{\exists x\forall u(\neg Q(x,y)\vee\neg P(u)\vee\forall z\neg R(y,z))}{вынес. $\forall$, не сод. св. $u$}
+\eq{\exists x\forall u\forall z(\neg Q(x,y)\vee\neg P(u)\vee\neg R(y,z))}{вынес. $\forall$, не сод. св. $z$}\par
+\term{ПНФ:} $\exists x\forall u\forall z(\neg Q(x,y)\vee\neg P(u)\vee\neg R(y,z))$\par\vspace{3mm}
+\red{3)}\ $(\exists xP(x)\vee\forall xQ(x))\,\&\,(S(y)\supset\forall xR(x))$
+\eq{(\exists xP(x)\vee\forall xQ(x))\,\&\,(\neg S(y)\vee\forall xR(x))}{выр. $\supset$}
+\eq{(\exists xP(x)\vee\forall zQ(z))\,\&\,(\neg S(y)\vee\forall uR(u))}{переим. (2 раза)}
+\eq{\exists x(P(x)\vee\forall zQ(z))\,\&\,\forall u(\neg S(y)\vee R(u))}{вынес. $\exists$, $\forall$ через $\vee$}
+\eq{\exists x\forall z(P(x)\vee Q(z))\,\&\,\forall u(\neg S(y)\vee R(u))}{вынес. $\forall$, не сод. св. $z$}
+\eq{\exists x\forall z((P(x)\vee Q(z))\,\&\,\forall u(\neg S(y)\vee R(u)))}{вынес. $\exists,\forall$ через $\&$}
+\eq{\exists x\forall z\forall u((P(x)\vee Q(z))\,\&\,(\neg S(y)\vee R(u)))}{вынес. $\forall$, не сод. св. $u$}\par
+\term{ПНФ:} $\exists x\forall z\forall u((P(x)\vee Q(z))\,\&\,(\neg S(y)\vee R(u)))$\par\vspace{3mm}
+\red{4)}\ $\exists x(R(x)\supset Q(x))\supset(\forall xR(x)\supset\exists xQ(x))$
+\eq{\neg\exists x(R(x)\supset Q(x))\vee(\neg\forall xR(x)\vee\exists xQ(x))}{выр. $\supset$ (2 раза)}
+\eq{\forall x\neg(R(x)\supset Q(x))\vee(\exists x\neg R(x)\vee\exists xQ(x))}{кв. з-ны де Моргана}
+\eq{\forall x\neg(R(x)\supset Q(x))\vee\exists x(\neg R(x)\vee Q(x))}{вынес. $\exists$ через $\vee$}
+\eq{\forall x\neg(\neg R(x)\vee Q(x))\vee\exists x(\neg R(x)\vee Q(x))}{выр. $\supset$}
+\eq{\forall x(R(x)\,\&\,\neg Q(x))\vee\exists x(\neg R(x)\vee Q(x))}{де Морган, двойн. отр.}
+\eq{\forall x(R(x)\,\&\,\neg Q(x))\vee\exists y(\neg R(y)\vee Q(y))}{переим.}
+\eq{\forall x((R(x)\,\&\,\neg Q(x))\vee\exists y(\neg R(y)\vee Q(y)))}{вынес. $\forall$, не сод. св. $x$}
+\eq{\forall x\exists y((R(x)\,\&\,\neg Q(x))\vee\neg R(y)\vee Q(y))}{вынес. $\exists$, не сод. св. $y$}\par
+\term{ПНФ:} $\forall x\exists y((R(x)\,\&\,\neg Q(x))\vee\neg R(y)\vee Q(y))$\par
+\end{document}

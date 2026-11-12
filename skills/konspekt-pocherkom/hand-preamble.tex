@@ -61,7 +61,7 @@
     ({\hcX*(1+\hcK*(\t-\hcS)/360)*cos(\t)*1pt},{\hcY*(1+\hcK*(\t-\hcS)/360)*sin(\t)*1pt});
   \end{scope}}
 % 8 видов шапки (как в её тетрадях); вид, наклон, сдвиг и шрифт — случайно на каждом листе
-\newcommand{\shapka}{\AddToShipoutPictureFG{\put(\LenToUnit{\paperwidth-62mm},\LenToUnit{\paperheight-30mm}){%
+\newcommand{\shapka}{\AddToShipoutPictureFG{\put(\LenToUnit{\paperwidth-70mm},\LenToUnit{\paperheight-30mm}){%
   \begin{tikzpicture}[ink]
   \pgfmathsetmacro{\shR}{(rnd-0.35)*7}\pgfmathsetmacro{\shX}{(rnd-0.5)*14}\pgfmathsetmacro{\shY}{(rnd-0.5)*8}%
   \pgfmathtruncatemacro{\shV}{int(rnd*16)}\pgfmathsetmacro{\shF}{13+rnd*2.5}%
