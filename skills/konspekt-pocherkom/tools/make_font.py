@@ -342,7 +342,7 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     copy("ь", "ъ", extra=tick)
     # заглавные, которых нет: увеличенная строчная (в прописях у этих букв та же форма)
     for lo, up in zip("абвгдежзийклмнопрстуфхцчшщъыьэюя", "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"):
-        if up not in variants and up not in "ГР" and lo in variants:
+        if up not in variants and up not in "ГРМ" and lo in variants:
             variants[up] = []
             for k, gi in enumerate(variants[lo]):
                 g = G[gi]; rp, w, S = trace(g, 1.35)
@@ -383,7 +383,8 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     # математика и прочие знаки — её штрихами (symbols.py)
     import symbols
     symbols.build(shapes, variants, base, meta, gname, XH, seed)
-    if "P" not in variants and "Р" in variants: copy("Р", "P")      # латинская P = её печатная Р
+    if "P" not in variants and "Р" in variants: copy("Р", "P")
+    if "M" not in variants and "М" in variants: copy("М", "M")      # латинская P = её печатная Р
     for src, dst in (("⊨", "⊧"), ("−", "−"), ("|", "∣"), ("∨", "∨")):
         if src in variants and dst not in variants: copy(src, dst)
     # комбинируемые точка и тильда над буквой (U+0307, U+0303): нулевая ширина, её точка / её волна
