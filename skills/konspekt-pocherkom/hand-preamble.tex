@@ -50,7 +50,7 @@
 % --- её элементы оформления
 % шапка: каждый лист по-своему — разный шрифт, наклон, сдвиг и вид надписи
 % (в две строки в рамке / в строку в рамке / в строку без рамки), как в её тетради
-\newcommand{\handstampfont}{\ifcase\uniformdeviate 3 \handA\or\handB\or\handC\fi}
+\newcommand{\handstampfont}{\ifcase\uniformdeviate 5 \handA\or\handB\or\handC\or\handD\or\handE\fi}
 % номер страницы в кружке: один штрих по кругу с заходом за начало (не замкнутый ровный круг)
 \newcommand{\handcircle}[1]{% центр
   \pgfmathsetmacro{\hcS}{40+rnd*60}\pgfmathsetmacro{\hcO}{25+rnd*45}\pgfmathsetmacro{\hcR}{(rnd-0.5)*30}%
@@ -63,27 +63,36 @@
 % 8 видов шапки (как в её тетрадях); вид, наклон, сдвиг и шрифт — случайно на каждом листе
 \newcommand{\shapka}{\AddToShipoutPictureFG{\put(\LenToUnit{\paperwidth-62mm},\LenToUnit{\paperheight-30mm}){%
   \begin{tikzpicture}[ink]
-  \pgfmathsetmacro{\shR}{(rnd-0.35)*6}\pgfmathsetmacro{\shX}{(rnd-0.5)*10}\pgfmathsetmacro{\shY}{(rnd-0.5)*6}%
-  \pgfmathtruncatemacro{\shV}{int(rnd*8)}%
-  \node[inner xsep=2.5pt,inner ysep=2.5pt,rotate=\shR,font=\fontsize{14pt}{14pt}\selectfont\color{ink}] (sh) at (\shX pt,\shY pt)
+  \pgfmathsetmacro{\shR}{(rnd-0.35)*7}\pgfmathsetmacro{\shX}{(rnd-0.5)*14}\pgfmathsetmacro{\shY}{(rnd-0.5)*8}%
+  \pgfmathtruncatemacro{\shV}{int(rnd*16)}\pgfmathsetmacro{\shF}{13+rnd*2.5}%
+  \node[inner xsep=2.5pt,inner ysep=2.5pt,rotate=\shR,font=\fontsize{\shF pt}{\shF pt}\selectfont\color{ink}] (sh) at (\shX pt,\shY pt)
     {\handstampfont\ifcase\shV
-       \begin{tabular}{@{}c@{}}Булгакова,\\305\end{tabular}\or   % 0: две строки, рамка
-       Булгакова, 305\or                                         % 1: строка, рамка
-       Булгакова, 305\or                                         % 2: строка без рамки
-       Булгакова\or                                              % 3: только фамилия в рамке
-       \begin{tabular}{@{}l@{}}Булгакова,\\\ \ 305\end{tabular}\or % 4: две строки без рамки
-       Булгакова, 305\or                                         % 5: подчёркнуто
-       Булгакова, 305\or                                         % 6: рамка, номер слева
-       \begin{tabular}{@{}c@{}}Булгакова\\305\end{tabular}\fi};  % 7: две строки, номер слева
-  \ifnum\shV=0 \def\shBox{1}\fi \ifnum\shV=1 \def\shBox{1}\fi \ifnum\shV=3 \def\shBox{1}\fi
-  \ifnum\shV=6 \def\shBox{1}\fi \ifnum\shV=7 \def\shBox{1}\fi
-  \ifdefined\shBox
+       \begin{tabular}{@{}c@{}}Булгакова,\\305\end{tabular}\or     % 0 рамка
+       Булгакова, 305\or                                           % 1 рамка
+       Булгакова, 305\or                                           % 2
+       Булгакова\or                                                % 3 рамка
+       \begin{tabular}{@{}l@{}}Булгакова,\\\ \ 305\end{tabular}\or % 4
+       Булгакова, 305\or                                           % 5 подчёркнуто
+       Булгакова, 305\or                                           % 6 рамка, номер слева
+       \begin{tabular}{@{}c@{}}Булгакова\\305\end{tabular}\or      % 7 рамка, номер слева
+       Булгакова М., 305\or                                        % 8
+       Булгакова М.\or                                             % 9 подчёркнуто
+       \begin{tabular}{@{}r@{}}Булгакова М.\\305 гр.\end{tabular}\or % 10
+       Булгакова 305\or                                            % 11 номер слева
+       305, Булгакова\or                                           % 12
+       \begin{tabular}{@{}c@{}}Булгакова М.\\гр. 305\end{tabular}\or % 13 рамка
+       Булгакова, гр. 305\or                                       % 14 подчёркнуто, номер слева
+       Булгакова\fi};                                              % 15 без всего
+  \let\shBox\relax\let\shUnd\relax\let\shLeft\relax
+  \ifcase\shV \def\shBox{1}\or\def\shBox{1}\or\or\def\shBox{1}\or\or\def\shUnd{1}\or\def\shBox{1}\def\shLeft{1}\or\def\shBox{1}\def\shLeft{1}\or
+     \or\def\shUnd{1}\or\or\def\shLeft{1}\or\or\def\shBox{1}\or\def\shUnd{1}\def\shLeft{1}\or\fi
+  \ifx\shBox\relax\else
     \handseg{(sh.south west)}{(sh.south east)}\handseg{(sh.north west)}{(sh.north east)}
     \handseg{(sh.south west)}{(sh.north west)}\handseg{(sh.south east)}{(sh.north east)}
   \fi
-  \ifnum\shV=5 \handseg{($(sh.south west)+(0,1pt)$)}{($(sh.south east)+(3pt,2pt)$)}\fi
-  \pgfmathsetmacro{\pnX}{0.5+rnd*0.2}\pgfmathsetmacro{\pnY}{(rnd-0.3)*0.15}%
-  \ifnum\shV>5 \coordinate (pc) at ($(sh.west)+(-\pnX,\pnY)$);\else \coordinate (pc) at ($(sh.east)+(\pnX,\pnY)$);\fi
+  \ifx\shUnd\relax\else \handseg{($(sh.south west)+(0,1pt)$)}{($(sh.south east)+(3pt,2pt)$)}\fi
+  \pgfmathsetmacro{\pnX}{0.5+rnd*0.25}\pgfmathsetmacro{\pnY}{(rnd-0.3)*0.2}%
+  \ifx\shLeft\relax \coordinate (pc) at ($(sh.east)+(\pnX,\pnY)$);\else \coordinate (pc) at ($(sh.west)+(-\pnX,\pnY)$);\fi
   \node[inner sep=0pt,font=\fontsize{15pt}{15pt}\selectfont\color{ink}] at (pc) {\handstampfont\thepage};
   \handcircle{(pc)}\end{tikzpicture}}}}
 \newcommand{\lk}[2]{{\fontsize{20pt}{10mm}\selectfont Лк №#1.\ \ #2}\par}

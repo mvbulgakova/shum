@@ -1,5 +1,5 @@
 \input{hand-preamble.tex}
-\newcommand{\pn}{\vdash_{PN}}
+\newcommand{\pn}{\vdash_{PN}}\newcommand{\lp}{\models_{\text{лп}}}
 \newcommand{\nm}[1]{\par\hangindent=8mm\hangafter=1\noindent #1\ }
 \newcommand{\dd}[2]{\rul{#1}{#2}}
 \begin{document}\shapka
@@ -7,12 +7,12 @@
 Формальная лог. с-ма (исчисление) задаётся 4 комп.:\par
 \hspace*{20mm}Я;\ \ $Ax$;\ \ $Rul$;\ \ $Df_{Der}$\par
 \term{Классическая предикатная сев PN} задаётся след. компонентами:
-\nm{1.} Я$_{PN}$ = ЯЛП$_\sigma$ --- формальный язык сев $P_\sigma N$
+\nm{1.} Я$_{PN}$ = ЯЛП$_{\sigma}$ --- формальный язык сев $P_{\sigma} N$
 \nm{2.} $Ax_{PN}=\emptyset$ --- мн-во аксиом PN
 \nm{3.} $Rul_{PN}=Rul_{N_{cl}}+Rul_{\forall\exists}$ (кв) --- мн-во PN-правил
 \nm{4.} $Df_{Der}$ --- опр. PN-вывода\par
 Будем изучать только \red{классические} предикатные сев.\par
-PN --- обозн. произвольной \term{классической предикатной сев} (вместо $P_\sigma N_{cl}$).\par\vspace{2mm}
+PN --- обозн. произвольной \term{классической предикатной сев} (вместо $P_{\sigma} N_{cl}$).\par\vspace{2mm}
 \red{Кванторные PN-правила}\par\vspace{1mm}
 \term{Правила введения кванторов:}\par\vspace{1mm}
 \hspace*{10mm}$\rul{A(x)}{\forall xA(x)}$\ (\,$\forall$в) \nb{$x$ не вх. своб. в $\Delta$}\par\vspace{2mm}
@@ -31,7 +31,7 @@ $\rul{\exists xA(x)\quad\begin{matrix}[A(x)]\\[-2pt]\vdots\\[-2pt]C\end{matrix}}
 \term{Пример.}\hspace{10mm}$\rul{(\exists l)A(l)\quad\begin{matrix}[A(l)]^1\\[-2pt]\vdots\\[-2pt]C\end{matrix}}{C}$\ \nb{(1)}\par\vspace{3mm}
 \red{Дерево PN-вывода}\par
 Неформально: \term{дерево PN-вывода} --- дерево ЯЛП-формул, в котором каждый переход происходит по какому-то PN-правилу.\par
-\term{Дерево PN-вывода с мн-вом зелёных листьев $\Delta$ и корнем $F$} (кратко: PN-$\Delta$-$F$-вывод).\par
+\term{Дерево PN-вывода с мн-вом зелёных}\par\term{листьев $\Delta$ и корнем $F$} (кратко: PN-$\Delta$-$F$-вывод).\par
 Обозн.: $\dd{\Delta}{F}$ вместо $D^\Delta_F$\par\vspace{1mm}
 \opr
 \nm{1.} Б.И. Любая ф-ла $F$ (ЯЛП) есть PN-$\Delta$-$F$-вывод, где $\Delta=\{F\}$.
@@ -45,5 +45,59 @@ $\rul{\exists xA(x)\quad\begin{matrix}[A(x)]\\[-2pt]\vdots\\[-2pt]C\end{matrix}}
 \opr Б.г., что \term{ф-ла $F$ PN-выводима из мн-ва формул $\Gamma$} ($\Gamma\pn F$), если сущ. PN-$\Delta$-$F$-вывод, такой что $\Delta\subseteq\Gamma$.\par
 \opr Будем говорить, что ф-ла $F$ \term{PN-выводима} ($\pn F$), если сущ. PN-$\emptyset$-$F$-вывод.\par\vspace{1mm}
 \term{Основные свойства отношения PN-выводимости}\par
-\term{Утв.} Отношение PN-выводимости монот., рефл., транз. (мрт), \dots\par
+\term{Утв.} Отношение PN-выводимости монот., рефл., транз. (мрт), т.е. \dots\par\vspace{2mm}
+\term{Пример} PN-вывода.\par
+Докажем: $\neg\exists xA(x)\pn\forall x\neg A(x)$, построив соотв. PN-вывод\par\vspace{2mm}
+\hspace*{15mm}$\rul{\rul{\rul{[A(x)]^1}{\exists xA(x)}\,\text{\nb{$\exists$в(**)}}\quad\neg\exists xA(x)}{\neg A(x)}\,\text{\nb{$\neg$в(1)}}}{\forall x\neg A(x)}\,\text{\nb{$\forall$в(*)}}$\par\vspace{2mm}
+\red{(**) $t=x$;\ \ $x$ --- $A(x)$-$x$-доп.}\par
+\red{(*) $\Delta=\{\neg\exists xA(x)\}$ --- не содержит своб. $x$}\par\vspace{3mm}
+\term{Св-ва отношения PN-выводимости,}\par\term{связанные с кв. правилами}\par
+(кв. правила сохраняют отношение PN-выводимости, \framebox{с.198, САМ})\par\vspace{2mm}
+$\rul{\Gamma\pn A(x)}{\Gamma\pn\forall xA(x)}$, где $x$ не вх. своб. в $\Gamma$ \nb{($\forall$в сохр $\pn$)}\par\vspace{2mm}
+$\rul{\Gamma\pn A(t)}{\Gamma\pn\exists xA(x)}$, где $t$ --- $A$-$x$-доп. \nb{($\exists$в сохр $\pn$)}\par\vspace{2mm}
+$\rul{\Gamma\pn\forall xA(x)}{\Gamma\pn A(t)}$, где $t$ --- $A$-$x$-доп. \nb{($\forall$у сохр $\pn$)}\par\vspace{2mm}
+$\rul{\Gamma\pn\exists xA(x);\ \Gamma,A(x)\pn C}{\Gamma\pn C}$, где $x$ не своб. в $C$ и в $\Gamma$ \nb{($\exists$у сохр $\pn$)}\par\vspace{3mm}
+\term{Свойства отношения СС в ЛП,}\par\term{связанные с кв. правилами}\par
+(кв. правила сохраняют отношение сс в ЛП, см. св-ва сс в ЛП)\par\vspace{2mm}
+$\rul{\Gamma\lp A(x)}{\Gamma\lp\forall xA(x)}$, где $x$ не вх. своб. в $\Gamma$ \nb{($\forall$в сохр $\lp$)}\par\vspace{2mm}
+$\rul{\Gamma\lp A(t)}{\Gamma\lp\exists xA(x)}$, где $t$ --- $A$-$x$-доп. \nb{($\exists$в сохр $\lp$)}\par\vspace{2mm}
+$\rul{\Gamma\lp\forall xA(x)}{\Gamma\lp A(t)}$, где $t$ --- $A$-$x$-доп. \nb{($\forall$у сохр $\lp$)}\par\vspace{2mm}
+$\rul{\Gamma\lp\exists xA(x);\ \Gamma,A(x)\lp C}{\Gamma\lp C}$, $x$ не своб. в $C$ и в $\Gamma$ \nb{($\exists$у сохр $\lp$)}\par\vspace{3mm}
+\term{Отношения типа следования} (отс):\par
+Известны отс: $\models$, $\vdash_{Nint}$, $\vdash_{Ncl}$, $\pn$, $\lp$\par
+При каких условиях отношение $\pn$ согласовано с отношением $\rho$, т.е.\par
+$(\Gamma)(F)(\Gamma\pn F\to\Gamma\rho F)$? \nb{($\Gamma$ и $F$ --- переменные по мн-вам ф-л и ф-лам ЯЛП)}\par
+\opr Б.г., что \term{кванторные PN-правила сохраняют отношение $\rho$}, если для любых ф-лы $A$, терма $t$, ф-лы $C$, мн-в ф-л $\Gamma,\Gamma_1,\Gamma_2$\par\vspace{2mm}
+$\rul{\Gamma\rho A(x)}{\Gamma\rho\forall xA(x)}$; где $x$ не вх. своб. в $\Gamma$\par\vspace{2mm}
+$\rul{\Gamma\rho A(t)}{\Gamma\rho\exists xA(x)}$; где терм $t$ --- $A$-$x$-доп.\par\vspace{2mm}
+$\rul{\Gamma\rho\forall xA(x)}{\Gamma\rho A(t)}$; где терм $t$ --- $A$-$x$-доп.\par\vspace{2mm}
+$\rul{\Gamma_1\rho\exists xA(x);\ \Gamma_2\rho C}{\Gamma_1\cup(\Gamma_2\setminus\{A\})\rho C}$, где $x$ не своб. в $C$ и $\Gamma_2\setminus\{A\}$\par\vspace{3mm}
+\term{Теорема} (\red{принцип индукции для PN-выводимости})\par
+Пусть $\rho$ --- отношение между мн-вами формул и формулами ЯЛП.\par
+\term{Если} $\rho$ --- рефлексивно и монотонно, а все PN-правила \red{сохраняют $\rho$}, \term{то} отношение $\pn$ согласовано с отношением $\rho$, т.е.\par
+\hspace*{20mm}$(\Gamma)(F)(\Gamma\pn F\to\Gamma\rho F)$\par\vspace{3mm}
+{\fontsize{19pt}{10mm}\selectfont Основные свойства сев PN}\par
+\red{1. Семантическая корректность PN}\par
+\term{Теорема} (о семантической корр-сти PN). Всякая PN-выводимая формула является общезначимой.\par
+Симв.: $(F)(\pn F\to\ \lp F)$\par
+\dvo Известно: 1) отн. сс $\lp$ реф. и мон., т.е. \dots\ (см. осн. св-ва сс)\par
+2) все PN-правила сохр. отн. сс (см. св-ва сс, связ. с вв и уд связ., кв)\par
+След., в силу \red{принципа индукции} для PN-выводимости, отношение PN-выводимости согласовано с отношением сс:\par
+\hspace*{20mm}$(\Gamma)(F)(\Gamma\pn F\to\Gamma\lp F)$.\par
+При $\Gamma=\emptyset$ получаем: $(F)(\pn F\to\ \lp F)$ $\blacksquare$\par
+Вопрос: всякая ли общезначимая формула PN-выводима? (позже)\par\vspace{2mm}
+\red{2. Непротиворечивость PN}\par
+\term{Теорема.} Предикатная сев PN непротиворечива, т.е. \term{не} существует ЯЛП-формулы $F$, т.ч. $\pn F$ и $\pn\neg F$\par
+\hspace*{15mm}Симв.: $\neg(\exists F)(\pn F$ и $\pn\neg F)$\par
+Д. Доп., что сущ. ф-ла, т.ч. PN-выводимы она сама и её отрицание.\par
+Пусть $F$ --- ф-ла ЯЛП, т.ч. $\pn F$ и $\pn\neg F$\par
+Тогда (по Т. о сем. корр. PN) общ-мы $F$ и $\neg F$, что невозможно. $W$ $\blacksquare$\par
+\term{Замечание.} Приведено семантическое д-во теоремы. Непротиворечивость PN можно д-ть синтаксически.\par\vspace{2mm}
+\red{3. Семантическая полнота PN (относит-но класса общ. ф-л)}\par
+\red{Теорема Гёделя} о полноте \red{классического} ИП ($PN_{cl}$) (1929):\par
+$PN_{cl}$ сем. полна, т.е. всякая общезначимая ЯЛП-ф-ла выводима в класс. ИП ($PN_{cl}$-выводима):\par
+\hspace*{20mm}$(F)(\lp F\to\ \vdash_{PN_{cl}}F)$\par
+Без д-ва.\par
+\term{Сл-е} (т. о полноте и т. о сем. корр.). Классы общезначимых формул ЯЛП$_{\sigma}$ и $P_{\sigma} N_{cl}$-выводимых формул совпадают:\par
+\hspace*{20mm}$(F)(\lp F\leftrightarrow\ \vdash_{PN_{cl}}F)$\par
 \end{document}

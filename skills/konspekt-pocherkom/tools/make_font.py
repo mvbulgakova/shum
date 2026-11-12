@@ -208,6 +208,7 @@ def connections(shapes, variants):
             for b in range(NB):
                 ty = BTARGET[b]
                 if abs(ty - ey) < 0.07 * XH and ex > adv - 15: continue   # и так сходятся
+                if abs(ty - ey) > 0.4 * XH: continue                       # крутой переход не рисуем (зигзаг)
                 x0, y0 = ex - 0.6 * W, ey
                 x1 = adv + 0.55 * W; y1 = ty
                 dx = max(x1 - x0, 30)
@@ -240,7 +241,35 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
         a = a[:, cols[0]:cols[-1] + 1]; w = a.shape[1] / xh
         a = cv2.GaussianBlur(cv2.resize(a, (20, 26), interpolation=cv2.INTER_AREA), (0, 0), 1.2)
         return a / (a.sum() + 1e-6), w
+    CONF = {"о": "аес", "а": "оия", "к": "ниех", "н": "икп", "и": "нпл", "е": "ьсог", "ь": "еб", "л": "ми",
+            "с": "ег", "г": "чес", "ч": "гу", "п": "ни", "м": "лш", "я": "ал", "в": "б", "ы": "ь"}
+    MED = {}
+    for ch, ids in variants.items():
+        if ch.isalpha() and ch.islower() and len(ids) >= 5:
+            A = [sig(G[i])[0] for i in ids]; A = [a for a in A if a is not None]
+            if A: MED[ch] = np.median(np.array(A), 0)
+    def hole(g):
+        """площадь самой большой замкнутой области в долях квадрата x-высоты"""
+        m = (g["img"] > 70).astype(np.uint8)
+        m = cv2.morphologyEx(m, cv2.MORPH_CLOSE, np.ones((2, 2), np.uint8))
+        cs, hier = cv2.findContours(m, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_NONE)
+        if hier is None: return 0.0
+        return max([cv2.contourArea(c) for c, h in zip(cs, hier[0]) if h[3] >= 0] or [0]) / max(g["lxh"], 8) ** 2
+    # «о» и «а» должны быть с заметным замкнутым овалом, иначе читаются как «е», «с», «и»
+    for ch, thr in (("о", 0.11), ("а", 0.06)):
+        if ch in variants:
+            k = [i for i in variants[ch] if hole(G[i]) >= thr]
+            if len(k) >= 10: variants[ch] = k
     for ch, ids in list(variants.items()):
+        if ch in CONF and ch in MED and len(ids) >= 8:
+            keep = []
+            for i in ids:
+                a = sig(G[i])[0]
+                if a is None: continue
+                own = np.abs(a - MED[ch]).sum()
+                oth = min([np.abs(a - MED[o]).sum() for o in CONF[ch] if o in MED] or [9])
+                if own < 0.92 * oth: keep.append(i)
+            if len(keep) >= 6: variants[ch] = ids = keep
         if not (ch.isalpha() and len(ids) >= 12): continue
         S_ = [sig(G[i]) for i in ids]
         ok = [k for k, (a, w) in enumerate(S_) if a is not None]
@@ -252,6 +281,11 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
         n = max(8, int(len(ok) * KEEPQ))
         best = sorted(range(len(ok)), key=lambda j: d[j])[:n]
         variants[ch] = [ids[ok[j]] for j in sorted(best)]
+    # ручные правки поверх автоотбора: data/pin.json {"буква": [номера экземпляров в glyphs.pkl]} — взять ровно эти
+    _pin = os.path.join(DATA, "pin.json")
+    if os.path.exists(_pin):
+        for ch, ids in json.load(open(_pin)).items(): variants[ch] = ids
+    if seed == 0: json.dump(variants, open("variants_dump.json", "w"), ensure_ascii=False)
     shapes = {}                         # glyph name -> (RecordingPen, advance)
     meta = {}                           # glyph name -> (prev, next)
     for ch, ids in variants.items():
@@ -273,7 +307,7 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
         if band.sum() < 5: continue
         x0, x1 = float(xv[band].min()), float(xv[band].max())
         r2 = RecordingPen(); rp.replay(TransformPen(r2, (1, 0, 0, 1, -x0, 0)))
-        shapes[n] = (r2, max(40, x1 - x0 + float(os.environ.get("HANDGAP", "0.22")) * XH))
+        shapes[n] = (r2, max(40, x1 - x0 + float(os.environ.get("HANDGAP", "0.10")) * XH))
     # базовый (cmap) глиф: лучший экземпляр в начале слова, иначе первый (самый типичный)
     base = {}
     for ch, ids in variants.items():
@@ -332,16 +366,16 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
         variants[dst] = list(range(n)); base[dst] = 0
         for k in range(n):
             r2 = RecordingPen(); x = 0; right = 0
-            for src, sx, gap, dy in parts:
-                kk = k % len(variants[src]); rp, a = shapes[gname(src, kk)]
+            for pi, (src, sx, gap, dy) in enumerate(parts):
+                kk = (k * 2 + pi * 3) % len(variants[src]); rp, a = shapes[gname(src, kk)]
                 x0 = gap[1] if isinstance(gap, tuple) else x + gap
                 rp.replay(TransformPen(r2, (sx, 0, 0, sx, x0, dy))); x = x0 + a * sx; right = max(right, x)
             shapes[gname(dst, k)] = (r2, right + 20); meta[gname(dst, k)] = ("^", "$")
     compose(";", [(",", 1, 0, 0), (".", 1, -70, XH * 0.75)])
     compose("!", [("1", 0.9, 0, XH * 0.25), (".", 1, -90, 0)])
     compose("№", [("N", 1, 0, 0), ("о", 0.6, 10, XH * 0.6)])
-    compose("„", [(",", 1, 0, 0), (",", 1, -10, 0)])
-    compose("“", [(",", 1, 0, XH * 1.6), (",", 1, -10, XH * 1.6)])
+    compose("„", [(",", 1, 0, 0), (",", 1, -10, 0)], n=6)
+    compose("“", [(",", 1, 0, XH * 1.6), (",", 1, -10, XH * 1.6)], n=6)
     compose("«", [(",", 1, 0, XH * 1.6), (",", 1, -10, XH * 1.6)])
     compose("»", [(",", 1, 0, XH * 1.6), (",", 1, -10, XH * 1.6)])
     compose("\"", [(",", 1, 0, XH * 1.6), (",", 1, -10, XH * 1.6)])
@@ -365,15 +399,16 @@ def main(out="MariaHand.otf", seed=0, name="MariaHand"):
     rj = np.random.RandomState(500 + seed)
     for ch in list(variants):
         n = len(variants[ch])
-        if n == 0 or n >= 3: continue
-        for j in range(3 - n):
+        need = 6 if (ch in symbols.MATHCLASS or ch in "„“") else 3
+        if n == 0 or n >= need: continue
+        for j in range(need - n):
             rp, adv = shapes[gname(ch, j % n)]
             sx = 1 + rj.uniform(-0.08, 0.08); sl = rj.uniform(-0.07, 0.07); sy = 1 + rj.uniform(-0.06, 0.06)
             r2 = RecordingPen(); rp.replay(TransformPen(r2, (sx, 0, sl, sy, 0, 0)))
             k = n + j; shapes[gname(ch, k)] = (r2, adv * sx); meta[gname(ch, k)] = meta[gname(ch, j % n)]
             variants[ch].append(k)
     # --- соединения: «дописываем» штрих от выхода буквы к входу следующей (по высоте входа)
-    conn = connections(shapes, variants) if os.environ.get("HANDTAILS", "0") != "0" else {}
+    conn = connections(shapes, variants) if os.environ.get("HANDTAILS", "1") != "0" else {}
     # --- сборка
     order = [".notdef", "space"] + sorted(shapes)
     fb = FontBuilder(1000, isTTF=False); fb.setupGlyphOrder(order)
@@ -483,11 +518,17 @@ MATHCHAR = "()[],.;:=+<>|/0123456789!?" + "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk
 def write_math_tex(pua, path):
     from symbols import MATHCLASS
     L = ["% создано make_font.py: знаки в формулах — её почерком, каждый раз случайный вариант",
-         "\\ExplSyntaxOff\\makeatletter"]
+         "\\ExplSyntaxOff\\makeatletter",
+         "% \\hm@roll{N}{имя}: случайный вариант 0..N-1, не совпадающий с предыдущим для этого знака",
+         "\\def\\hm@roll#1#2{\\count@=\\uniformdeviate#1\\relax\\expandafter\\ifx\\csname#2\\endcsname\\relax\\else"
+         "\\ifnum\\count@=\\csname#2\\endcsname\\relax\\advance\\count@ by \\numexpr1+\\uniformdeviate\\numexpr#1-1\\relax\\relax"
+         "\\ifnum\\count@<#1\\else\\advance\\count@ by -#1\\fi\\fi\\fi\\expandafter\\xdef\\csname#2\\endcsname{\\the\\count@}}"]
     def body(ch):
         cl = MATHCLASS.get(ch, 0)
         alts = " \\or ".join(f'\\Umathchar{cl}\\hm@fam"{c:X} ' for c in pua[ch])
-        return f"\\ifcase\\uniformdeviate{len(pua[ch])} {alts}\\fi"
+        n = len(pua[ch])
+        if n < 2: return f"\\ifcase\\uniformdeviate{n} {alts}\\fi"
+        return f"\\hm@roll{{{n}}}{{hm@l@{ord(ch):X}}}\\ifcase\\count@ {alts}\\fi"
     names = {}
     for i, ch in enumerate(sorted(pua)):
         nm = "hm@" + "abcdefghijklmnopqrstuvwxyz"[i // 26] + "abcdefghijklmnopqrstuvwxyz"[i % 26]
